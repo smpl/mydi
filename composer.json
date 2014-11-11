@@ -1,0 +1,23 @@
+{
+    "name": "smpl/mydi",
+    "description": "My small dependency injection implementation",
+    "minimum-stability": "stable",
+    "license": "GNUv2",
+    "authors": [
+        {
+            "name": "Evgeniy Kuvshinov",
+            "email": "smpl@itmywork.com"
+        }
+    ],
+    "autoload":{
+        "psr-4": {
+            "smpl\\mydi\\": "src/"
+        }
+    },
+    "require":{
+        "php":">=5.4.0"
+    },
+    "require-dev":{
+        "phpunit/phpunit": "3.7.27"
+    }
+}
