@@ -51,6 +51,17 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator->resolve('test');
     }
 
+    public function testAddContainer()
+    {
+        $result = 123;
+        $mock = $this->getMock('\smpl\mydi\ContainerInterface');
+        $mock->expects($this->any())
+            ->method('resolve')
+            ->will($this->returnValue($result));
+        $this->locator->add('test', $mock);
+        $this->assertSame($result, $this->locator->resolve('test'));
+    }
+
     public function providerValidParams()
     {
         return [

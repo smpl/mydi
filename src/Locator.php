@@ -10,7 +10,11 @@ class Locator implements LocatorInterface
         if (!isset($this->containers[$name])) {
             throw new \InvalidArgumentException(sprintf('name is already exist, $s', $name));
         }
-        return $this->containers[$name];
+        $result = $this->containers[$name];
+        if ($result instanceof ContainerInterface) {
+            $result = $result->resolve();
+        }
+        return $result;
     }
 
     public function add($name, $value)
