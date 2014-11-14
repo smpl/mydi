@@ -6,6 +6,7 @@ use smpl\mydi\container\Service;
 class Locator implements LocatorInterface
 {
     private $containers = [];
+    private $calls = [];
 
     public function resolve($name)
     {
@@ -13,9 +14,15 @@ class Locator implements LocatorInterface
             throw new \InvalidArgumentException(sprintf('name is already exist, $s', $name));
         }
         $result = $this->containers[$name];
+        if (array_search($name, $this->calls) !== false) {
+            throw new \InvalidArgumentException(
+                sprintf('Infinite recursion in the configuration, name called again: %s, call stack: %s. ', $name, implode(', ', $this->calls)));
+        }
+        array_push($this->calls, $name);
         if ($result instanceof ContainerInterface) {
             $result = $result->resolve();
         }
+        array_pop($this->calls);
         return $result;
     }
 

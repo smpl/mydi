@@ -9,8 +9,8 @@ class Service extends Factory
     public function resolve()
     {
         if (!$this->isCalled) {
-            $this->isCalled = true;
             $this->result = parent::resolve();
+            $this->isCalled = true;
         }
         return $this->result;
     }

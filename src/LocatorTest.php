@@ -152,7 +152,25 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->locator->resolve('test');
         $this->assertSame($result, $this->locator->resolve('test'));
         $this->assertTrue($result instanceof \stdClass);
+    }
 
+    /**
+     * @see https://github.com/smpl/mydi/issues/10
+     * @expectedException \InvalidArgumentException
+     */
+    public function testNotCorrectConfiguration() {
+        $locator = $this->locator;
+        $locator->a = function () use ($locator) {
+            $obj = new \stdClass();
+            $obj->test = $locator->resolve('b');
+            return $obj;
+        };
+        $locator->b = function () use ($locator) {
+            $obj = new \stdClass();
+            $obj->test = $locator->resolve('a');
+            return $obj;
+        };
+        $locator->a;    // InvalidArgumentException
     }
 
     public function testArraySetContainer()
