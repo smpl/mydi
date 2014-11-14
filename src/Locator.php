@@ -1,6 +1,8 @@
 <?php
 namespace smpl\mydi;
 
+use smpl\mydi\container\Service;
+
 class Locator implements LocatorInterface
 {
     private $containers = [];
@@ -37,6 +39,9 @@ class Locator implements LocatorInterface
     {
         if (!is_string($name)) {
             throw new \InvalidArgumentException('name must be string');
+        }
+        if (is_callable($value)) {
+            $value = new Service($value);
         }
         $this->containers[$name] = $value;
     }

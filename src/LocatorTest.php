@@ -145,6 +145,14 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->locator->resolve('test'));
         $this->locator->delete('test');
         $this->assertSame(false, $this->locator->isExist('test'));
+
+        $this->locator->add('test', function () {
+            return new \stdClass();
+        });
+        $result = $this->locator->resolve('test');
+        $this->assertSame($result, $this->locator->resolve('test'));
+        $this->assertTrue($result instanceof \stdClass);
+
     }
 
     public function testArraySetContainer()
