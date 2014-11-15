@@ -20,6 +20,8 @@
 * Поддержка [PSR-4](https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-4-autoloader.md)
 * Поддеркжа [composer](https://getcomposer.org/doc/00-intro.md)
 * Полное покрытие тестами [phpunit](https://phpunit.de/) на текущий момент 3.7
+* Стараюсь делать простое приложение, придерживаясь [KISS](https://ru.wikipedia.org/wiki/KISS_%28%D0%BF%D1%80%D0%B8%D0%BD%D1%86%D0%B8%D0%BF%29)
+* Стараюсь придерживаться [SOLID](https://ru.wikipedia.org/wiki/SOLID_%28%D0%BE%D0%B1%D1%8A%D0%B5%D0%BA%D1%82%D0%BD%D0%BE-%D0%BE%D1%80%D0%B8%D0%B5%D0%BD%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D0%BE%D0%B5_%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5%29)
 
 ## Требования ##
 1. PHP 5.4 или новее (также поддерживается HHVM смотри [build](https://travis-ci.org/smpl/mydi))
@@ -58,48 +60,48 @@ $locator->resolve(string); // вернет 'value'
 контейнер.
 
 ```php
-$locator->add(dsn, 'mysql:dbname=testdb;host=127.0.0.1');
-$locator->add(user, 'dbuser');
-$locator->add(password, 'dbpass');
+$locator->add('dsn', 'mysql:dbname=testdb;host=127.0.0.1');
+$locator->add('user', 'dbuser');
+$locator->add('password', 'dbpass');
 // Через создание Factory
-$locator->add(pdo, new \smpl\mydi\container\Factory(function () use ($locator) {
-    return new \PDO($locator->add(dsn), $locator->add(user), $locator->add(password));
+$locator->add('pdo', new \smpl\mydi\container\Factory(function () use ($locator) {
+    return new \PDO($locator->resolve('dsn'), $locator->resolve('user), $locator->resolve('password'));
 }));
 
-$pdo = $locator->add(pdo); // вызовет анонимную функцию и создаст новый экземпляр \PDO
-$pdoAnother = $locator->add(pdo); // снова вызовет анонимную функцию и создаст новый экземпляр \PDO
+$pdo = $locator->add('pdo'); // вызовет анонимную функцию и создаст новый экземпляр \PDO
+$pdoAnother = $locator->add('pdo'); // снова вызовет анонимную функцию и создаст новый экземпляр \PDO
 
 // Проверим
 var_dump($pdo instanceof \PDO); // true
 var_dump($pdoAnother instanceof \PDO);  // true
 var_dump($pdo == $pdoAnother);  // true да они оба одинаковыъ типов
 var_dump($pdo === $pdoAnother); // false это разные экземпляры, подробней смотри сравнения объектов в php
-
-// Просто анонимная функция которая автоматически обернется в Factory, я так предпочитаю создавать
-$locator->add(pdo2, function () use ($locator) {
-    return new \PDO($locator->add(dsn), $locator->add(user), $locator->add(password));
-});
 ```
 
 #### Service ####
 Это почти тоже самое что и Factory, только **callable элемент вызывается ОДИН раз**. Этот контейнер по умолчанию применяется для анонимных функций.
 ```php
-$locator->add(dsn, 'mysql:dbname=testdb;host=127.0.0.1');
-$locator->add(user, 'dbuser');
-$locator->add(password, 'dbpass');
+$locator->add('dsn', 'mysql:dbname=testdb;host=127.0.0.1');
+$locator->add('user', 'dbuser');
+$locator->add('password', 'dbpass');
 // Через создание Factory
-$locator->add(pdo, new \smpl\mydi\container\Service(function () use ($locator) {
-    return new \PDO($locator->add(dsn), $locator->add(user), $locator->add(password));
+$locator->add('pdo', new \smpl\mydi\container\Service(function () use ($locator) {
+    return new \PDO($locator->resolve('dsn'), $locator->resolve('user'), $locator->resolve('password'));
 }));
 
-$pdo = $locator->add(pdo); // вызовет анонимную функцию и создаст новый экземпляр \PDO
-$pdoAnother = $locator->add(pdo); // Вызова анонимной функции не будет, вернутся тот же результат что и выше, по сути $pdoAnother = $pdo
+$pdo = $locator->add('pdo'); // вызовет анонимную функцию и создаст новый экземпляр \PDO
+$pdoAnother = $locator->add('pdo'); // Вызова анонимной функции не будет, вернутся тот же результат что и выше, по сути $pdoAnother = $pdo
 
 // Проверим
 var_dump($pdo instanceof \PDO); // true
 var_dump($pdoAnother instanceof \PDO);  // true
 var_dump($pdo == $pdoAnother);  // true да они оба одинаковыъ типов
 var_dump($pdo === $pdoAnother); // true это одинаковые экземпляры, потому что второй раз функция не вызывалась а вернулось тоже самое
+
+// Просто анонимная функция которая автоматически обернется в Service, я так предпочитаю создавать
+$locator->add('pdo2', function () use ($locator) {
+    return new \PDO($locator->resolve('dsn'), $locator->resolve('user'), $locator->resolve('password'));
+});
 ```
 
 ## Autors ##
