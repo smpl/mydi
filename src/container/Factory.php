@@ -8,7 +8,7 @@ class Factory implements ContainerInterface
     /**
      * @var callable
      */
-    private $callback;
+    protected $callback;
 
     public function __construct(\Closure $callback)
     {
