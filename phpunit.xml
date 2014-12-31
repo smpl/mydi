@@ -1,9 +1,10 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://raw.github.com/sebastianbergmann/phpunit/3.7/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://raw.github.com/sebastianbergmann/phpunit/4.4/phpunit.xsd"
          colors="true">
     <testsuites>
         <testsuite name="unit">
             <directory suffix="Test.php">./src/</directory>
+            <exclude>src/AbstractLoaderTest.php</exclude>
         </testsuite>
     </testsuites>
 </phpunit>

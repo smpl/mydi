@@ -1,20 +1,8 @@
 <?php
 namespace smpl\mydi;
 
-class LocatorTest extends \PHPUnit_Framework_TestCase
+class LocatorTest extends AbstractLoaderTest
 {
-    /**
-     * @var LocatorInterface
-     */
-    private $locator;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->locator = new Locator();
-    }
-
-
     /**
      * @param $name
      * @param $value
@@ -29,31 +17,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $name
-     * @param $value
-     * @dataProvider providerValidParams
-     */
-    public function testArrayParams($name, $value)
-    {
-        $this->locator[$name] = $value;
-        $this->assertSame($value, $this->locator[$name]);
-        $this->assertSame(true, isset($this->locator[$name]));
-        unset($this->locator[$name]);
-        $this->assertSame(false, isset($this->locator[$name]));
-    }
-
-    /**
-     * @param $name
-     * @param $value
-     * @dataProvider providerValidParams
-     */
-    public function testPropertyParams($name, $value)
-    {
-        $this->locator->$name = $value;
-        $this->assertSame($value, $this->locator->$name);
-    }
-
-    /**
+     * Нет возможности создать два контейнера с одинаковым именем
      * @expectedException \InvalidArgumentException
      */
     public function testAddNameExist()
@@ -62,36 +26,13 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
         $this->locator->add('test', 1);
     }
 
-    public function testArraySetNameExist()
-    {
-        $this->locator['test'] = 1;
-        $this->assertSame(1, $this->locator['test']);
-        $this->locator['test'] = 2;
-        $this->assertSame(2, $this->locator['test']);
-    }
-
-    public function testPropertySetNameExist()
-    {
-        $this->locator->test = 1;
-        $this->assertSame(1, $this->locator->test);
-        $this->locator->test = 2;
-        $this->assertSame(2, $this->locator->test);
-    }
-
     /**
+     * В качестве ключа может быть строка это определено в интерфейсе смотри LocatorInterface и @see https://github.com/smpl/mydi/issues/3
      * @expectedException \InvalidArgumentException
      */
     public function testAddNameNotString()
     {
         $this->locator->add(1, 1);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testArraySetNameNotString()
-    {
-        $this->locator[1] = 1;
     }
 
     /**
@@ -105,33 +46,9 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testArrayDeleteNotExist()
-    {
-        unset($this->locator['test']);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testResolveNameNotExist()
     {
         $this->locator->resolve('test');
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testArrayResolveNameNotExist()
-    {
-        $this->locator['test'];
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testPropertyResolveNameNotExist()
-    {
-        $this->locator['test'];
     }
 
     public function testAddContainer()
@@ -155,58 +72,24 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @see https://github.com/smpl/mydi/issues/10
+     * Бесконечное разрешение зависимостей #10 @see https://github.com/smpl/mydi/issues/10
+     * Классный способ создать багию используя магические методы @see https://github.com/smpl/mydi/issues/13
      * @expectedException \InvalidArgumentException
      */
-    public function testNotCorrectConfiguration() {
+    public function testNotCorrectConfiguration()
+    {
         $locator = $this->locator;
-        $locator->a = function () use ($locator) {
+        $locator->add('a', function () use ($locator) {
             $obj = new \stdClass();
             $obj->test = $locator->resolve('b');
             return $obj;
-        };
-        $locator->b = function () use ($locator) {
+        });
+        $locator->add('a', function () use ($locator) {
             $obj = new \stdClass();
             $obj->test = $locator->resolve('a');
             return $obj;
-        };
-        $locator->a;    // InvalidArgumentException
-    }
-
-    public function testArraySetContainer()
-    {
-        $result = 123;
-        $mock = $this->getMock('\smpl\mydi\ContainerInterface');
-        $mock->expects($this->any())
-            ->method('resolve')
-            ->will($this->returnValue($result));
-        $this->locator['test'] =  $mock;
-        $this->assertSame($result, $this->locator['test']);
-        $this->assertSame(true, isset($this->locator['test']));
-        unset($this->locator['test']);
-        $this->assertSame(false, isset($this->locator['test']));
-    }
-
-    public function testPropertySetContainer()
-    {
-        $result = 123;
-        $mock = $this->getMock('\smpl\mydi\ContainerInterface');
-        $mock->expects($this->any())
-            ->method('resolve')
-            ->will($this->returnValue($result));
-        $this->locator->test =  $mock;
-        $this->assertSame($result, $this->locator->test);
-    }
-
-    public function providerValidParams()
-    {
-        return [
-            ['int', 1],
-            ['float', 0.5],
-            ['bool', true],
-            ['string', 'test'],
-            ['object', new \stdClass()],
-        ];
+        });
+        $locator->resolve('a');    // InvalidArgumentException
     }
 }
  
