@@ -42,7 +42,7 @@ class Locator implements LocatorInterface
         unset($this->containers[$name]);
     }
 
-    private function set($name, $value)
+    public function set($name, $value)
     {
         if (!is_string($name)) {
             throw new \InvalidArgumentException('name must be string');
