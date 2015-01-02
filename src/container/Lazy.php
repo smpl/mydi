@@ -1,6 +1,11 @@
 <?php
 namespace smpl\mydi\container;
 
+/**
+ * Class Lazy
+ * @package smpl\mydi\container
+ * @see https://github.com/smpl/mydi/issues/9
+ */
 class Lazy extends Factory
 {
     public function resolve()

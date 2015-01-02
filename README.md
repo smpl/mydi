@@ -49,13 +49,26 @@ $locator = new \smpl\mydi\Locator();
 ### Создание простых контейнеров, а также их получение ###
 ```php
 // Создание
-$locator->add(name, true);
-$locator->add(string, 'value');
-$locator->add(array, [1, 2, 3]);
-$locator->add(object, new \ArrayObject([1, 2, 3));
+$locator->add('name', true);
+$locator->add('string', 'value');
+$locator->add('array', [1, 2, 3]);
+$locator->add('object', new \ArrayObject([1, 2, 3));
 // Получение
-$locator->resolve(string); // вернет 'value'
+$locator->resolve('string'); // вернет 'value'
+
+// Одна очень важная особенность нет возможности повторно добавить уже занятое имя через add, например
+$locator->add('test', 'my value');
+$locator->add('test', 'new value'); // Вызовет исключение
 ```
+Более подробно смотрите комментарии фаил **src/LocatorInterface.php**
+а также примеры использования в **src/LocatorTest.php**
+
+Доступна установку зависимостей в виде массива через [ArrayAccess](php.net/manual/en/class.arrayaccess.php) интерфейс
+смотри **src/LocatorArrayTest.php**
+
+Доступна установка зависимостей с помощью свойств (через магические методы __get, __set)
+смотри **src/LocatorPropertyTest.php**
+
 ### Создание сложных контейнеров ###
 
 #### Factory ####
@@ -68,7 +81,7 @@ $locator->add('user', 'dbuser');
 $locator->add('password', 'dbpass');
 // Через создание Factory
 $locator->add('pdo', new \smpl\mydi\container\Factory(function () use ($locator) {
-    return new \PDO($locator->resolve('dsn'), $locator->resolve('user), $locator->resolve('password'));
+    return new \PDO($locator->resolve('dsn'), $locator->resolve('user'), $locator->resolve('password'));
 }));
 
 $pdo = $locator->add('pdo'); // вызовет анонимную функцию и создаст новый экземпляр \PDO
@@ -80,6 +93,7 @@ var_dump($pdoAnother instanceof \PDO);  // true
 var_dump($pdo == $pdoAnother);  // true да они оба одинаковыъ типов
 var_dump($pdo === $pdoAnother); // false это разные экземпляры, подробней смотри сравнения объектов в php
 ```
+Более подробно с её поведением можно ознакомиться в юнит тесте **src/container/FactoryTest.php**
 
 #### Service ####
 Это почти тоже самое что и Factory, только **callable элемент вызывается ОДИН раз**. Этот контейнер по умолчанию применяется для анонимных функций.
@@ -106,6 +120,7 @@ $locator->add('pdo2', function () use ($locator) {
     return new \PDO($locator->resolve('dsn'), $locator->resolve('user'), $locator->resolve('password'));
 });
 ```
+Более подробно с её поведением можно ознакомиться в юнит тесте **src/container/ServiceTest.php**
 
 #### Lazy ####
 Данный объект всегда возвращает анонимную функцию которую вы передали ему в качестве конструктора, которую вы можете вызвать и передать параметры
@@ -121,6 +136,8 @@ $locator->magic = new Lazy(function ($param) use ($locator) {
 $locator->magic(1); // Более подробный вариант $locator->resolve('magic')(1);
 $locator->magic(2); // Более подробный вариант $locator->resolve('magic')(2);
 ```
+Более подробно с её поведением можно ознакомиться в юнит тесте **src/container/LazyTest.php**
+
 ## Autors ##
 
 * **JID:** smpl@itmywork.com

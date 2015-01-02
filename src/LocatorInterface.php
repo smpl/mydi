@@ -9,15 +9,17 @@ namespace smpl\mydi;
  */
 interface LocatorInterface extends \ArrayAccess{
     /**
-     * @param string $name
-     * @return mixed
+     * Разрешить зависимость по её имени
+     * @param string $name имя зависимости
+     * @return mixed Значение которое хранилось в этом контейнере
      * @throws \InvalidArgumentException
      */
     public function resolve($name);
 
     /**
-     * @param string $name
-     * @param $value
+     * Добавить новый контейнер с именем $name и значение $value
+     * @param string $name Имя контейнера
+     * @param mixed $value Здесь может быть любое значение или даже объект с интерфейсом ContainerInterface
      * @throws \InvalidArgumentException
      */
     public function add($name, $value);

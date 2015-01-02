@@ -3,6 +3,11 @@ namespace smpl\mydi\container;
 
 use smpl\mydi\ContainerInterface;
 
+/**
+ * Class Factory
+ * @package smpl\mydi\container
+ * @see https://github.com/smpl/mydi/issues/2
+ */
 class Factory implements ContainerInterface
 {
     /**
@@ -10,6 +15,9 @@ class Factory implements ContainerInterface
      */
     protected $callback;
 
+    /**
+     * @param callable $callback Анонимная функция которая возвращает необходимый результат
+     */
     public function __construct(\Closure $callback)
     {
         $this->callback = $callback;
