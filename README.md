@@ -31,7 +31,7 @@
 
 ## Установка ##
 1. Установить [composer](https://getcomposer.org/doc/00-intro.md)
-2. Выполнить: ``` composer require smpl/mydi:dev-master```
+2. Выполнить: ``` composer require smpl/mydi:v1.0.0```
 3. Готово
 
 ### Для разработчиков ###
