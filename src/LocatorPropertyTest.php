@@ -33,9 +33,13 @@ class LocatorPropertyTest extends AbstractLoaderTest
      */
     public function testPropertySetNameExist()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->locator->test = 1;
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->assertSame(1, $this->locator->test);
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->locator->test = 2;
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->assertSame(2, $this->locator->test);
     }
 
@@ -45,6 +49,7 @@ class LocatorPropertyTest extends AbstractLoaderTest
      */
     public function testPropertyResolveNameNotExist()
     {
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->locator->test;
     }
 
@@ -55,8 +60,25 @@ class LocatorPropertyTest extends AbstractLoaderTest
         $mock->expects($this->any())
             ->method('resolve')
             ->will($this->returnValue($result));
-        $this->locator->test =  $mock;
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->locator->test = $mock;
+        /** @noinspection PhpUndefinedFieldInspection */
         $this->assertSame($result, $this->locator->test);
+    }
+
+    /**
+     * @test
+     */
+    public function lazyLoad()
+    {
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->locator->test = function () {
+            return function () {
+                return 5;
+            };
+        };
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->assertSame(5, $this->locator->test());
     }
 
 }

@@ -53,6 +53,17 @@ class Locator implements LocatorInterface
         $this->containers[$name] = $value;
     }
 
+    public function __call($name, $arguments)
+    {
+        if ($this->isExist($name)) {
+            $container = $this->resolve($name);
+            if (is_callable($container)) {
+                return call_user_func_array($container, $arguments);
+            }
+        }
+        throw new \InvalidArgumentException;
+    }
+
     public function isExist($name)
     {
         return isset($this->containers[$name]);
