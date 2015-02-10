@@ -77,6 +77,7 @@ class LocatorTest extends AbstractLoaderTest
 
     /**
      * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Name is already exist, test
      */
     public function testResolveNameNotExist()
     {

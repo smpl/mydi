@@ -11,7 +11,7 @@ class Locator implements LocatorInterface
     public function resolve($name)
     {
         if (!$this->isExist($name)) {
-            throw new \InvalidArgumentException(sprintf('name is already exist, $s', $name));
+            throw new \InvalidArgumentException(sprintf('Name is already exist, %s', $name));
         }
         $result = $this->containers[$name];
         if (array_search($name, $this->calls) !== false) {
