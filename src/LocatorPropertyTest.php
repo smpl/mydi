@@ -79,6 +79,23 @@ class LocatorPropertyTest extends AbstractLoaderTest
         };
         /** @noinspection PhpUndefinedMethodInspection */
         $this->assertSame(5, $this->locator->test());
+
+        /** @noinspection PhpUndefinedFieldInspection */
+        $this->locator->magic = function () {
+            return 7;
+        };
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->assertSame(7, $this->locator->magic());
+    }
+
+    /**
+     * @test
+     * @expectedException \InvalidArgumentException
+     */
+    public function invalidLazyLoad()
+    {
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->locator->test();
     }
 
 }

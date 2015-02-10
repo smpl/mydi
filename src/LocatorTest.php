@@ -77,7 +77,7 @@ class LocatorTest extends AbstractLoaderTest
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Name is already exist, test
+     * @expectedExceptionMessage Name is not defined, test
      */
     public function testResolveNameNotExist()
     {
@@ -145,7 +145,7 @@ class LocatorTest extends AbstractLoaderTest
             $obj->test = $locator->resolve('b');
             return $obj;
         });
-        $locator->add('a', function () use ($locator) {
+        $locator->add('b', function () use ($locator) {
             $obj = new \stdClass();
             $obj->test = $locator->resolve('a');
             return $obj;
