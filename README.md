@@ -36,7 +36,7 @@
 
 ### Для разработчиков ###
 1. Изменить [minimum-stability](https://getcomposer.org/doc/04-schema.md#minimum-stability): **dev** например выполнив такую команду: composer install --dev
-2. Запуск тестов vendor\bin\phpunit --config phpunit.xml
+2. Запуск тестов composer test
 
 ## Примеры использования ##
 ### Создание locator зависимостей ###
