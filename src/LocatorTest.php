@@ -152,5 +152,84 @@ class LocatorTest extends AbstractLoaderTest
         });
         $locator->resolve('a');    // InvalidArgumentException
     }
+
+    /**
+     * @test
+     * @see https://github.com/smpl/mydi/issues/22
+     * @expectedException \PHPUnit_Framework_Error
+     * @dataProvider providerLoadersInvalid
+     * @param $value
+     */
+    public function setLoadersInvalid($value)
+    {
+        $this->locator->setLoaders($value);
+    }
+
+    public function providerLoadersInvalid()
+    {
+        return [
+            [null],
+            [false],
+            [true],
+            [5],
+            ['123'],
+            [new \stdClass()],
+        ];
+    }
+
+    /**
+     * @test
+     * @see https://github.com/smpl/mydi/issues/22
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Loaders must imlemenent \smpl\mydi\LoaderInterface
+     * @dataProvider providerLoadersInvalidArray
+     * @param $array
+     */
+    public function setLoadersInvilidArray($array)
+    {
+        $this->locator->setLoaders($array);
+    }
+
+    public function providerLoadersInvalidArray()
+    {
+        return [
+            [[null]],
+            [[false]],
+            [[123]],
+            [['123']],
+            [[new \stdClass()]],
+        ];
+    }
+
+    /**
+     * @test
+     * @see https://github.com/smpl/mydi/issues/22
+     */
+    public function getLoaders()
+    {
+        $this->assertSame([], $this->locator->getLoaders());
+    }
+
+    /**
+     * @test
+     * @see https://github.com/smpl/mydi/issues/22
+     * @dataProvider providerValidParams
+     * @param string $name
+     * @param mixed $value
+     */
+    public function resolveUseLoader($name, $value)
+    {
+        $loader = $this->getMock('\smpl\mydi\LoaderInterface');
+        $loader->expects($this->once())
+            ->method('isLoadable')
+            ->with($this->equalTo($name))
+            ->will($this->returnValue(true));
+        $loader->expects($this->once())
+            ->method('load')
+            ->with($this->equalTo($name))
+            ->will($this->returnValue($value));
+        $this->locator->setLoaders([$loader]);
+        $this->assertSame($value, $this->locator->resolve($name));
+    }
 }
  

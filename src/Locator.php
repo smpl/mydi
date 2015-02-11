@@ -7,16 +7,44 @@ class Locator implements LocatorInterface
 {
     private $containers = [];
     private $calls = [];
+    /**
+     * @var LoaderInterface[]
+     */
+    private $loaders = [];
+
+    public function __construct(array $loaders = [])
+    {
+        $this->setLoaders($loaders);
+    }
+
+    /**
+     * @param $name
+     * @return LoaderInterface|null Loader который может загрузить
+     */
+    private function isLoadable($name)
+    {
+        $result = null;
+        foreach ($this->loaders as $loader) {
+            if ($loader->isLoadable($name)) {
+                $result = $loader;
+            }
+        }
+        return $result;
+    }
 
     public function resolve($name)
     {
         if (!$this->isExist($name)) {
-            throw new \InvalidArgumentException(sprintf('Name is not defined, %s', $name));
+            if (is_null($loader = $this->isLoadable($name))) {
+                throw new \InvalidArgumentException(sprintf('Name is not defined, %s', $name));
+            }
+            $this->add($name, $loader->load($name));
         }
         $result = $this->containers[$name];
         if (array_search($name, $this->calls) !== false) {
             throw new \InvalidArgumentException(
-                sprintf('Infinite recursion in the configuration, name called again: %s, call stack: %s. ', $name, implode(', ', $this->calls)));
+                sprintf('Infinite recursion in the configuration, name called again: %s, call stack: %s. ', $name,
+                    implode(', ', $this->calls)));
         }
         array_push($this->calls, $name);
         if ($result instanceof ContainerInterface) {
@@ -98,5 +126,27 @@ class Locator implements LocatorInterface
     public function __set($name, $value)
     {
         $this->set($name, $value);
+    }
+
+    /**
+     * @return LoaderInterface[]
+     */
+    public function getLoaders()
+    {
+        return $this->loaders;
+    }
+
+    /**
+     * @param LoaderInterface[] $loaders
+     * @throw \InvalidArgumentException
+     */
+    public function setLoaders(array $loaders)
+    {
+        foreach ($loaders as $loader) {
+            if (!($loader instanceof LoaderInterface)) {
+                throw new \InvalidArgumentException('Loaders must imlemenent \smpl\mydi\LoaderInterface');
+            }
+        }
+        $this->loaders = $loaders;
     }
 }

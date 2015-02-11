@@ -68,6 +68,7 @@ class LocatorPropertyTest extends AbstractLoaderTest
 
     /**
      * @test
+     * @see https://github.com/smpl/mydi/issues/19
      */
     public function lazyLoad()
     {
@@ -90,6 +91,7 @@ class LocatorPropertyTest extends AbstractLoaderTest
 
     /**
      * @test
+     * @see https://github.com/smpl/mydi/issues/19
      * @expectedException \InvalidArgumentException
      */
     public function invalidLazyLoad()
