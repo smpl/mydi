@@ -7,7 +7,8 @@ namespace smpl\mydi;
  * Каждой зависимости при добавление присвайвается уникальное имя, а для её разрешения его необходимо указать
  * @package smpl\mydi
  */
-interface LocatorInterface extends \ArrayAccess{
+interface LocatorInterface extends \ArrayAccess
+{
     /**
      * Разрешить зависимость по её имени
      * @param string $name имя зависимости
@@ -43,6 +44,17 @@ interface LocatorInterface extends \ArrayAccess{
      * @return bool
      */
     public function isExist($name);
+
+    /**
+     * @return LoaderInterface[]
+     */
+    public function getLoaders();
+
+    /**
+     * @param LoaderInterface[] $loaders
+     * @throw \InvalidArgumentException
+     */
+    public function setLoaders(array $loaders);
 
     /**
      * @param string $name

@@ -4,7 +4,7 @@ namespace smpl\mydi;
 class AbstractLoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Locator
+     * @var LocatorInterface
      */
     protected $locator;
 
