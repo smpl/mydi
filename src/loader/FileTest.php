@@ -100,6 +100,14 @@ php;
         $this->loader->load('testOutput');
     }
 
+    /**
+     * @test
+     */
+    public function getContext()
+    {
+        $this->assertSame([], $this->loader->getContext());
+    }
+
     public static function tearDownAfterClass()
     {
         parent::tearDownAfterClass();
