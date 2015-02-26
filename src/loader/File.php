@@ -34,7 +34,6 @@ class File implements LoaderInterface
             throw new \InvalidArgumentException('Container name must be string');
         }
         $path = $this->containerNameToPath($containerName);
-        $result = false;
         if (substr($path, 0, strlen($this->basePath)) === $this->basePath) {
             $result = is_readable($this->containerNameToPath($containerName));
         } else {
