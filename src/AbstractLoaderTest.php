@@ -22,6 +22,7 @@ class AbstractLoaderTest extends \PHPUnit_Framework_TestCase
             ['bool', true],
             ['string', 'test'],
             ['object', new \stdClass()],
+            ['null', null]
         ];
     }
 }

@@ -95,7 +95,7 @@ class Locator implements LocatorInterface
 
     public function isExist($name)
     {
-        return isset($this->containers[$name]);
+        return array_key_exists($name, $this->containers);
     }
 
     public function offsetExists($offset)
