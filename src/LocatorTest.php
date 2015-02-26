@@ -231,5 +231,34 @@ class LocatorTest extends AbstractLoaderTest
         $this->locator->setLoaders([$loader]);
         $this->assertSame($value, $this->locator->resolve($name));
     }
+
+    /**
+     * @test
+     * @depends resolveUseLoader
+     */
+    public function getLoaderInvalid() {
+        $this->assertSame(null, $this->locator->getLoader('invalidName'));
+        $loader = $this->getMock('\smpl\mydi\LoaderInterface');
+        $loader->expects($this->once())
+            ->method('isLoadable')
+            ->with($this->equalTo('invalidName'))
+            ->will($this->returnValue(false));
+        $this->locator->setLoaders([$loader]);
+        $this->assertSame(null, $this->locator->getLoader('invalidName'));
+    }
+
+    /**
+     * @test
+     * @depends resolveUseLoader
+     */
+    public function getLoaderValid() {
+        $loader = $this->getMock('\smpl\mydi\LoaderInterface');
+        $loader->expects($this->once())
+            ->method('isLoadable')
+            ->with($this->equalTo('valid'))
+            ->will($this->returnValue(true));
+        $this->locator->setLoaders([$loader]);
+        $this->assertTrue($this->locator->getLoader('valid') instanceof LoaderInterface);
+    }
 }
  

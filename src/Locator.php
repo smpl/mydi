@@ -17,11 +17,7 @@ class Locator implements LocatorInterface
         $this->setLoaders($loaders);
     }
 
-    /**
-     * @param $name
-     * @return LoaderInterface|null Loader который может загрузить
-     */
-    private function isLoadable($name)
+    public function getLoader($name)
     {
         $result = null;
         foreach ($this->loaders as $loader) {
@@ -35,7 +31,7 @@ class Locator implements LocatorInterface
     public function resolve($name)
     {
         if (!$this->isExist($name)) {
-            if (is_null($loader = $this->isLoadable($name))) {
+            if (is_null($loader = $this->getLoader($name))) {
                 throw new \InvalidArgumentException(sprintf('Name is not defined, %s', $name));
             }
             $this->add($name, $loader->load($name));

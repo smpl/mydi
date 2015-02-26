@@ -46,6 +46,12 @@ interface LocatorInterface extends \ArrayAccess
     public function isExist($name);
 
     /**
+     * @param string $containerName
+     * @return LoaderInterface|null| null в случае если подходящего загрузчика не нашлось
+     */
+    public function getLoader($containerName);
+
+    /**
      * @return LoaderInterface[]
      */
     public function getLoaders();
