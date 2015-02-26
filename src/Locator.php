@@ -59,8 +59,12 @@ class Locator implements LocatorInterface, LoggerAwareInterface
         $result = $this->containers[$name];
         if (array_search($name, $this->calls) !== false) {
             throw new \InvalidArgumentException(
-                sprintf('Infinite recursion in the configuration, name called again: %s, call stack: %s. ', $name,
-                    implode(', ', $this->calls)));
+                sprintf(
+                    'Infinite recursion in the configuration, name called again: %s, call stack: %s. ',
+                    $name,
+                    implode(', ', $this->calls)
+                )
+            );
         }
         array_push($this->calls, $name);
         if ($result instanceof ContainerInterface) {

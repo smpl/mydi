@@ -3,8 +3,11 @@
          colors="true">
     <testsuites>
         <testsuite name="unit">
-            <directory suffix="Test.php">./src/</directory>
-            <exclude>src/AbstractLoaderTest.php</exclude>
+            <directory suffix="Test.php">./tests/</directory>
+            <exclude>tests/AbstractLoaderTest.php</exclude>
         </testsuite>
     </testsuites>
+    <logging>
+        <log type="coverage-clover" target="/tmp/coverage.xml"/>
+    </logging>
 </phpunit>

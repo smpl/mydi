@@ -7,7 +7,7 @@ namespace smpl\mydi;
  * Interface LoaderInterface
  * @package smpl\mydi
  */
-interface LoaderInterface 
+interface LoaderInterface
 {
     /**
      * Проверяет может ли загрузить данный контейнер этот Loader

@@ -1,0 +1,21 @@
+filter:
+    paths: [src/*]
+    excluded_paths: [vendor/*, tests/*]
+before_commands:
+    - 'composer install'
+tools:
+    external_code_coverage:
+            timeout: 36000    # Timeout in seconds.
+    php_mess_detector: true
+    php_code_sniffer:
+            config:
+                standard: "PSR2" # Other Values: PSR2, PEAR, Zend, WordPress, Drupal, TYPO3CMS
+    sensiolabs_security_checker: true
+    php_code_coverage: true
+    php_pdepend: true
+    php_loc:
+        enabled: true
+        excluded_dirs: [vendor, tests]
+    php_cpd:
+        enabled: true
+        excluded_dirs: [vendor, tests]

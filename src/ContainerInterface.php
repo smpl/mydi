@@ -8,4 +8,4 @@ interface ContainerInterface
      * @return mixed значение которое храниться в данном контейнере
      */
     public function resolve();
-} 
+}
