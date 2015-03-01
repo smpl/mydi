@@ -20,9 +20,9 @@
 Обычно в любой системе есть несколько типов объектов:
 
 1. Которые создаються каждый раз как их запрашивают **Factory**
-2. Которые создаються в момент когда их первый раз запрашивают, а потом просто возрщают тот же самый результат **Service**
+2. Которые создаються в момент когда их первый раз запрашивают, а потом просто возвращают тот же самый результат **Service**
 3. Иногда есть что то вроде фабричного метода для создания однотипных объектов с отличающими лишь параметрами **Lazy** 
-или когда какой то объект зависит от другова для создания которого надо много ресурсов и используется он крайне редко и 
+или когда какой то объект зависит от другого для создания которого надо много ресурсов и используется он крайне редко и 
 создать который можно принудительно
 
 ## Особенности ##
@@ -35,15 +35,15 @@
 * Возможность загружать определение контейнера в момент когда его запросили используя **Loader**, а определение может храниться в php файлах или json, yaml конфигурции или читать анотации из файлов классов или используя все сразу или свой формат
 
 ## Требования ##
-1. PHP 5.4 или новее (также поддерживается HHVM смотри [build](https://travis-ci.org/smpl/mydi))
+1. PHP 5.4 или новее (также поддерживается)
 
 ## Установка ##
-1. Установить [composer](https://getcomposer.org/doc/00-intro.md)
+1. Установить [composer](https://getcomposer.org/doc/00-intro.md) если ещё не установлен!
 2. Выполнить: ``` composer require smpl/mydi:v1.0.0```
 3. Готово
 
 ### Для разработчиков ###
-* Запуск тестов composer test
+* Запуск тестов ``` composer test ```
 
 ## Примеры использования ##
 ### Создание locator зависимостей ###
@@ -66,6 +66,7 @@ $locator->resolve('string'); // вернет 'value'
 // Одна очень важная особенность нет возможности повторно добавить уже занятое имя через add, например
 $locator->add('test', 'my value');
 $locator->add('test', 'new value'); // Вызовет исключение
+$locaotr->set('test', 'new value'); // Валидно переопределит существующее значение
 ```
 Более подробно смотрите комментарии фаил **src/LocatorInterface.php**
 а также примеры использования в **src/LocatorTest.php**
@@ -78,7 +79,7 @@ var_dump('value' === $locator['string']); // true
 ```
 
 Доступна установка зависимостей с помощью свойств (через магические методы __get, __set)
-смотри **src/LocatorPropertyTest.php**
+смотри **src/LocatorPropertyTest.php** [возможность @deprecated](https://github.com/smpl/mydi/issues/28)
 ```php
 $locator->string = 'value';
 var_dump('value' === $locator->string); // true
@@ -100,8 +101,8 @@ $locator->add('pdo', new \smpl\mydi\container\Factory(function () use ($locator)
     return new \PDO($locator->resolve('dsn'), $locator->resolve('user'), $locator->resolve('password'));
 }));
 
-$pdo = $locator->add('pdo'); // вызовет анонимную функцию и создаст новый экземпляр \PDO
-$pdoAnother = $locator->add('pdo'); // снова вызовет анонимную функцию и создаст новый экземпляр \PDO
+$pdo = $locator->resolve('pdo'); // вызовет анонимную функцию и создаст новый экземпляр \PDO
+$pdoAnother = $locator->resolve('pdo'); // снова вызовет анонимную функцию и создаст новый экземпляр \PDO
 
 // Проверим
 var_dump($pdo instanceof \PDO); // true
@@ -122,8 +123,8 @@ $locator->add('pdo', new \smpl\mydi\container\Service(function () use ($locator)
     return new \PDO($locator->resolve('dsn'), $locator->resolve('user'), $locator->resolve('password'));
 }));
 
-$pdo = $locator->add('pdo'); // вызовет анонимную функцию и создаст новый экземпляр \PDO
-$pdoAnother = $locator->add('pdo'); // Вызова анонимной функции не будет, вернутся тот же результат что и выше, по сути $pdoAnother = $pdo
+$pdo = $locator->resolve('pdo'); // вызовет анонимную функцию и создаст новый экземпляр \PDO
+$pdoAnother = $locator->resolve('pdo'); // Вызова анонимной функции не будет, вернутся тот же результат что и выше, по сути $pdoAnother = $pdo
 
 // Проверим
 var_dump($pdo instanceof \PDO); // true
@@ -144,13 +145,16 @@ $locator->add('pdo2', function () use ($locator) {
 $locator->magic = new Lazy(function ($param) use ($locator) {
        // тут какая то логика по созданию объекта учитывая параметр
        $obj = new stdClass();
-       $obj->db = $locator->db;
+       $obj->db = $locator->db; // pdo береться из преведущих определений (например посмотри в Service)
        $obj->param = $param;
        return $obj;
 });
 // вызываем с разными параметрами
-$locator->magic(1); // Более подробный вариант $locator->resolve('magic')(1);
-$locator->magic(2); // Более подробный вариант $locator->resolve('magic')(2);
+$magic1 = $locator->magic(1); // Более подробный вариант $locator->resolve('magic')(1);
+$magic2 = $locator->magic(2); // Более подробный вариант $locator->resolve('magic')(2);
+
+var_dump($magic1->param === 1); // true параметр был успешно передан и создан объект
+var_dump($magic2->param === 2); // true
 ```
 Более подробно с её поведением можно ознакомиться в юнит тесте **src/container/LazyTest.php**
 
