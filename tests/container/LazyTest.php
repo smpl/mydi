@@ -12,7 +12,7 @@ class LazyTest extends \PHPUnit_Framework_TestCase
             return new \stdClass();
         });
         /** @var LocatorInterface $locator */
-        $locator = $this->getMockBuilder('\smpl\mydi\LocatorInterface')->getMock();
+        $locator = $this->getMockBuilder(LocatorInterface::class)->getMock();
         $container = $lazy->resolve($locator);
         $this->assertSame(true, is_callable($container));
         $this->assertSame(true, $container instanceof \Closure);
@@ -25,7 +25,7 @@ class LazyTest extends \PHPUnit_Framework_TestCase
     {
         $std = new \StdClass;
         $std->param = 1;
-        $locator = $this->getMockBuilder('\smpl\mydi\LocatorInterface')
+        $locator = $this->getMockBuilder(LocatorInterface::class)
             ->getMock();
         $locator->expects($this->any())
             ->method('resolve')

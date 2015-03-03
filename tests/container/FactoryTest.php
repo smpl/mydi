@@ -11,7 +11,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
             return new \stdClass();
         });
         /** @var LocatorInterface $locator */
-        $locator = $this->getMockBuilder('\smpl\mydi\LocatorInterface')->getMock();
+        $locator = $this->getMockBuilder(LocatorInterface::class)->getMock();
         $result = $factory->resolve($locator);
         $this->assertEquals($result, $factory->resolve($locator));
         $this->assertNotSame($result, $factory->resolve($locator));
