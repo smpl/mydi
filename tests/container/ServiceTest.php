@@ -11,7 +11,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
             return new \stdClass();
         });
         /** @var LocatorInterface $locator */
-        $locator = $this->getMockBuilder(LocatorInterface::class)->getMock();
+        $locator = $this->getMockBuilder('\smpl\mydi\LocatorInterface')->getMock();
         $result = $service->resolve($locator);
         $this->assertSame($result, $service->resolve($locator));
 
