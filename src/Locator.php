@@ -106,10 +106,6 @@ class Locator implements LocatorInterface, LoggerAwareInterface
         if (!is_string($name)) {
             throw new \InvalidArgumentException('name must be string');
         }
-        if (is_callable($value)) {
-            $this->logger->info('Used default wrapper for callable element', ['name' => $name]);
-            $value = new Service($value);
-        }
         $this->containers[$name] = $value;
     }
 

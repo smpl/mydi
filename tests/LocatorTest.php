@@ -1,6 +1,8 @@
 <?php
 namespace smpl\mydi;
 
+use smpl\mydi\container\Service;
+
 class LocatorTest extends AbstractLoaderTest
 {
     /**
@@ -105,7 +107,7 @@ class LocatorTest extends AbstractLoaderTest
         });
         $result = $this->locator->resolve('test');
         $this->assertSame($result, $this->locator->resolve('test'));
-        $this->assertTrue($result instanceof \stdClass);
+        $this->assertTrue($result instanceof \Closure);
     }
 
     /**
@@ -129,7 +131,7 @@ class LocatorTest extends AbstractLoaderTest
         });
         $result = $this->locator->resolve('test');
         $this->assertSame($result, $this->locator->resolve('test'));
-        $this->assertTrue($result instanceof \stdClass);
+        $this->assertTrue($result instanceof \Closure);
     }
 
     /**
@@ -140,16 +142,16 @@ class LocatorTest extends AbstractLoaderTest
     public function testNotCorrectConfiguration()
     {
         $locator = $this->locator;
-        $locator->add('a', function () use ($locator) {
+        $locator->add('a', new Service(function () use ($locator) {
             $obj = new \stdClass();
             $obj->test = $locator->resolve('b');
             return $obj;
-        });
-        $locator->add('b', function () use ($locator) {
+        }));
+        $locator->add('b', new Service(function () use ($locator) {
             $obj = new \stdClass();
             $obj->test = $locator->resolve('a');
             return $obj;
-        });
+        }));
         $locator->resolve('a');    // InvalidArgumentException
     }
 
