@@ -113,18 +113,6 @@ class Locator implements LocatorInterface, LoggerAwareInterface
         $this->containers[$name] = $value;
     }
 
-    public function __call($name, $arguments)
-    {
-        if ($this->isExist($name)) {
-            $container = $this->resolve($name);
-            if (is_callable($container)) {
-                return call_user_func_array($container, $arguments);
-            }
-            return $container;
-        }
-        throw new \InvalidArgumentException;
-    }
-
     public function isExist($name)
     {
         $this->logger->debug('Locator isExist container {name}', ['name' => $name]);
@@ -150,17 +138,6 @@ class Locator implements LocatorInterface, LoggerAwareInterface
     {
         $this->delete($offset);
     }
-
-    public function __get($name)
-    {
-        return $this->resolve($name);
-    }
-
-    public function __set($name, $value)
-    {
-        $this->set($name, $value);
-    }
-
     /**
      * @return LoaderInterface[]
      */

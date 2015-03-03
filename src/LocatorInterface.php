@@ -61,16 +61,4 @@ interface LocatorInterface extends \ArrayAccess
      * @throw \InvalidArgumentException
      */
     public function setLoaders(array $loaders);
-
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function __get($name);
-
-    /**
-     * @param string $name
-     * @param $value
-     */
-    public function __set($name, $value);
 }
