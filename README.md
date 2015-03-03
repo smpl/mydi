@@ -91,7 +91,7 @@ $locator->add('dsn', 'mysql:dbname=testdb;host=127.0.0.1');
 $locator->add('user', 'dbuser');
 $locator->add('password', 'dbpass');
 // Через создание Factory
-$locator->add('pdo', new \smpl\mydi\container\Factory(function () use ($locator) {
+$locator->add('pdo', new \smpl\mydi\container\Factory(function (LocatorInterface $locator) {
     return new \PDO($locator->resolve('dsn'), $locator->resolve('user'), $locator->resolve('password'));
 }));
 
@@ -115,7 +115,7 @@ $locator->add('dsn', 'mysql:dbname=testdb;host=127.0.0.1');
 $locator->add('user', 'dbuser');
 $locator->add('password', 'dbpass');
 // Через создание Factory
-$locator->add('pdo', new \smpl\mydi\container\Service(function () use ($locator) {
+$locator->add('pdo', new \smpl\mydi\container\Service(function (LocatorInterface $locator) {
     return new \PDO($locator->resolve('dsn'), $locator->resolve('user'), $locator->resolve('password'));
 }));
 
@@ -129,7 +129,7 @@ var_dump($pdo == $pdoAnother);  // true да они оба одинаковыъ 
 var_dump($pdo === $pdoAnother); // true это одинаковые экземпляры, потому что второй раз функция не вызывалась а вернулось тоже самое
 
 // Просто анонимная функция которая автоматически обернется в Service, я так предпочитаю создавать
-$locator->add('pdo2', function () use ($locator) {
+$locator->add('pdo2', function (LocatorInterface $locator) {
     return new \PDO($locator->resolve('dsn'), $locator->resolve('user'), $locator->resolve('password'));
 });
 ```
@@ -138,7 +138,7 @@ $locator->add('pdo2', function () use ($locator) {
 #### Lazy ####
 Данный объект всегда возвращает анонимную функцию которую вы передали ему в качестве конструктора, которую вы можете вызвать и передать параметры
 ```php
-$locator['magic'] = new Lazy(function ($param) use ($locator) {
+$locator['magic'] = new Lazy(function (LocatorInterface $locator, $param) {
        // тут какая то логика по созданию объекта учитывая параметр
        $obj = new stdClass();
        $obj->db = $locator['db']; // pdo береться из преведущих определений (например посмотри в Service)

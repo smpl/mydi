@@ -1,6 +1,8 @@
 <?php
 namespace smpl\mydi\container;
 
+use smpl\mydi\LocatorInterface;
+
 /**
  * Class Lazy
  * @package smpl\mydi\container
@@ -8,10 +10,11 @@ namespace smpl\mydi\container;
  */
 class Lazy extends Factory
 {
-    public function resolve()
+    public function resolve(LocatorInterface $locator)
     {
-        return function () {
-            return call_user_func_array($this->callback, func_get_args());
+        return function () use ($locator) {
+            $args = array_merge([$locator], func_get_args());
+            return call_user_func_array($this->callback, $args);
         };
     }
 }

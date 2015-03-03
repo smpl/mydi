@@ -2,6 +2,7 @@
 namespace smpl\mydi\container;
 
 use smpl\mydi\ContainerInterface;
+use smpl\mydi\LocatorInterface;
 
 /**
  * Class Factory
@@ -23,8 +24,8 @@ class Factory implements ContainerInterface
         $this->callback = $callback;
     }
 
-    public function resolve()
+    public function resolve(LocatorInterface $locator)
     {
-        return call_user_func_array($this->callback, []);
+        return call_user_func_array($this->callback, [$locator]);
     }
 }

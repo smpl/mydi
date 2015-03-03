@@ -1,6 +1,8 @@
 <?php
 namespace smpl\mydi\container;
 
+use smpl\mydi\LocatorInterface;
+
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testResolve()
@@ -8,17 +10,16 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new Factory(function (){
             return new \stdClass();
         });
-        $result = $factory->resolve();
-        $this->assertNotSame($result, $factory->resolve());
-    }
+        /** @var LocatorInterface $locator */
+        $locator = $this->getMockBuilder(LocatorInterface::class)->getMock();
+        $result = $factory->resolve($locator);
+        $this->assertEquals($result, $factory->resolve($locator));
+        $this->assertNotSame($result, $factory->resolve($locator));
 
-    public function testClosing()
-    {
-        $result = 123;
-        $factory = new Factory(function () use ($result) {
-            return $result;
+        $factory = new Factory(function (LocatorInterface $locator){
+            return $locator;
         });
-        $this->assertSame($result, $factory->resolve());
+        $this->assertSame($locator, $factory->resolve($locator));
     }
 }
  

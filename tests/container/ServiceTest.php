@@ -1,24 +1,24 @@
 <?php
 namespace smpl\mydi\container;
 
+use smpl\mydi\LocatorInterface;
+
 class ServiceTest extends \PHPUnit_Framework_TestCase
 {
     public function testResolve()
     {
-        $factory = new Service(function () {
+        $service = new Service(function () {
             return new \stdClass();
         });
-        $result = $factory->resolve();
-        $this->assertSame($result, $factory->resolve());
-    }
+        /** @var LocatorInterface $locator */
+        $locator = $this->getMockBuilder(LocatorInterface::class)->getMock();
+        $result = $service->resolve($locator);
+        $this->assertSame($result, $service->resolve($locator));
 
-    public function testClosing()
-    {
-        $result = 123;
-        $factory = new Service(function () use ($result) {
-            return $result;
+        $service = new Service(function (LocatorInterface $locator){
+            return $locator;
         });
-        $this->assertSame($result, $factory->resolve());
+        $this->assertSame($locator, $service->resolve($locator));
     }
 }
  

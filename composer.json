@@ -20,7 +20,7 @@
         "psr/log": "@stable"
     },
     "require-dev":{
-        "phpunit/phpunit": "4.*"
+        "phpunit/phpunit": "@stable"
     },
     "scripts": {
         "test": "vendor/bin/phpunit"

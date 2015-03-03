@@ -75,7 +75,7 @@ class Locator implements LocatorInterface, LoggerAwareInterface
                     'name' => $name
                 ]
             );
-            $result = $result->resolve();
+            $result = $result->resolve($this);
         }
         array_pop($this->calls);
         $this->logger->info('Locator container {name} is resolved', ['name' => $name]);

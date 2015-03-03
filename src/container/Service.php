@@ -1,6 +1,8 @@
 <?php
 namespace smpl\mydi\container;
 
+use smpl\mydi\LocatorInterface;
+
 /**
  * Class Service
  * @package smpl\mydi\container
@@ -11,10 +13,10 @@ class Service extends Factory
     private $result;
     private $isCalled = false;
 
-    public function resolve()
+    public function resolve(LocatorInterface $locator)
     {
         if (!$this->isCalled) {
-            $this->result = parent::resolve();
+            $this->result = parent::resolve($locator);
             $this->isCalled = true;
         }
         return $this->result;
