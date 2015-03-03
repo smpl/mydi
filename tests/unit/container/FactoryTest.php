@@ -1,6 +1,7 @@
 <?php
-namespace smpl\mydi\container;
+namespace smpl\mydi\tests\unit\container;
 
+use smpl\mydi\container\Factory;
 use smpl\mydi\LocatorInterface;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase

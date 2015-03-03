@@ -1,5 +1,5 @@
 <?php
-namespace smpl\mydi;
+namespace smpl\mydi\tests\unit;
 
 class LocatorArrayTest extends AbstractLoaderTest
 {

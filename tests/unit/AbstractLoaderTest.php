@@ -1,5 +1,8 @@
 <?php
-namespace smpl\mydi;
+namespace smpl\mydi\tests\unit;
+
+use smpl\mydi\Locator;
+use smpl\mydi\LocatorInterface;
 
 class AbstractLoaderTest extends \PHPUnit_Framework_TestCase
 {

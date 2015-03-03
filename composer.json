@@ -12,7 +12,8 @@
     ],
     "autoload":{
         "psr-4": {
-            "smpl\\mydi\\": ["src/", "tests/"]
+            "smpl\\mydi\\": ["src/"],
+            "smpl\\mydi\\tests\\": ["tests/"]
         }
     },
     "require":{

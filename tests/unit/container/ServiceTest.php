@@ -1,6 +1,7 @@
 <?php
-namespace smpl\mydi\container;
+namespace smpl\mydi\tests\unit\container;
 
+use smpl\mydi\container\Service;
 use smpl\mydi\LocatorInterface;
 
 class ServiceTest extends \PHPUnit_Framework_TestCase

@@ -1,5 +1,7 @@
 <?php
-namespace smpl\mydi\loader;
+namespace smpl\mydi\tests\unit\loader;
+
+use smpl\mydi\loader\File;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {
