@@ -1,6 +1,7 @@
 <?php
 namespace smpl\mydi\tests\unit\loader\parser;
 
+use ReflectionClass;
 use smpl\mydi\loader\parser\Php;
 use smpl\mydi\tests\unit\unit\loader\parser\JsonTest;
 
@@ -15,6 +16,8 @@ class PhpTest extends JsonTest {
     {
         parent::setUp();
         $this->filePathInvalidFormat = $this->getResource('phpInvalid.php');
+        $reflect = new ReflectionClass($this);
+        self::$shortClass = $reflect->getShortName();
     }
 
     /**

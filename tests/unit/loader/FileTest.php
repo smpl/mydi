@@ -5,7 +5,7 @@ use smpl\mydi\loader\File;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {
-    private static $dir = 'resource';
+    private static $resourceDir;
     /**
      * @var File
      */
@@ -14,32 +14,25 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        mkdir(__DIR__ . DIRECTORY_SEPARATOR . self::$dir);
-        $content = <<<'php'
-<?php
-return 15;
-php;
-        file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . self::$dir . DIRECTORY_SEPARATOR . 'test.php', $content);
-        mkdir(__DIR__ . DIRECTORY_SEPARATOR . self::$dir . DIRECTORY_SEPARATOR . 'subDir');
-        file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . self::$dir . DIRECTORY_SEPARATOR . 'subDir/test.php', $content);
-        file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . self::$dir . DIRECTORY_SEPARATOR . 'test.php', $content);
-        $content = <<<'php'
-<?php
-return 15 + $a;
-php;
-        file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . self::$dir . DIRECTORY_SEPARATOR . 'testContext.php', $content);
-        $content = <<<'php'
-<?php
-echo 'Magic';
-return 15;
-php;
-        file_put_contents(__DIR__ . DIRECTORY_SEPARATOR . self::$dir . DIRECTORY_SEPARATOR . 'testOutput.php', $content);
+        self::$resourceDir = __DIR__
+            . DIRECTORY_SEPARATOR
+            . '..'
+            . DIRECTORY_SEPARATOR
+            . '..'
+            . DIRECTORY_SEPARATOR
+            . 'resource'
+            . DIRECTORY_SEPARATOR
+            . 'unit'
+            . DIRECTORY_SEPARATOR
+            . 'loader'
+            . DIRECTORY_SEPARATOR
+            . 'FileTest';
     }
 
     protected function setUp()
     {
         parent::setUp();
-        $this->loader = new File(__DIR__ . DIRECTORY_SEPARATOR . self::$dir);
+        $this->loader = new File(self::$resourceDir);
     }
 
 
@@ -108,17 +101,6 @@ php;
     public function getContext()
     {
         $this->assertSame([], $this->loader->getContext());
-    }
-
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        unlink(__DIR__ . DIRECTORY_SEPARATOR . self::$dir . DIRECTORY_SEPARATOR . 'subDir/test.php');
-        rmdir(__DIR__ . DIRECTORY_SEPARATOR . self::$dir . DIRECTORY_SEPARATOR . 'subDir');
-        unlink(__DIR__ . DIRECTORY_SEPARATOR . self::$dir . DIRECTORY_SEPARATOR . 'test.php');
-        unlink(__DIR__ . DIRECTORY_SEPARATOR . self::$dir . DIRECTORY_SEPARATOR . 'testContext.php');
-        unlink(__DIR__ . DIRECTORY_SEPARATOR . self::$dir . DIRECTORY_SEPARATOR . 'testOutput.php');
-        rmdir(__DIR__ . DIRECTORY_SEPARATOR . self::$dir);
     }
 
 }

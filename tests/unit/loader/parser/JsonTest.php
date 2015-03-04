@@ -1,6 +1,7 @@
 <?php
 namespace smpl\mydi\tests\unit\unit\loader\parser;
 
+use ReflectionClass;
 use smpl\mydi\loader\parser\Json;
 
 class JsonTest extends \PHPUnit_Framework_TestCase
@@ -11,11 +12,14 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     protected $parser = 'smpl\mydi\loader\parser\Json';
     protected $file = 'json.json';
     protected $filePathInvalidFormat = __FILE__;
+    protected static $shortClass;
 
     protected function setUp()
     {
         parent::setUp();
         $this->parser = new $this->parser;
+        $reflect = new ReflectionClass($this);
+        self::$shortClass = $reflect->getShortName();
     }
 
     protected function getResource($file) {
@@ -34,6 +38,8 @@ class JsonTest extends \PHPUnit_Framework_TestCase
         . 'loader'
         . DIRECTORY_SEPARATOR
         . 'parser'
+        . DIRECTORY_SEPARATOR
+        . self::$shortClass
         . DIRECTORY_SEPARATOR
         . $file;
     }
