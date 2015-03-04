@@ -12,7 +12,8 @@ interface ParserInterface
     /**
      * @param $fileName
      * @return array
-     * @throw \InvliadArgumentException в случае если фаил не существует или нет возможности его прочитать
+     * @throws \InvalidArgumentException в случае если фаил не существует или нет возможности его прочитать
+     * @throws \RuntimeException в случае если фаил не может быть разобран парсером
      */
     public function parse($fileName);
 }

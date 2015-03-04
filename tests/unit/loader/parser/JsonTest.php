@@ -8,34 +8,39 @@ class JsonTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Json
      */
-    private $parser;
+    protected $parser = 'smpl\mydi\loader\parser\Json';
+    protected $file = 'json.json';
+    protected $filePathInvalidFormat = __FILE__;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->parser = new Json();
+        $this->parser = new $this->parser;
+    }
+
+    protected function getResource($file) {
+        return __DIR__
+        . DIRECTORY_SEPARATOR
+        . '..'
+        . DIRECTORY_SEPARATOR
+        . '..'
+        . DIRECTORY_SEPARATOR
+        . '..'
+        . DIRECTORY_SEPARATOR
+        . 'resource'
+        . DIRECTORY_SEPARATOR
+        . 'unit'
+        . DIRECTORY_SEPARATOR
+        . 'loader'
+        . DIRECTORY_SEPARATOR
+        . 'parser'
+        . DIRECTORY_SEPARATOR
+        . $file;
     }
 
     public function testParse()
     {
-        $result = $this->parser->parse(__DIR__
-            . DIRECTORY_SEPARATOR
-            . '..'
-            . DIRECTORY_SEPARATOR
-            . '..'
-            . DIRECTORY_SEPARATOR
-            . '..'
-            . DIRECTORY_SEPARATOR
-            . 'resource'
-            . DIRECTORY_SEPARATOR
-            . 'unit'
-            . DIRECTORY_SEPARATOR
-            . 'loader'
-            . DIRECTORY_SEPARATOR
-            . 'parser'
-            . DIRECTORY_SEPARATOR
-            . 'json.json'
-        );
+        $result = $this->parser->parse($this->getResource($this->file));
         $valid = [
             "int" => 15,
             "string" => "some string",
@@ -64,7 +69,7 @@ class JsonTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseInvalidFormat()
     {
-        $this->parser->parse(__FILE__);
+        $this->parser->parse($this->filePathInvalidFormat);
     }
 
 }
