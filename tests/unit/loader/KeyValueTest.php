@@ -8,7 +8,7 @@ use smpl\mydi\LoaderInterface;
 class KeyValueTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var LoaderInterface
+     * @var KeyValue
      */
     private $loader;
     /**
@@ -36,6 +36,12 @@ class KeyValueTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($value, $this->loader->load($key));
     }
 
+    public function testGetParser()
+    {
+        $parser = $this->loader->getParser();
+        $this->assertInstanceOf(ParserInterface::class, $parser);
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Container:`not declared container`, must be loadable
@@ -61,7 +67,7 @@ class KeyValueTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $parser = $this->getMock('smpl\mydi\loader\ParserInterface');
-        $parser->expects($this->once())
+        $parser->expects($this->any())
             ->method('parse')
             ->with($this->equalTo('mockedFile'))
             ->will($this->returnValue($this->parsedConfig));

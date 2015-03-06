@@ -25,6 +25,22 @@ class KeyValue implements LoaderInterface
     public function __construct($fileName, ParserInterface $parser)
     {
         $this->fileName = $fileName;
+        $this->setParser($parser);
+    }
+
+    /**
+     * @return ParserInterface
+     */
+    public function getParser()
+    {
+        return $this->parser;
+    }
+
+    /**
+     * @param ParserInterface $parser
+     */
+    public function setParser(ParserInterface $parser)
+    {
         $this->parser = $parser;
     }
 
