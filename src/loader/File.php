@@ -1,6 +1,8 @@
 <?php
 namespace smpl\mydi\loader;
 
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use smpl\mydi\LoaderInterface;
 
 /**
@@ -94,5 +96,42 @@ class File implements LoaderInterface
     public function getContext()
     {
         return $this->context;
+    }
+
+    /**
+     * Это вызывается в случае когда у Locator запросили построение дерева зависимостей,
+     * Метод нужен исключительно разработчикам для анализа зависимостей и может не очень быстро работать
+     * на production в обычной ситуации данный метод не должен вызываться
+     * @return array
+     */
+    public function getAllLoadableName()
+    {
+        $result = [];
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($this->basePath,
+                RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST);
+        $iterator->rewind();
+        while ($iterator->valid()) {
+            /** @var RecursiveDirectoryIterator $iterator */
+            if ($iterator->isFile() && 'php' === $iterator->getExtension()) {
+                $path = pathinfo($iterator->getSubPathName());
+                if ($iterator->getSubPath() == '') {
+                    $file = $path['filename'];
+                } else {
+                    $file = $path['dirname'] . DIRECTORY_SEPARATOR . $path['filename'];
+                }
+                $result[] = $this->pathToContainerName($file);
+            }
+            $iterator->next();
+        }
+        sort($result);
+        return $result;
+    }
+
+    private function pathToContainerName($path)
+    {
+        $result = str_replace(DIRECTORY_SEPARATOR, '_', $path);
+        return $result;
     }
 }

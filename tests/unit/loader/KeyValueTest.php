@@ -42,6 +42,12 @@ class KeyValueTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(ParserInterface::class, $parser);
     }
 
+
+    public function testGetAllLoadableName()
+    {
+        $this->assertSame(array_keys($this->parsedConfig), $this->loader->getAllLoadableName());
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Container:`not declared container`, must be loadable

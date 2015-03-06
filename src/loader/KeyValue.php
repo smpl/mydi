@@ -77,4 +77,15 @@ class KeyValue implements LoaderInterface
         }
         return $this->getConfiguration()[$containerName];
     }
+
+    /**
+     * Это вызывается в случае когда у Locator запросили построение дерева зависимостей,
+     * Метод нужен исключительно разработчикам для анализа зависимостей и может не очень быстро работать
+     * на production в обычной ситуации данный метод не должен вызываться
+     * @return array
+     */
+    public function getAllLoadableName()
+    {
+        return array_keys($this->getConfiguration());
+    }
 }

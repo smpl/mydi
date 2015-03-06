@@ -12,6 +12,8 @@ class Locator implements LocatorInterface, LoggerAwareInterface
     use LoggerAwareTrait;
     private $containers = [];
     private $calls = [];
+    private $isDependencyMapBuild = false;
+    private $dependencyMap = [];
     /**
      * @var LoaderInterface[]
      */
@@ -43,41 +45,9 @@ class Locator implements LocatorInterface, LoggerAwareInterface
     public function resolve($name)
     {
         $this->logger->debug('Locator resolve {name}', ['name' => $name]);
-        if (!$this->isExist($name)) {
-            if (is_null($loader = $this->getLoader($name))) {
-                throw new \InvalidArgumentException(sprintf('Name is not defined, %s', $name));
-            }
-            $this->logger->info(
-                'Locator resolve {name} with Loader {class}',
-                [
-                    'name' => $name,
-                    'class' => get_class($loader)
-                ]
-            );
-            $this->add($name, $loader->load($name));
-        }
-        $result = $this->containers[$name];
-        if (array_search($name, $this->calls) !== false) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Infinite recursion in the configuration, name called again: %s, call stack: %s. ',
-                    $name,
-                    implode(', ', $this->calls)
-                )
-            );
-        }
-        array_push($this->calls, $name);
-        if ($result instanceof ContainerInterface) {
-            $this->logger->info(
-                'Locator use ContainerInterface {class} to resolve {name}',
-                [
-                    'class' => get_class($result),
-                    'name' => $name
-                ]
-            );
-            $result = $result->resolve($this);
-        }
-        array_pop($this->calls);
+        $this->beforeResolve($name);
+        $result = $this->load($name);
+        $this->afterResolve();
         $this->logger->info('Locator container {name} is resolved', ['name' => $name]);
         return $result;
     }
@@ -134,6 +104,7 @@ class Locator implements LocatorInterface, LoggerAwareInterface
     {
         $this->delete($offset);
     }
+
     /**
      * @return LoaderInterface[]
      */
@@ -157,5 +128,121 @@ class Locator implements LocatorInterface, LoggerAwareInterface
             $this->logger->info('set loader {class}', ['class' => get_class($loader)]);
         }
         $this->loaders = $loaders;
+    }
+
+    public function getDependencyMap()
+    {
+        $names = $this->getAllName();
+        $this->isDependencyMapBuild = true;
+        foreach ($names as $containerName) {
+            $this->resolve($containerName);
+        }
+        $this->isDependencyMapBuild = false;
+        return $this->dependencyMap;
+    }
+
+    private function getAllName()
+    {
+        $result = array_keys($this->containers);
+        foreach ($this->loaders as $loader) {
+            $names = $loader->getAllLoadableName();
+            foreach ($names as $name) {
+                if (!in_array($name, $result)) {
+                    $result[] = $name;
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param $name
+     */
+    private function beforeResolve($name)
+    {
+        if ($this->isDependencyMapBuild) {
+            $this->setDependencyMap($name);
+        }
+
+        if (array_search($name, $this->calls) !== false) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Infinite recursion in the configuration, name called again: %s, call stack: %s. ',
+                    $name,
+                    implode(', ', $this->calls)
+                )
+            );
+        }
+        array_push($this->calls, $name);
+
+        if (!$this->isExist($name)) {
+            $this->tryLoadFromLoader($name);
+        }
+    }
+
+    private function afterResolve()
+    {
+        array_pop($this->calls);
+    }
+
+    /**
+     * @param $name
+     * @return mixed
+     */
+    private function load($name)
+    {
+        $result = $this->containers[$name];
+        if ($result instanceof ContainerInterface) {
+            $this->logger->info(
+                'Locator use ContainerInterface {class} to resolve {name}',
+                [
+                    'class' => get_class($result),
+                    'name' => $name
+                ]
+            );
+            $result = $result->resolve($this);
+            return $result;
+        }
+        return $result;
+    }
+
+    /**
+     * @param $name
+     * @throw \InvalidArgumentException в случае если не сможет найти подходящий Loader
+     */
+    private function tryLoadFromLoader($name)
+    {
+        if (is_null($loader = $this->getLoader($name))) {
+            throw new \InvalidArgumentException(sprintf('Name is not defined, %s', $name));
+        }
+        $this->logger->info(
+            'Locator resolve {name} with Loader {class}',
+            [
+                'name' => $name,
+                'class' => get_class($loader)
+            ]
+        );
+        $this->add($name, $loader->load($name));
+    }
+
+    /**
+     * @param $name
+     */
+    private function setDependencyMap($name)
+    {
+
+        if (empty($this->calls)) {
+            $containerName = $name;
+             $containerValue = [];
+        } else {
+            $containerName = $this->calls[count($this->calls) - 1];
+            $containerValue = $name;
+        }
+        if (is_array($containerValue) && !array_key_exists($containerName, $this->dependencyMap)) {
+            $this->dependencyMap[$containerName] = $containerValue;
+        }
+        if (is_string($containerValue)) {
+            $this->dependencyMap[$containerName][] = $containerValue;
+        }
     }
 }

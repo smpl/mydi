@@ -103,4 +103,10 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertSame([], $this->loader->getContext());
     }
 
+    public function testGetAllLoadableName()
+    {
+        $expected = ['subDir_test', 'test', 'testContext', 'testOutput'];
+        $this->assertSame($expected, $this->loader->getAllLoadableName());
+    }
+
 }

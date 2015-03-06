@@ -61,4 +61,10 @@ interface LocatorInterface extends \ArrayAccess
      * @throw \InvalidArgumentException
      */
     public function setLoaders(array $loaders);
+
+    /**
+     * Получает дерево зависимостей вида 'container' => ['dependcy'] и так для каждого контейнера строиться.
+     * @return array
+     */
+    public function getDependencyMap();
 }
