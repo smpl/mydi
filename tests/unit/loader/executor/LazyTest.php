@@ -6,9 +6,6 @@ use smpl\mydi\LocatorInterface;
 
 class LazyTest extends \PHPUnit_Framework_TestCase
 {
-    protected $executorClass = Lazy::class;
-    protected $wrapperClass = \smpl\mydi\container\Lazy::class;
-    protected $wrapperResult = \Closure::class;
     /**
      * @var Lazy
      */
@@ -19,8 +16,32 @@ class LazyTest extends \PHPUnit_Framework_TestCase
         $locator = $this->getMock(LocatorInterface::class);
         /** @var LocatorInterface $locator */
         $result = $this->executor->execute('stdClass', []);
-        $this->assertInstanceOf($this->wrapperClass, $result);
-        $this->assertInstanceOf($this->wrapperResult, $result->resolve($locator));
+        $this->assertInstanceOf(\smpl\mydi\container\Lazy::class, $result);
+        $this->assertInstanceOf(\Closure::class, $result->resolve($locator));
+    }
+
+    public function testExecuteWithString()
+    {
+        $locator = $this->getMock(LocatorInterface::class);
+        $locator->expects($this->once())
+            ->method('resolve')
+            ->with('stdClass')
+            ->will($this->returnValue(1234));
+        /** @var LocatorInterface $locator */
+
+        $result = $this->executor->execute('ololo', \stdClass::class);
+        $this->assertInstanceOf(\smpl\mydi\container\Lazy::class, $result);
+        $result = $result->resolve($locator);
+        $this->assertSame(1234, $result());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Config must be string or array
+     */
+    public function testExecuteInvalidConfig()
+    {
+        $this->executor->execute('test', null);
     }
 
     public function testExecuteWithConstructs()
@@ -46,6 +67,6 @@ class LazyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->executor = new $this->executorClass();
+        $this->executor = new Lazy();
     }
 }

@@ -6,9 +6,6 @@ use smpl\mydi\LocatorInterface;
 
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
-    protected $executorClass = Factory::class;
-    protected $wrapperClass = \smpl\mydi\container\Factory::class;
-    protected $wrapperResult = \stdClass::class;
     /**
      * @var Factory
      */
@@ -19,8 +16,31 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $locator = $this->getMock(LocatorInterface::class);
         /** @var LocatorInterface $locator */
         $result = $this->executor->execute('stdClass', []);
-        $this->assertInstanceOf($this->wrapperClass, $result);
-        $this->assertInstanceOf($this->wrapperResult, $result->resolve($locator));
+        $this->assertInstanceOf(\smpl\mydi\container\Factory::class, $result);
+        $this->assertInstanceOf(\stdClass::class, $result->resolve($locator));
+    }
+
+    public function testExecuteWithString()
+    {
+        $locator = $this->getMock(LocatorInterface::class);
+        $locator->expects($this->once())
+            ->method('resolve')
+            ->with('stdClass')
+            ->will($this->returnValue(1234));
+        /** @var LocatorInterface $locator */
+
+        $result = $this->executor->execute('ololo', \stdClass::class);
+        $this->assertInstanceOf(\smpl\mydi\container\Factory::class, $result);
+        $this->assertSame(1234, $result->resolve($locator));
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Config must be string or array
+     */
+    public function testExecuteInvalidConfig()
+    {
+        $this->executor->execute('test', null);
     }
 
     public function testExecuteWithConstructs()
@@ -46,6 +66,6 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->executor = new $this->executorClass();
+        $this->executor = new Factory();
     }
 }

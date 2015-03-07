@@ -10,10 +10,19 @@ namespace smpl\mydi\loader;
 interface ParserInterface
 {
     /**
-     * @param $fileName
-     * @return array
-     * @throws \InvalidArgumentException в случае если фаил не существует или нет возможности его прочитать
-     * @throws \RuntimeException в случае если фаил не может быть разобран парсером
+     * @param string $fileName
+     * @return mixed
      */
-    public function parse($fileName);
+    public function setFileName($fileName);
+
+    /**
+     * @return string
+     */
+    public function getFileName();
+
+    /**
+     * @return mixed
+     * @throws \InvalidArgumentException в случае если фаил не существует или нет возможности его прочитать
+     */
+    public function parse();
 }

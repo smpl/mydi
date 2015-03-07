@@ -1,29 +1,32 @@
 {
-    "name": "smpl/mydi",
-    "description": "My small dependency injection implementation",
-    "minimum-stability": "stable",
-    "prefer-stable": true,
-    "license": "GNUv2",
-    "authors": [
-        {
-            "name": "Evgeniy Kuvshinov",
-            "email": "smpl@itmywork.com"
-        }
-    ],
-    "autoload":{
-        "psr-4": {
-            "smpl\\mydi\\": ["src/"],
-            "smpl\\mydi\\tests\\": ["tests/"]
-        }
-    },
-    "require":{
-        "php":">=5.4.0",
-        "psr/log": "@stable"
-    },
-    "require-dev":{
-        "phpunit/phpunit": "@stable"
-    },
-    "scripts": {
-        "test": "vendor/bin/phpunit"
+  "name": "smpl/mydi",
+  "description": "My small dependency injection implementation",
+  "minimum-stability": "stable",
+  "prefer-stable": true,
+  "license": "GNUv2",
+  "authors": [
+    {
+      "name": "Evgeniy Kuvshinov",
+      "email": "smpl@itmywork.com"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "smpl\\mydi\\": ["src/"],
+      "smpl\\mydi\\tests\\": ["tests/"]
+    }
+  },
+  "require": {
+    "php": ">=5.4.0",
+    "psr/log": "@stable"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "@stable"
+  },
+  "suggest": {
+    "monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services, psr/log support"
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit"
+  }
 }

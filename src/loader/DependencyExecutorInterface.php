@@ -5,7 +5,7 @@ interface DependencyExecutorInterface
 {
     /**
      * @param string $containerName
-     * @param array $config
+     * @param array|string $config
      * @return mixed
      */
     public function execute($containerName, $config);

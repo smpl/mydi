@@ -7,6 +7,7 @@ use smpl\mydi\loader\executor\Service;
 
 class Dependency extends KeyValue
 {
+    private static $executorsDefault;
     /**
      * @var string
      */
@@ -16,7 +17,15 @@ class Dependency extends KeyValue
      */
     private $executors = [];
 
-    private static $executorsDefault;
+    public function __construct(ParserInterface $parser, $defaultExecutorName = 'service', $executors = null)
+    {
+        if (is_null($executors)) {
+            $executors = self::getDefaultExecutors();
+        }
+        $this->setDefaultExecutorName($defaultExecutorName);
+        $this->setExecutors($executors);
+        parent::__construct($parser);
+    }
 
     /**
      * @return DependencyExecutorInterface[]
@@ -32,16 +41,6 @@ class Dependency extends KeyValue
         return self::$executorsDefault;
     }
 
-    public function __construct($fileName, ParserInterface $parser, $defaultExecutorName = 'service', $executors = null)
-    {
-        if (is_null($executors)) {
-            $executors = self::getDefaultExecutors();
-        }
-        $this->setDefaultExecutorName($defaultExecutorName);
-        $this->setExecutors($executors);
-        parent::__construct($fileName, $parser);
-    }
-
     public function load($containerName)
     {
         $config = parent::load($containerName);
@@ -52,35 +51,6 @@ class Dependency extends KeyValue
         }
         $result = $this->getExecutorByName($executorName)->execute($containerName, $config);
         return $result;
-    }
-
-    /**
-     * @return DependencyExecutorInterface[]
-     */
-    public function getExecutors()
-    {
-        return $this->executors;
-    }
-
-    /**
-     * @param DependencyExecutorInterface[] $executors
-     */
-    public function setExecutors(array $executors)
-    {
-        foreach ($executors as $executorName => $executor) {
-            if (!is_string($executorName)) {
-                throw new \InvalidArgumentException('Executor name must be a string');
-            }
-            if (!($executor instanceof DependencyExecutorInterface)) {
-                throw new \InvalidArgumentException(
-                    sprintf(
-                        'Excecutor: `%s`, must implement DependencyExecutorInterface',
-                        $executorName
-                    )
-                );
-            }
-        }
-        $this->executors = $executors;
     }
 
     /**
@@ -115,6 +85,35 @@ class Dependency extends KeyValue
             throw new \InvalidArgumentException(sprintf('Executor: `%s`, not found', $name));
         }
         return $this->getExecutors()[$name];
+    }
+
+    /**
+     * @return DependencyExecutorInterface[]
+     */
+    public function getExecutors()
+    {
+        return $this->executors;
+    }
+
+    /**
+     * @param DependencyExecutorInterface[] $executors
+     */
+    public function setExecutors(array $executors)
+    {
+        foreach ($executors as $executorName => $executor) {
+            if (!is_string($executorName)) {
+                throw new \InvalidArgumentException('Executor name must be a string');
+            }
+            if (!($executor instanceof DependencyExecutorInterface)) {
+                throw new \InvalidArgumentException(
+                    sprintf(
+                        'Excecutor: `%s`, must implement DependencyExecutorInterface',
+                        $executorName
+                    )
+                );
+            }
+        }
+        $this->executors = $executors;
     }
 
 }

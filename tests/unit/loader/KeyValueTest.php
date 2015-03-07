@@ -3,7 +3,6 @@ namespace smpl\mydi\tests\unit\tests\unit\loader;
 
 use smpl\mydi\loader\KeyValue;
 use smpl\mydi\loader\ParserInterface;
-use smpl\mydi\LoaderInterface;
 
 class KeyValueTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,6 +48,20 @@ class KeyValueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \RuntimeException
+     */
+    public function testInvalidConfiguration()
+    {
+        $parser = $this->getMock('smpl\mydi\loader\ParserInterface');
+        $parser->expects($this->any())
+            ->method('parse')
+            ->will($this->returnValue('123'));
+        /** @var ParserInterface $parser */
+        $this->loader->setParser($parser);
+        $this->loader->load('test');
+    }
+
+    /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Container:`not declared container`, must be loadable
      */
@@ -75,9 +88,8 @@ class KeyValueTest extends \PHPUnit_Framework_TestCase
         $parser = $this->getMock('smpl\mydi\loader\ParserInterface');
         $parser->expects($this->any())
             ->method('parse')
-            ->with($this->equalTo('mockedFile'))
             ->will($this->returnValue($this->parsedConfig));
         /** @var ParserInterface $parser */
-        $this->loader = new KeyValue('mockedFile', $parser);
+        $this->loader = new KeyValue($parser);
     }
 }

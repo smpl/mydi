@@ -1,16 +1,35 @@
 <?php
 namespace smpl\mydi\loader\parser;
 
-use smpl\mydi\loader\ParserInterface;
-
-class Php implements ParserInterface
+class Php extends AbstractParser
 {
-    public function parse($fileName)
+    /**
+     * @var array
+     */
+    private $context = [];
+
+    public function __construct($fileName, array $context = [])
     {
+        parent::__construct($fileName);
+        $this->setContext($context);
+    }
+
+    /**
+     * @param array $context
+     */
+    public function setContext(array $context)
+    {
+        $this->context = $context;
+    }
+
+    public function parse()
+    {
+        $fileName = $this->getFileName();
         if (!is_readable($fileName)) {
             throw new \InvalidArgumentException(sprintf('FileName: `%s`, must be readable', $fileName));
         }
         ob_start();
+        extract($this->context);
         $result = include $fileName;
         $output = ob_get_clean();
         if (!empty($output)) {
@@ -20,9 +39,6 @@ class Php implements ParserInterface
                     $fileName
                 )
             );
-        }
-        if (!is_array($result)) {
-            throw new \RuntimeException(sprintf('Invalid format in file: `%s`', $fileName));
         }
         return $result;
     }

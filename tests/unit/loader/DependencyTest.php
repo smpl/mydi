@@ -84,11 +84,9 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecutorNotString()
     {
-        $file = 'mockedFile';
         $parser = $this->getMock(ParserInterface::class);
         $parser->expects($this->any())
             ->method('parse')
-            ->with($file)
             ->will($this->returnValue(['test' => ['executor' => 123]]));
         /** @var ParserInterface $parser */
         $this->dependency->setParser($parser);
@@ -101,11 +99,9 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecutorNotFound()
     {
-        $file = 'mockedFile';
         $parser = $this->getMock(ParserInterface::class);
         $parser->expects($this->any())
             ->method('parse')
-            ->with($file)
             ->will($this->returnValue(['test' => ['executor' => 'magic']]));
         /** @var ParserInterface $parser */
         $this->dependency->setParser($parser);
@@ -119,6 +115,20 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     public function testSetDefaultExecutorNameNotString()
     {
         $this->dependency->setDefaultExecutorName(123);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testInvalidConfiguration()
+    {
+        $parser = $this->getMock('smpl\mydi\loader\ParserInterface');
+        $parser->expects($this->any())
+            ->method('parse')
+            ->will($this->returnValue('123'));
+        /** @var ParserInterface $parser */
+        $this->dependency->setParser($parser);
+        $this->dependency->load('test');
     }
 
     /**
@@ -143,14 +153,12 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $file = 'mockedFile';
         $parser = $this->getMock(ParserInterface::class);
         $parser->expects($this->any())
             ->method('parse')
-            ->with($file)
             ->will($this->returnValue(self::$parsedConfig));
         /** @var ParserInterface $parser */
-        $this->dependency = new Dependency($file, $parser);
+        $this->dependency = new Dependency($parser);
     }
 
 }

@@ -1,13 +1,13 @@
 <?php
 namespace smpl\mydi\tests\unit\loader;
 
-use smpl\mydi\loader\File;
+use smpl\mydi\loader\IoC;
 
-class FileTest extends \PHPUnit_Framework_TestCase
+class IoCTest extends \PHPUnit_Framework_TestCase
 {
     private static $resourceDir;
     /**
-     * @var File
+     * @var IoC
      */
     private $loader;
 
@@ -28,13 +28,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
             . DIRECTORY_SEPARATOR
             . 'FileTest';
     }
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->loader = new File(self::$resourceDir);
-    }
-
 
     public function testIsLoadable()
     {
@@ -87,15 +80,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @exceptedExceptionMessage Output in file: `%s` must be empty
-     */
-    public function testLoadNotEmptyOutput()
-    {
-        $this->loader->load('testOutput');
-    }
-
-    /**
      * @test
      */
     public function getContext()
@@ -107,6 +91,12 @@ class FileTest extends \PHPUnit_Framework_TestCase
     {
         $expected = ['subDir_test', 'test', 'testContext', 'testOutput'];
         $this->assertSame($expected, $this->loader->getAllLoadableName());
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->loader = new IoC(self::$resourceDir);
     }
 
 }

@@ -14,18 +14,63 @@ class KeyValue implements LoaderInterface
      */
     private $map = [];
     /**
-     * @var string
-     */
-    private $fileName;
-    /**
      * @var ParserInterface
      */
     private $parser;
 
-    public function __construct($fileName, ParserInterface $parser)
+    public function __construct(ParserInterface $parser)
     {
-        $this->fileName = $fileName;
         $this->setParser($parser);
+    }
+
+    /**
+     * Загрузка контейнера
+     * @param string $containerName
+     * @throws \InvalidArgumentException если имя нельзя загрузить
+     * @return mixed
+     */
+    public function load($containerName)
+    {
+        if (!$this->isLoadable($containerName)) {
+            throw new \InvalidArgumentException(sprintf('Container:`%s`, must be loadable', $containerName));
+        }
+        return $this->getConfiguration()[$containerName];
+    }
+
+    /**
+     * Проверяет может ли загрузить данный контейнер этот Loader
+     * @param string $containerName
+     * @throws \InvalidArgumentException если имя не строка
+     * @return bool
+     */
+    public function isLoadable($containerName)
+    {
+        return array_key_exists($containerName, $this->getConfiguration());
+    }
+
+    private function getConfiguration()
+    {
+        if ($this->isLoad === false) {
+            $this->setMap($this->parser->parse());
+            $this->isLoad = true;
+        }
+        return $this->map;
+    }
+
+    /**
+     * @param array $map
+     */
+    private function setMap($map)
+    {
+        if (!is_array($map)) {
+            throw new \RuntimeException(
+                sprintf(
+                    'Config: `%s` must return array of configuration',
+                    $this->getParser()->getFileName()
+                )
+            );
+        }
+        $this->map = $map;
     }
 
     /**
@@ -42,40 +87,6 @@ class KeyValue implements LoaderInterface
     public function setParser(ParserInterface $parser)
     {
         $this->parser = $parser;
-    }
-
-    private function getConfiguration()
-    {
-        if ($this->isLoad === false) {
-            $this->map = $this->parser->parse($this->fileName);
-            $this->isLoad = true;
-        }
-        return $this->map;
-    }
-
-    /**
-     * Проверяет может ли загрузить данный контейнер этот Loader
-     * @param string $containerName
-     * @throws \InvalidArgumentException если имя не строка
-     * @return bool
-     */
-    public function isLoadable($containerName)
-    {
-        return array_key_exists($containerName, $this->getConfiguration());
-    }
-
-    /**
-     * Загрузка контейнера
-     * @param string $containerName
-     * @throws \InvalidArgumentException если имя нельзя загрузить
-     * @return mixed
-     */
-    public function load($containerName)
-    {
-        if (!$this->isLoadable($containerName)) {
-            throw new \InvalidArgumentException(sprintf('Container:`%s`, must be loadable', $containerName));
-        }
-        return $this->getConfiguration()[$containerName];
     }
 
     /**

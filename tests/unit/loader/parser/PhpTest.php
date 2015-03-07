@@ -6,48 +6,17 @@ use smpl\mydi\loader\parser\Php;
 
 class PhpTest extends \PHPUnit_Framework_TestCase
 {
+    protected static $shortClass;
     /**
      * @var Php
      */
     protected $parser = 'smpl\mydi\loader\parser\Php';
     protected $file = 'php.php';
     protected $filePathInvalidFormat = __FILE__;
-    protected static $shortClass;
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->parser = new $this->parser;
-        $reflect = new ReflectionClass($this);
-        $this->filePathInvalidFormat = $this->getResource('phpInvalid.php');
-        self::$shortClass = $reflect->getShortName();
-    }
-
-    protected function getResource($file) {
-        return __DIR__
-        . DIRECTORY_SEPARATOR
-        . '..'
-        . DIRECTORY_SEPARATOR
-        . '..'
-        . DIRECTORY_SEPARATOR
-        . '..'
-        . DIRECTORY_SEPARATOR
-        . 'resource'
-        . DIRECTORY_SEPARATOR
-        . 'unit'
-        . DIRECTORY_SEPARATOR
-        . 'loader'
-        . DIRECTORY_SEPARATOR
-        . 'parser'
-        . DIRECTORY_SEPARATOR
-        . self::$shortClass
-        . DIRECTORY_SEPARATOR
-        . $file;
-    }
 
     public function testParse()
     {
-        $result = $this->parser->parse($this->getResource($this->file));
+        $result = $this->parser->parse();
         $valid = [
             "int" => 15,
             "string" => "some string",
@@ -68,15 +37,8 @@ class PhpTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseInvalidFileName()
     {
-        $this->parser->parse('invalid name file');
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     */
-    public function testParseInvalidFormat()
-    {
-        $this->parser->parse($this->filePathInvalidFormat);
+        $this->parser->setFileName('invalid name file');
+        $this->parser->parse();
     }
 
     /**
@@ -84,6 +46,59 @@ class PhpTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseWithOutput()
     {
-        $this->parser->parse($this->getResource('phpWithOutput.php'));
+        $this->parser->setFileName($this->getResource('phpWithOutput.php'));
+        $this->parser->parse();
+    }
+
+    public function testParseWithContext()
+    {
+        $this->parser->setFileName($this->getResource('testContext.php'));
+
+        $this->parser->setContext(['a' => 7]);
+        $this->assertSame(15 + 7, $this->parser->parse());
+
+        $this->parser->setContext(['a' => 8]);
+        $this->assertSame(15 + 8, $this->parser->parse());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage File name must be string
+     */
+    public function testSetFileNameNotString()
+    {
+        $this->parser->setFileName(123);
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $reflect = new ReflectionClass($this);
+        $this->filePathInvalidFormat = $this->getResource('phpInvalid.php');
+        self::$shortClass = $reflect->getShortName();
+        $this->parser = new $this->parser($this->getResource($this->file));
+    }
+
+    protected function getResource($file)
+    {
+        return __DIR__
+        . DIRECTORY_SEPARATOR
+        . '..'
+        . DIRECTORY_SEPARATOR
+        . '..'
+        . DIRECTORY_SEPARATOR
+        . '..'
+        . DIRECTORY_SEPARATOR
+        . 'resource'
+        . DIRECTORY_SEPARATOR
+        . 'unit'
+        . DIRECTORY_SEPARATOR
+        . 'loader'
+        . DIRECTORY_SEPARATOR
+        . 'parser'
+        . DIRECTORY_SEPARATOR
+        . self::$shortClass
+        . DIRECTORY_SEPARATOR
+        . $file;
     }
 }

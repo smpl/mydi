@@ -3,12 +3,17 @@ namespace smpl\mydi\tests\unit\loader;
 
 use smpl\mydi\container\Factory;
 use smpl\mydi\container\Service;
-use smpl\mydi\LocatorAwareInterface;
+use smpl\mydi\loader\LocatorAwareInterface;
 use smpl\mydi\loader\ServiceLocator;
 use smpl\mydi\LocatorInterface;
 
 class ServiceLocatorTest extends \PHPUnit_Framework_TestCase implements LocatorAwareInterface
 {
+
+    /**
+     * @var ServiceLocator
+     */
+    private $serviceLocator;
 
     public static function mydiLoad(LocatorInterface $locator)
     {
@@ -20,11 +25,6 @@ class ServiceLocatorTest extends \PHPUnit_Framework_TestCase implements LocatorA
 
         return new Service($callback);
     }
-
-    /**
-     * @var ServiceLocator
-     */
-    private $serviceLocator;
 
     public function testIsLoadable()
     {

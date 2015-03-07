@@ -3,6 +3,7 @@ namespace smpl\mydi\loader;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use smpl\mydi\loader\parser\Php;
 use smpl\mydi\LoaderInterface;
 
 /**
@@ -12,16 +13,37 @@ use smpl\mydi\LoaderInterface;
  * Class File
  * @package smpl\mydi\loader
  */
-class File implements LoaderInterface
+class IoC implements LoaderInterface
 {
     private $context;
 
     private $basePath;
+    /**
+     * @var Php[]
+     */
+    private $parsers = [];
 
-    public function __construct($basePath, array $context = [])
+    public function __construct($basePath, array $context = [], Php $parserPhp = null)
     {
         $this->basePath = realpath($basePath);
         $this->setContext($context);
+    }
+
+    /**
+     * Загрузка контейнера
+     * @param string $containerName
+     * @throws \InvalidArgumentException если имя нельзя загрузить
+     * @throws \LogicException если у файла что подгружаем будет выводиться какой то текст
+     * @return mixed
+     */
+    public function load($containerName)
+    {
+        if (!$this->isLoadable($containerName)) {
+            throw new \InvalidArgumentException(sprintf('Container:`%s` must be loadable', $containerName));
+        }
+        $parser = $this->getParser($containerName);
+        $result = $parser->parse();
+        return $result;
     }
 
     /**
@@ -55,39 +77,13 @@ class File implements LoaderInterface
         return realpath($this->basePath . DIRECTORY_SEPARATOR . $result . '.php');
     }
 
-    /**
-     * Загрузка контейнера
-     * @param string $containerName
-     * @throws \InvalidArgumentException если имя нельзя загрузить
-     * @throws \LogicException если у файла что подгружаем будет выводиться какой то текст
-     * @return mixed
-     */
-    public function load($containerName)
+    private function getParser($containerName)
     {
-        if (!$this->isLoadable($containerName)) {
-            throw new \InvalidArgumentException(sprintf('Container:`%s` must be loadable', $containerName));
+        if (!array_key_exists($containerName, $this->parsers)) {
+            $this->parsers[$containerName] = new Php($this->containerNameToPath($containerName));
         }
-        ob_start();
-        extract($this->context);
-        $result = require $this->containerNameToPath($containerName);
-        $output = ob_get_clean();
-        if (!empty($output)) {
-            throw new \LogicException(
-                sprintf(
-                    'Output in file: `%s` must be empty',
-                    $this->containerNameToPath($containerName)
-                )
-            );
-        }
-        return $result;
-    }
-
-    /**
-     * @param array $context
-     */
-    public function setContext(array $context)
-    {
-        $this->context = $context;
+        $this->parsers[$containerName]->setContext($this->getContext());
+        return $this->parsers[$containerName];
     }
 
     /**
@@ -96,6 +92,14 @@ class File implements LoaderInterface
     public function getContext()
     {
         return $this->context;
+    }
+
+    /**
+     * @param array $context
+     */
+    public function setContext(array $context)
+    {
+        $this->context = $context;
     }
 
     /**
@@ -115,13 +119,7 @@ class File implements LoaderInterface
         while ($iterator->valid()) {
             /** @var RecursiveDirectoryIterator $iterator */
             if ($iterator->isFile() && 'php' === $iterator->getExtension()) {
-                $path = pathinfo($iterator->getSubPathName());
-                if ($iterator->getSubPath() == '') {
-                    $file = $path['filename'];
-                } else {
-                    $file = $path['dirname'] . DIRECTORY_SEPARATOR . $path['filename'];
-                }
-                $result[] = $this->pathToContainerName($file);
+                $result[] = $this->pathToContainerName($iterator->getSubPathName());
             }
             $iterator->next();
         }
@@ -131,6 +129,7 @@ class File implements LoaderInterface
 
     private function pathToContainerName($path)
     {
+        $path = substr($path, 0, -4);
         $result = str_replace(DIRECTORY_SEPARATOR, '_', $path);
         return $result;
     }

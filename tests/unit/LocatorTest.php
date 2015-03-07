@@ -81,7 +81,7 @@ class LocatorTest extends AbstractLoaderTest
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Name is not defined, test
+     * @expectedExceptionMessage Container name: `test` is not defined
      */
     public function testResolveNameNotExist()
     {
@@ -166,7 +166,7 @@ class LocatorTest extends AbstractLoaderTest
      */
     public function setLoadersInvalid($value)
     {
-        $this->locator->setLoaders($value);
+        $this->locator->setLoader($value);
     }
 
     public function providerLoadersInvalid()
@@ -179,39 +179,6 @@ class LocatorTest extends AbstractLoaderTest
             ['123'],
             [new \stdClass()],
         ];
-    }
-
-    /**
-     * @test
-     * @see https://github.com/smpl/mydi/issues/22
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Loaders must imlemenent \smpl\mydi\LoaderInterface
-     * @dataProvider providerLoadersInvalidArray
-     * @param $array
-     */
-    public function setLoadersInvilidArray($array)
-    {
-        $this->locator->setLoaders($array);
-    }
-
-    public function providerLoadersInvalidArray()
-    {
-        return [
-            [[null]],
-            [[false]],
-            [[123]],
-            [['123']],
-            [[new \stdClass()]],
-        ];
-    }
-
-    /**
-     * @test
-     * @see https://github.com/smpl/mydi/issues/22
-     */
-    public function getLoaders()
-    {
-        $this->assertSame([], $this->locator->getLoaders());
     }
 
     /**
@@ -232,43 +199,30 @@ class LocatorTest extends AbstractLoaderTest
             ->method('load')
             ->with($this->equalTo($name))
             ->will($this->returnValue($value));
-        $this->locator->setLoaders([$loader]);
+        /** @var LoaderInterface $loader */
+        $this->locator->setLoader($loader);
         $this->assertSame($value, $this->locator->resolve($name));
     }
 
-    /**
-     * @test
-     * @depends resolveUseLoader
-     */
-    public function getLoaderInvalid()
+    public function testGetLoader()
     {
-        $this->assertSame(null, $this->locator->getLoader('invalidName'));
-        $loader = $this->getMock('\smpl\mydi\LoaderInterface');
-        $loader->expects($this->once())
-            ->method('isLoadable')
-            ->with($this->equalTo('invalidName'))
-            ->will($this->returnValue(false));
-        $this->locator->setLoaders([$loader]);
-        $this->assertSame(null, $this->locator->getLoader('invalidName'));
-    }
+        $this->assertInstanceOf(LoaderInterface::class, $this->locator->getLoader());
 
-    /**
-     * @test
-     * @depends resolveUseLoader
-     */
-    public function getLoaderValid()
-    {
-        $loader = $this->getMock('\smpl\mydi\LoaderInterface');
-        $loader->expects($this->once())
-            ->method('isLoadable')
-            ->with($this->equalTo('valid'))
-            ->will($this->returnValue(true));
-        $this->locator->setLoaders([$loader]);
-        $this->assertTrue($this->locator->getLoader('valid') instanceof LoaderInterface);
+        $result = $this->getMock(LoaderInterface::class);
+        /** @var LoaderInterface $result */
+        $this->locator->setLoader($result);
+        $this->assertSame($result, $this->locator->getLoader());
     }
 
     public function testGetDependencyMap()
     {
+        $loader = $this->getMock('\smpl\mydi\LoaderInterface');
+        $loader->expects($this->any())
+            ->method('getAllLoadableName')
+            ->will($this->returnValue([]));
+        /** @var LoaderInterface $loader */
+        $this->locator->setLoader($loader);
+
         $this->locator->add('string', 'my string');
         $this->locator->add('int', 123);
 
@@ -296,6 +250,7 @@ class LocatorTest extends AbstractLoaderTest
         $this->assertSame($expected, $this->locator->getDependencyMap());
 
         $loader = $this->getMock(LoaderInterface::class);
+        /** @var \PHPUnit_Framework_MockObject_MockObject $loader */
         $loader->expects($this->once())
             ->method('getAllLoadableName')
             ->will($this->returnValue(['loader']));
@@ -312,7 +267,8 @@ class LocatorTest extends AbstractLoaderTest
                 $result->int = $locator->resolve('int');
                 return $result;
             })));
-        $this->locator->setLoaders([$loader]);
+        /** @var LoaderInterface $loader */
+        $this->locator->setLoader($loader);
         $expected += ['loader' => ['main', 'int']];
         $this->assertSame($expected, $this->locator->getDependencyMap());
     }

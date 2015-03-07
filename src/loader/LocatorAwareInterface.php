@@ -1,5 +1,7 @@
 <?php
-namespace smpl\mydi;
+namespace smpl\mydi\loader;
+
+use smpl\mydi\LocatorInterface;
 
 interface LocatorAwareInterface
 {
