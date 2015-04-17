@@ -1,13 +1,13 @@
 <?php
 namespace smpl\mydi\tests\unit\loader\executor;
 
-use smpl\mydi\loader\executor\Lazy;
+use smpl\mydi\loader\executor\LazyFactory;
 use smpl\mydi\LocatorInterface;
 
-class LazyTest extends \PHPUnit_Framework_TestCase
+class LazyFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Lazy
+     * @var LazyFactory
      */
     protected $executor;
 
@@ -20,7 +20,7 @@ class LazyTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(\Closure::class, $result->resolve($locator));
         $value1 = $result->resolve($locator);
         $value2 = $result->resolve($locator);
-        $this->assertSame($value1(), $value2());
+        $this->assertNotSame($value1(), $value2());
     }
 
     public function testExecuteWithString()
@@ -70,6 +70,6 @@ class LazyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->executor = new Lazy();
+        $this->executor = new LazyFactory();
     }
 }
