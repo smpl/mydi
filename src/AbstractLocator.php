@@ -19,7 +19,7 @@ abstract class AbstractLocator implements LocatorInterface
 
     public function offsetExists($offset)
     {
-        return $this->isExist($offset);
+        return $this->has($offset);
     }
 
     public function offsetGet($offset)

@@ -43,7 +43,7 @@ interface LocatorInterface extends \ArrayAccess
      * @param string $name
      * @return bool
      */
-    public function isExist($name);
+    public function has($name);
 
     /**
      * @return LoaderInterface[]

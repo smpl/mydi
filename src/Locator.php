@@ -30,12 +30,12 @@ class Locator extends AbstractLocator
         }
         array_push($this->calls, $name);
 
-        if (!$this->isExist($name)) {
+        if (!$this->has($name)) {
             $this->tryLoadFromLoader($name);
         }
     }
 
-    public function isExist($name)
+    public function has($name)
     {
         return array_key_exists($name, $this->containers);
     }
@@ -62,7 +62,7 @@ class Locator extends AbstractLocator
 
     public function add($name, $value)
     {
-        if ($this->isExist($name)) {
+        if ($this->has($name)) {
             throw new \InvalidArgumentException(sprintf('name is already exist, %s', $name));
         }
         $this->set($name, $value);
@@ -97,7 +97,7 @@ class Locator extends AbstractLocator
 
     public function delete($name)
     {
-        if (!$this->isExist($name)) {
+        if (!$this->has($name)) {
             throw new \InvalidArgumentException(sprintf('name is not exist, %s', $name));
         }
         unset($this->containers[$name]);

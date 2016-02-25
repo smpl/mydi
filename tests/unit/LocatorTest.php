@@ -16,7 +16,7 @@ class LocatorTest extends AbstractLoaderTest
         $this->locator->add($name, $value);
         $this->assertSame($value, $this->locator->resolve($name));
         $this->locator->delete($name);
-        $this->assertSame(false, $this->locator->isExist($name));
+        $this->assertSame(false, $this->locator->has($name));
     }
 
     /**
@@ -29,7 +29,7 @@ class LocatorTest extends AbstractLoaderTest
         $this->locator->set($name, $value);
         $this->assertSame($value, $this->locator->resolve($name));
         $this->locator->delete($name);
-        $this->assertSame(false, $this->locator->isExist($name));
+        $this->assertSame(false, $this->locator->has($name));
     }
 
     /**
@@ -101,7 +101,7 @@ class LocatorTest extends AbstractLoaderTest
         $this->locator->add('test', $mock);
         $this->assertSame($result, $this->locator->resolve('test'));
         $this->locator->delete('test');
-        $this->assertSame(false, $this->locator->isExist('test'));
+        $this->assertSame(false, $this->locator->has('test'));
 
         $this->locator->add('test', function () {
             return new \stdClass();
@@ -125,7 +125,7 @@ class LocatorTest extends AbstractLoaderTest
         $this->locator->set('test', $mock);
         $this->assertSame($result, $this->locator->resolve('test'));
         $this->locator->delete('test');
-        $this->assertSame(false, $this->locator->isExist('test'));
+        $this->assertSame(false, $this->locator->has('test'));
 
         $this->locator->set('test', function () {
             return new \stdClass();
