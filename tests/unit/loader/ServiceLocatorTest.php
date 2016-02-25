@@ -45,12 +45,6 @@ class ServiceLocatorTest extends \PHPUnit_Framework_TestCase implements LocatorA
         $this->serviceLocator->isLoadable(123);
     }
 
-    public function testGetAllLoadableName()
-    {
-        $this->assertSame([], $this->serviceLocator->getAllLoadableName());
-    }
-
-
     public function testLoad()
     {
         $result = $this->serviceLocator->load('\smpl\mydi\tests\unit\loader\ServiceLocatorTest');

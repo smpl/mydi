@@ -46,19 +46,13 @@ interface LocatorInterface extends \ArrayAccess
     public function isExist($name);
 
     /**
-     * @return LoaderInterface
+     * @return LoaderInterface[]
      */
-    public function getLoader();
+    public function getLoaders();
 
     /**
-     * @param LoaderInterface $loader
+     * @param LoaderInterface[] $loader
      * @throw \InvalidArgumentException
      */
-    public function setLoader(LoaderInterface $loader);
-
-    /**
-     * Получает дерево зависимостей вида 'container' => ['dependcy'] и так для каждого контейнера строиться.
-     * @return array
-     */
-    public function getDependencyMap();
+    public function setLoaders(array $loader);
 }

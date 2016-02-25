@@ -17,7 +17,7 @@ class Factory implements ContainerInterface
     protected $callback;
 
     /**
-     * @param callable $callback Анонимная функция которая возвращает необходимый результат
+     * @param \Closure $callback Анонимная функция которая возвращает необходимый результат
      */
     public function __construct(\Closure $callback)
     {

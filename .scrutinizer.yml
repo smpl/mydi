@@ -1,11 +1,10 @@
 filter:
     paths: [src/*]
     excluded_paths: [vendor/*, tests/*]
-before_commands:
-    - 'composer install'
+
+checks:
+    php: true
 tools:
-    external_code_coverage:
-            timeout: 36000    # Timeout in seconds.
     php_mess_detector: true
     php_code_sniffer:
             config:

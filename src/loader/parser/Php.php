@@ -30,6 +30,7 @@ class Php extends AbstractParser
         }
         ob_start();
         extract($this->context);
+        /** @noinspection PhpIncludeInspection */
         $result = include $fileName;
         $output = ob_get_clean();
         if (!empty($output)) {

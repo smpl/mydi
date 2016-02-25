@@ -16,7 +16,7 @@ class Lazy extends AbstractExecutor
     public function execute($containerName, $config)
     {
         if (!$this->isLoaded) {
-            $this->loaded = new ContainerService(parent::execute($containerName, $config));
+            $this->loaded = new ContainerService($this->getClosure($containerName, $config));
             $this->isLoaded = true;
         }
         return new \smpl\mydi\container\Lazy(function (LocatorInterface $locatorInterface) {

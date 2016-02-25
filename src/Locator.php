@@ -8,11 +8,9 @@ class Locator extends AbstractLocator
 
     public function resolve($name)
     {
-        $this->logger->debug('Locator resolve {name}', ['name' => $name]);
         $this->beforeResolve($name);
         $result = $this->load($name);
         $this->afterResolve();
-        $this->logger->info('Locator container {name} is resolved', ['name' => $name]);
         return $result;
     }
 
@@ -21,10 +19,6 @@ class Locator extends AbstractLocator
      */
     private function beforeResolve($name)
     {
-        if ($this->isDependencyMapBuild) {
-            $this->buildMap($name);
-        }
-
         if (array_search($name, $this->calls) !== false) {
             throw new \InvalidArgumentException(
                 sprintf(
@@ -41,24 +35,8 @@ class Locator extends AbstractLocator
         }
     }
 
-    /**
-     * @param $name
-     */
-    protected function buildMap($name)
-    {
-        if (empty($this->calls)) {
-            $containerName = $name;
-            $containerValue = [];
-        } else {
-            $containerName = $this->calls[count($this->calls) - 1];
-            $containerValue = $name;
-        }
-        $this->setDependencyMap($containerName, $containerValue);
-    }
-
     public function isExist($name)
     {
-        $this->logger->debug('Locator isExist container {name}', ['name' => $name]);
         return array_key_exists($name, $this->containers);
     }
 
@@ -68,22 +46,22 @@ class Locator extends AbstractLocator
      */
     private function tryLoadFromLoader($name)
     {
-        if (!$this->getLoader()->isLoadable($name)) {
+        $result = null;
+        /** @var LoaderInterface $loader */
+        foreach ($this->getLoaders() as $loader) {
+            if ($loader->isLoadable($name)) {
+                $result = $loader;
+                break;
+            }
+        }
+        if (is_null($result)) {
             throw new \InvalidArgumentException(sprintf('Container name: `%s` is not defined', $name));
         }
-        $this->logger->info(
-            'Locator resolve {name} with Loader {class}',
-            [
-                'name' => $name,
-                'class' => get_class($this->getLoader())
-            ]
-        );
-        $this->add($name, $this->getLoader()->load($name));
+        $this->add($name, $result->load($name));
     }
 
     public function add($name, $value)
     {
-        $this->logger->debug('Locator add container {name}', ['name' => $name]);
         if ($this->isExist($name)) {
             throw new \InvalidArgumentException(sprintf('name is already exist, %s', $name));
         }
@@ -92,7 +70,6 @@ class Locator extends AbstractLocator
 
     public function set($name, $value)
     {
-        $this->logger->debug('Locator set container {name}', ['name' => $name]);
         if (!is_string($name)) {
             throw new \InvalidArgumentException('name must be string');
         }
@@ -107,13 +84,6 @@ class Locator extends AbstractLocator
     {
         $result = $this->containers[$name];
         if ($result instanceof ContainerInterface) {
-            $this->logger->info(
-                'Locator use ContainerInterface {class} to resolve {name}',
-                [
-                    'class' => get_class($result),
-                    'name' => $name
-                ]
-            );
             $result = $result->resolve($this);
             return $result;
         }
@@ -127,22 +97,9 @@ class Locator extends AbstractLocator
 
     public function delete($name)
     {
-        $this->logger->debug('Locator delete container {name}', ['name' => $name]);
         if (!$this->isExist($name)) {
             throw new \InvalidArgumentException(sprintf('name is not exist, %s', $name));
         }
         unset($this->containers[$name]);
-    }
-
-    protected function getAllName()
-    {
-        $result = array_keys($this->containers);
-        $names = $this->getLoader()->getAllLoadableName();
-        foreach ($names as $name) {
-            if (!in_array($name, $result)) {
-                $result[] = $name;
-            }
-        }
-        return $result;
     }
 }

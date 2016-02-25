@@ -1,6 +1,7 @@
 <?php
 namespace smpl\mydi\tests\unit\loader\executor;
 
+use smpl\mydi\container\Lazy;
 use smpl\mydi\loader\executor\LazyFactory;
 use smpl\mydi\LocatorInterface;
 
@@ -16,7 +17,7 @@ class LazyFactoryTest extends \PHPUnit_Framework_TestCase
         $locator = $this->getMock(LocatorInterface::class);
         /** @var LocatorInterface $locator */
         $result = $this->executor->execute('stdClass', []);
-        $this->assertInstanceOf(\smpl\mydi\container\Lazy::class, $result);
+        $this->assertInstanceOf(Lazy::class, $result);
         $this->assertInstanceOf(\Closure::class, $result->resolve($locator));
         $value1 = $result->resolve($locator);
         $value2 = $result->resolve($locator);
@@ -33,7 +34,7 @@ class LazyFactoryTest extends \PHPUnit_Framework_TestCase
         /** @var LocatorInterface $locator */
 
         $result = $this->executor->execute('ololo', \stdClass::class);
-        $this->assertInstanceOf(\smpl\mydi\container\Lazy::class, $result);
+        $this->assertInstanceOf(Lazy::class, $result);
         $result = $result->resolve($locator);
         $this->assertSame(1234, $result());
     }

@@ -3,7 +3,6 @@ namespace smpl\mydi\tests\unit;
 
 use smpl\mydi\container\Service;
 use smpl\mydi\LoaderInterface;
-use smpl\mydi\LocatorInterface;
 
 class LocatorTest extends AbstractLoaderTest
 {
@@ -159,14 +158,13 @@ class LocatorTest extends AbstractLoaderTest
 
     /**
      * @test
-     * @see https://github.com/smpl/mydi/issues/22
      * @expectedException \PHPUnit_Framework_Error
      * @dataProvider providerLoadersInvalid
      * @param $value
      */
     public function setLoadersInvalid($value)
     {
-        $this->locator->setLoader($value);
+        $this->locator->setLoaders($value);
     }
 
     public function providerLoadersInvalid()
@@ -179,6 +177,14 @@ class LocatorTest extends AbstractLoaderTest
             ['123'],
             [new \stdClass()],
         ];
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testSetLoadersInvalid()
+    {
+        $this->locator->setLoaders([1]);
     }
 
     /**
@@ -200,77 +206,18 @@ class LocatorTest extends AbstractLoaderTest
             ->with($this->equalTo($name))
             ->will($this->returnValue($value));
         /** @var LoaderInterface $loader */
-        $this->locator->setLoader($loader);
+        $this->locator->setLoaders([$loader]);
         $this->assertSame($value, $this->locator->resolve($name));
     }
 
     public function testGetLoader()
     {
-        $this->assertInstanceOf(LoaderInterface::class, $this->locator->getLoader());
+        $this->assertSame([], $this->locator->getLoaders());
 
-        $result = $this->getMock(LoaderInterface::class);
-        /** @var LoaderInterface $result */
-        $this->locator->setLoader($result);
-        $this->assertSame($result, $this->locator->getLoader());
-    }
-
-    public function testGetDependencyMap()
-    {
-        $loader = $this->getMock('\smpl\mydi\LoaderInterface');
-        $loader->expects($this->any())
-            ->method('getAllLoadableName')
-            ->will($this->returnValue([]));
-        /** @var LoaderInterface $loader */
-        $this->locator->setLoader($loader);
-
-        $this->locator->add('string', 'my string');
-        $this->locator->add('int', 123);
-
-        $expected = [
-            'string' => [],
-            'int' => []
-        ];
-        $this->assertSame($expected, $this->locator->getDependencyMap());
-
-        $this->locator->add('service', new Service(function (LocatorInterface $locator) {
-            $result = new \stdClass();
-            $result->string = $locator->resolve('string');
-            $result->int = $locator->resolve('int');
-            return $result;
-        }));
-        $expected += ['service' => ['string', 'int']];
-        $this->assertSame($expected, $this->locator->getDependencyMap());
-
-        $this->locator->add('main', new Service(function (LocatorInterface $locator) {
-            $result = new \stdClass();
-            $result->service = $locator->resolve('service');
-            return $result;
-        }));
-        $expected += ['main' => ['service']];
-        $this->assertSame($expected, $this->locator->getDependencyMap());
-
-        $loader = $this->getMock(LoaderInterface::class);
-        /** @var \PHPUnit_Framework_MockObject_MockObject $loader */
-        $loader->expects($this->once())
-            ->method('getAllLoadableName')
-            ->will($this->returnValue(['loader']));
-        $loader->expects($this->once())
-            ->method('isLoadable')
-            ->with('loader')
-            ->will($this->returnValue(true));
-        $loader->expects($this->once())
-            ->method('load')
-            ->with('loader')
-            ->will($this->returnValue(new Service(function (LocatorInterface $locator) {
-                $result = new \stdClass();
-                $result->main = $locator->resolve('main');
-                $result->int = $locator->resolve('int');
-                return $result;
-            })));
-        /** @var LoaderInterface $loader */
-        $this->locator->setLoader($loader);
-        $expected += ['loader' => ['main', 'int']];
-        $this->assertSame($expected, $this->locator->getDependencyMap());
+        $result = [$this->getMock(LoaderInterface::class)];
+        /** @var LoaderInterface[] $result */
+        $this->locator->setLoaders($result);
+        $this->assertSame($result, $this->locator->getLoaders());
     }
 }
  

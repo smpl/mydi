@@ -33,6 +33,7 @@ class Dependency extends KeyValue
     public static function getDefaultExecutors()
     {
         if (empty(self::$executorsDefault)) {
+            $result = [];
             $result['service'] = new Service();
             $result['factory'] = new Factory();
             $result['lazy'] = new Lazy();

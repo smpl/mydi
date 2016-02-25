@@ -1,8 +1,6 @@
 <?php
 namespace smpl\mydi\loader;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use smpl\mydi\loader\parser\Php;
 use smpl\mydi\LoaderInterface;
 
@@ -23,7 +21,7 @@ class IoC implements LoaderInterface
      */
     private $parsers = [];
 
-    public function __construct($basePath, array $context = [], Php $parserPhp = null)
+    public function __construct($basePath, array $context = [])
     {
         $this->basePath = realpath($basePath);
         $this->setContext($context);
@@ -100,37 +98,5 @@ class IoC implements LoaderInterface
     public function setContext(array $context)
     {
         $this->context = $context;
-    }
-
-    /**
-     * Это вызывается в случае когда у Locator запросили построение дерева зависимостей,
-     * Метод нужен исключительно разработчикам для анализа зависимостей и может не очень быстро работать
-     * на production в обычной ситуации данный метод не должен вызываться
-     * @return array
-     */
-    public function getAllLoadableName()
-    {
-        $result = [];
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($this->basePath,
-                RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST);
-        $iterator->rewind();
-        while ($iterator->valid()) {
-            /** @var RecursiveDirectoryIterator $iterator */
-            if ($iterator->isFile() && 'php' === $iterator->getExtension()) {
-                $result[] = $this->pathToContainerName($iterator->getSubPathName());
-            }
-            $iterator->next();
-        }
-        sort($result);
-        return $result;
-    }
-
-    private function pathToContainerName($path)
-    {
-        $path = substr($path, 0, -4);
-        $result = str_replace(DIRECTORY_SEPARATOR, '_', $path);
-        return $result;
     }
 }
