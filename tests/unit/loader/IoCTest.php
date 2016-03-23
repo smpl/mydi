@@ -80,11 +80,11 @@ class IoCTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
+     * @expectedException \RuntimeException
      */
-    public function getContext()
+    public function testLoadWithOutput()
     {
-        $this->assertSame([], $this->loader->getContext());
+        $this->loader->load('testOutput');
     }
 
     protected function setUp()

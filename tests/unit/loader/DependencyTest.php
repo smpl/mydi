@@ -6,7 +6,6 @@ use smpl\mydi\loader\DependencyExecutorInterface;
 use smpl\mydi\loader\executor\Factory;
 use smpl\mydi\loader\executor\Lazy;
 use smpl\mydi\loader\executor\Service;
-use smpl\mydi\loader\ParserInterface;
 
 class DependencyTest extends \PHPUnit_Framework_TestCase
 {
@@ -84,12 +83,9 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecutorNotString()
     {
-        $parser = $this->getMock(ParserInterface::class);
-        $parser->expects($this->any())
-            ->method('parse')
-            ->will($this->returnValue(['test' => ['executor' => 123]]));
-        /** @var ParserInterface $parser */
-        $this->dependency->setParser($parser);
+        $this->dependency->setLoader(function () {
+            return ['test' => ['executor' => 123]];
+        });
         $this->dependency->load('test');
     }
 
@@ -99,12 +95,9 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecutorNotFound()
     {
-        $parser = $this->getMock(ParserInterface::class);
-        $parser->expects($this->any())
-            ->method('parse')
-            ->will($this->returnValue(['test' => ['executor' => 'magic']]));
-        /** @var ParserInterface $parser */
-        $this->dependency->setParser($parser);
+        $this->dependency->setLoader(function () {
+            return ['test' => ['executor' => 'magic']];
+        });
         $this->dependency->load('test');
     }
 
@@ -122,12 +115,9 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidConfiguration()
     {
-        $parser = $this->getMock('smpl\mydi\loader\ParserInterface');
-        $parser->expects($this->any())
-            ->method('parse')
-            ->will($this->returnValue('123'));
-        /** @var ParserInterface $parser */
-        $this->dependency->setParser($parser);
+        $this->dependency->setLoader(function () {
+            return '123';
+        });
         $this->dependency->load('test');
     }
 
@@ -153,12 +143,9 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $parser = $this->getMock(ParserInterface::class);
-        $parser->expects($this->any())
-            ->method('parse')
-            ->will($this->returnValue(self::$parsedConfig));
-        /** @var ParserInterface $parser */
-        $this->dependency = new Dependency($parser);
+        $this->dependency = new Dependency(function () {
+            return self::$parsedConfig;
+        });
     }
 
 }

@@ -17,7 +17,7 @@ class Dependency extends KeyValue
      */
     private $executors = [];
 
-    public function __construct(ParserInterface $parser, $defaultExecutorName = 'service', $executors = null)
+    public function __construct(\Closure $parser, $defaultExecutorName = 'service', $executors = null)
     {
         if (is_null($executors)) {
             $executors = self::getDefaultExecutors();
