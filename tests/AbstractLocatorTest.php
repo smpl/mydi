@@ -1,10 +1,7 @@
 <?php
-namespace smpl\mydi\tests\unit;
+namespace smpl\mydi;
 
-use smpl\mydi\Locator;
-use smpl\mydi\LocatorInterface;
-
-class AbstractLoaderTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var LocatorInterface

@@ -1,26 +1,23 @@
 <?php
-namespace smpl\mydi\tests\unit\loader\executor;
+namespace smpl\mydi\loader\executor;
 
-use smpl\mydi\loader\executor\Lazy;
 use smpl\mydi\LocatorInterface;
 
-class LazyTest extends \PHPUnit_Framework_TestCase
+class ServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Lazy
+     * @var Service
      */
     protected $executor;
+    protected $wrapperResult = \stdClass::class;
 
     public function testExecute()
     {
         $locator = $this->getMock(LocatorInterface::class);
         /** @var LocatorInterface $locator */
         $result = $this->executor->execute('stdClass', []);
-        $this->assertInstanceOf(\smpl\mydi\container\Lazy::class, $result);
-        $this->assertInstanceOf(\Closure::class, $result->resolve($locator));
-        $value1 = $result->resolve($locator);
-        $value2 = $result->resolve($locator);
-        $this->assertSame($value1(), $value2());
+        $this->assertInstanceOf(\smpl\mydi\container\Service::class, $result);
+        $this->assertInstanceOf(\stdClass::class, $result->resolve($locator));
     }
 
     public function testExecuteWithString()
@@ -33,9 +30,8 @@ class LazyTest extends \PHPUnit_Framework_TestCase
         /** @var LocatorInterface $locator */
 
         $result = $this->executor->execute('ololo', \stdClass::class);
-        $this->assertInstanceOf(\smpl\mydi\container\Lazy::class, $result);
-        $result = $result->resolve($locator);
-        $this->assertSame(1234, $result());
+        $this->assertInstanceOf(\smpl\mydi\container\Service::class, $result);
+        $this->assertSame(1234, $result->resolve($locator));
     }
 
     /**
@@ -70,6 +66,6 @@ class LazyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->executor = new Lazy();
+        $this->executor = new Service();
     }
 }

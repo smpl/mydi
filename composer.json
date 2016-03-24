@@ -12,8 +12,14 @@
   ],
   "autoload": {
     "psr-4": {
-      "smpl\\mydi\\": ["src/"],
-      "smpl\\mydi\\tests\\": ["tests/"]
+      "smpl\\mydi\\": [
+        "src/"
+      ]
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "smpl\\mydi\\": "tests/"
     }
   },
   "require": {

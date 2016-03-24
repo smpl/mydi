@@ -1,5 +1,5 @@
 <?php
-namespace smpl\mydi\tests\unit\tests\unit\loader;
+namespace smpl\mydi\tests\unit\loader;
 
 use smpl\mydi\loader\KeyValue;
 

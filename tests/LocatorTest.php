@@ -1,10 +1,9 @@
 <?php
-namespace smpl\mydi\tests\unit;
+namespace smpl\mydi;
 
 use smpl\mydi\container\Service;
-use smpl\mydi\LoaderInterface;
 
-class LocatorTest extends AbstractLoaderTest
+class LocatorTestTest extends AbstractLocatorTest
 {
     /**
      * @param string $name
@@ -88,7 +87,7 @@ class LocatorTest extends AbstractLoaderTest
     }
 
     /**
-     * В случае если добавляется в контейнер объект с интерфейсом \smpl\mydi\tests\unit\tests\unit\ContainerInterface
+     * В случае если добавляется в контейнер объект с интерфейсом \smpl\mydi\tests\unit\ContainerInterface
      * должен вызываться метод resolve у объекта, когда у Locator вызывают resolve
      */
     public function testAddContainer()
@@ -112,7 +111,7 @@ class LocatorTest extends AbstractLoaderTest
     }
 
     /**
-     * В случае если добавляется в контейнер объект с интерфейсом \smpl\mydi\tests\unit\ContainerInterface
+     * В случае если добавляется в контейнер объект с интерфейсом \smpl\mydi\ContainerInterface
      * должен вызываться метод resolve у объекта, когда у Locator вызывают resolve
      */
     public function testSetContainer()

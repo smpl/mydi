@@ -1,10 +1,8 @@
 <?php
-namespace smpl\mydi\tests\unit\loader;
+namespace smpl\mydi\loader;
 
 use smpl\mydi\container\Factory;
 use smpl\mydi\container\Service;
-use smpl\mydi\loader\LocatorAwareInterface;
-use smpl\mydi\loader\ServiceLocator;
 use smpl\mydi\LocatorInterface;
 
 class ServiceLocatorTest extends \PHPUnit_Framework_TestCase implements LocatorAwareInterface
@@ -28,7 +26,7 @@ class ServiceLocatorTest extends \PHPUnit_Framework_TestCase implements LocatorA
 
     public function testIsLoadable()
     {
-        $this->assertTrue($this->serviceLocator->isLoadable('\smpl\mydi\tests\unit\loader\ServiceLocatorTest'));
+        $this->assertTrue($this->serviceLocator->isLoadable('\smpl\mydi\loader\ServiceLocatorTest'));
     }
 
     public function testIsLoadableInvalidClass()
@@ -47,7 +45,7 @@ class ServiceLocatorTest extends \PHPUnit_Framework_TestCase implements LocatorA
 
     public function testLoad()
     {
-        $result = $this->serviceLocator->load('\smpl\mydi\tests\unit\loader\ServiceLocatorTest');
+        $result = $this->serviceLocator->load('\smpl\mydi\loader\ServiceLocatorTest');
         $this->assertInstanceOf(Factory::class, $result);
         $locator = $this->getMock('\smpl\mydi\LocatorInterface');
         $locator->expects($this->once())

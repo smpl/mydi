@@ -1,7 +1,5 @@
 <?php
-namespace smpl\mydi\tests\unit\loader;
-
-use smpl\mydi\loader\IoC;
+namespace smpl\mydi\loader;
 
 class IoCTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,8 +13,6 @@ class IoCTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUpBeforeClass();
         self::$resourceDir = __DIR__
-            . DIRECTORY_SEPARATOR
-            . '..'
             . DIRECTORY_SEPARATOR
             . '..'
             . DIRECTORY_SEPARATOR

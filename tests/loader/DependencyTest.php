@@ -1,8 +1,6 @@
 <?php
-namespace smpl\mydi\tests\unit\loader;
+namespace smpl\mydi\loader;
 
-use smpl\mydi\loader\Dependency;
-use smpl\mydi\loader\DependencyExecutorInterface;
 use smpl\mydi\loader\executor\Factory;
 use smpl\mydi\loader\executor\Lazy;
 use smpl\mydi\loader\executor\Service;
