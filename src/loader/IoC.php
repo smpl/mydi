@@ -40,7 +40,8 @@ class IoC implements LoaderInterface
             throw new \InvalidArgumentException(sprintf('Container:`%s` must be loadable', $containerName));
         }
         ob_start();
-        extract($this->getContext());
+        $output = $this->getContext();
+        extract($output);
         /** @noinspection PhpIncludeInspection */
         $result = include $this->containerNameToPath($containerName);
         $output = ob_get_clean();
