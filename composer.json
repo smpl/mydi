@@ -12,19 +12,21 @@
   ],
   "autoload": {
     "psr-4": {
-      "smpl\\mydi\\": ["src/"],
-      "smpl\\mydi\\tests\\": ["tests/"]
+      "smpl\\mydi\\": [
+        "src/"
+      ]
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "smpl\\mydi\\": "tests/"
     }
   },
   "require": {
-    "php": ">=5.4.0",
-    "psr/log": "@stable"
+    "php": ">=5.4.0"
   },
   "require-dev": {
     "phpunit/phpunit": "@stable"
-  },
-  "suggest": {
-    "monolog/monolog": "Sends your logs to files, sockets, inboxes, databases and various web services, psr/log support"
   },
   "scripts": {
     "test": "vendor/bin/phpunit"

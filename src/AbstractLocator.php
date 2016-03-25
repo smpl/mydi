@@ -1,31 +1,25 @@
 <?php
 namespace smpl\mydi;
 
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
-
-abstract class AbstractLocator implements LocatorInterface, LoggerAwareInterface
+abstract class AbstractLocator implements LocatorInterface
 {
-    use LoggerAwareTrait;
-
-    protected $isDependencyMapBuild = false;
     protected $dependencyMap = [];
     /**
-     * @var LoaderInterface
+     * @var LoaderInterface[]
      */
-    protected $loader;
+    protected $loaders;
 
-    public function __construct(LoaderInterface $loader, LoggerInterface $logger = null)
+    /**
+     * @param LoaderInterface[] $loader
+     */
+    public function __construct(array $loader = [])
     {
-        $this->setLogger(is_null($logger) ? new NullLogger() : $logger);
-        $this->setLoader($loader);
+        $this->setLoaders($loader);
     }
 
     public function offsetExists($offset)
     {
-        return $this->isExist($offset);
+        return $this->has($offset);
     }
 
     public function offsetGet($offset)
@@ -36,20 +30,23 @@ abstract class AbstractLocator implements LocatorInterface, LoggerAwareInterface
     /**
      * @return LoaderInterface
      */
-    public function getLoader()
+    public function getLoaders()
     {
-        $this->logger->debug('Locator {method}', ['method' => __METHOD__]);
-        return $this->loader;
+        return $this->loaders;
     }
 
     /**
-     * @param LoaderInterface $loader
+     * @param LoaderInterface[] $loaders
      * @throw \InvalidArgumentException
      */
-    public function setLoader(LoaderInterface $loader)
+    public function setLoaders(array $loaders)
     {
-        $this->logger->debug('Locator {method}', ['method' => __METHOD__]);
-        $this->loader = $loader;
+        foreach($loaders as $loader) {
+            if (!$loader instanceof LoaderInterface) {
+                throw new \InvalidArgumentException('Loaders array must instance of LoaderInterface');
+            }
+        }
+        $this->loaders = $loaders;
     }
 
     public function offsetSet($offset, $value)
@@ -61,31 +58,4 @@ abstract class AbstractLocator implements LocatorInterface, LoggerAwareInterface
     {
         $this->delete($offset);
     }
-
-    public function getDependencyMap()
-    {
-        $names = $this->getAllName();
-        $this->isDependencyMapBuild = true;
-        foreach ($names as $containerName) {
-            $this->resolve($containerName);
-        }
-        $this->isDependencyMapBuild = false;
-        return $this->dependencyMap;
-    }
-
-    /**
-     * @param string $name
-     * @param string|array $value
-     */
-    protected function setDependencyMap($name, $value)
-    {
-        if (is_array($value) && !array_key_exists($name, $this->dependencyMap)) {
-            $this->dependencyMap[$name] = $value;
-        }
-        if (is_string($value)) {
-            $this->dependencyMap[$name][] = $value;
-        }
-    }
-
-    abstract protected function getAllName();
 }

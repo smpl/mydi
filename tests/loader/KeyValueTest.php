@@ -1,8 +1,7 @@
 <?php
-namespace smpl\mydi\tests\unit\tests\unit\loader;
+namespace smpl\mydi\tests\unit\loader;
 
 use smpl\mydi\loader\KeyValue;
-use smpl\mydi\loader\ParserInterface;
 
 class KeyValueTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,29 +34,12 @@ class KeyValueTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($value, $this->loader->load($key));
     }
 
-    public function testGetParser()
-    {
-        $parser = $this->loader->getParser();
-        $this->assertInstanceOf(ParserInterface::class, $parser);
-    }
-
-
-    public function testGetAllLoadableName()
-    {
-        $this->assertSame(array_keys($this->parsedConfig), $this->loader->getAllLoadableName());
-    }
-
     /**
-     * @expectedException \RuntimeException
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Container:`test`, must be loadable
      */
     public function testInvalidConfiguration()
     {
-        $parser = $this->getMock('smpl\mydi\loader\ParserInterface');
-        $parser->expects($this->any())
-            ->method('parse')
-            ->will($this->returnValue('123'));
-        /** @var ParserInterface $parser */
-        $this->loader->setParser($parser);
         $this->loader->load('test');
     }
 
@@ -85,11 +67,8 @@ class KeyValueTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $parser = $this->getMock('smpl\mydi\loader\ParserInterface');
-        $parser->expects($this->any())
-            ->method('parse')
-            ->will($this->returnValue($this->parsedConfig));
-        /** @var ParserInterface $parser */
-        $this->loader = new KeyValue($parser);
+        $this->loader = new KeyValue(function () {
+            return $this->parsedConfig;
+        });
     }
 }

@@ -6,13 +6,12 @@ use smpl\mydi\LocatorInterface;
 
 abstract class AbstractExecutor implements DependencyExecutorInterface
 {
-
     /**
-     * @param string $containerName
-     * @param array $config
-     * @return mixed
+     * @param $containerName
+     * @param $config
+     * @return \Closure
      */
-    public function execute($containerName, $config)
+    protected function getClosure($containerName, $config)
     {
         if (!is_array($config) && !is_string($config)) {
             throw new \InvalidArgumentException('Config must be string or array');
@@ -23,7 +22,7 @@ abstract class AbstractExecutor implements DependencyExecutorInterface
     /**
      * @param $containerName
      * @param $config
-     * @return callable
+     * @return \Closure
      */
     private function getCallback($containerName, $config)
     {
@@ -38,7 +37,7 @@ abstract class AbstractExecutor implements DependencyExecutorInterface
     /**
      * @param $containerName
      * @param $config
-     * @return callable
+     * @return \Closure
      */
     private function callbackFromArray($containerName, $config)
     {
@@ -58,7 +57,7 @@ abstract class AbstractExecutor implements DependencyExecutorInterface
 
     /**
      * @param string $config
-     * @return callable
+     * @return \Closure
      */
     private function callbackFromString($config)
     {

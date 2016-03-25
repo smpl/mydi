@@ -19,14 +19,6 @@ interface LocatorInterface extends \ArrayAccess
 
     /**
      * Добавить новый контейнер с именем $name и значение $value
-     * @param string $name Имя контейнера должно быть уникально
-     * @param mixed $value Здесь может быть любое значение или даже объект с интерфейсом ContainerInterface
-     * @throws \InvalidArgumentException
-     */
-    public function add($name, $value);
-
-    /**
-     * Добавить новый контейнер с именем $name и значение $value
      * @param string $name Имя контейнера
      * @param mixed $value Здесь может быть любое значение или даже объект с интерфейсом ContainerInterface
      * @throws \InvalidArgumentException
@@ -43,22 +35,16 @@ interface LocatorInterface extends \ArrayAccess
      * @param string $name
      * @return bool
      */
-    public function isExist($name);
+    public function has($name);
 
     /**
-     * @return LoaderInterface
+     * @return LoaderInterface[]
      */
-    public function getLoader();
+    public function getLoaders();
 
     /**
-     * @param LoaderInterface $loader
+     * @param LoaderInterface[] $loader
      * @throw \InvalidArgumentException
      */
-    public function setLoader(LoaderInterface $loader);
-
-    /**
-     * Получает дерево зависимостей вида 'container' => ['dependcy'] и так для каждого контейнера строиться.
-     * @return array
-     */
-    public function getDependencyMap();
+    public function setLoaders(array $loader);
 }

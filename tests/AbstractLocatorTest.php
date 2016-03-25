@@ -1,11 +1,7 @@
 <?php
-namespace smpl\mydi\tests\unit;
+namespace smpl\mydi;
 
-use smpl\mydi\LoaderInterface;
-use smpl\mydi\Locator;
-use smpl\mydi\LocatorInterface;
-
-class AbstractLoaderTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var LocatorInterface
@@ -27,8 +23,6 @@ class AbstractLoaderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $loader = $this->getMock(LoaderInterface::class);
-        /** @var LoaderInterface $loader */
-        $this->locator = new Locator($loader);
+        $this->locator = new Locator();
     }
 }

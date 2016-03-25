@@ -1,9 +1,6 @@
 <?php
 namespace smpl\mydi\loader;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use smpl\mydi\loader\parser\Php;
 use smpl\mydi\LoaderInterface;
 
 /**
@@ -15,15 +12,16 @@ use smpl\mydi\LoaderInterface;
  */
 class IoC implements LoaderInterface
 {
-    private $context;
-
+    /**
+     * @var string
+     */
     private $basePath;
     /**
-     * @var Php[]
+     * @var array
      */
-    private $parsers = [];
+    private $context;
 
-    public function __construct($basePath, array $context = [], Php $parserPhp = null)
+    public function __construct($basePath, $context = [])
     {
         $this->basePath = realpath($basePath);
         $this->setContext($context);
@@ -33,7 +31,7 @@ class IoC implements LoaderInterface
      * Загрузка контейнера
      * @param string $containerName
      * @throws \InvalidArgumentException если имя нельзя загрузить
-     * @throws \LogicException если у файла что подгружаем будет выводиться какой то текст
+     * @throws \RuntimeException если у файла что подгружаем будет выводиться какой то текст
      * @return mixed
      */
     public function load($containerName)
@@ -41,8 +39,19 @@ class IoC implements LoaderInterface
         if (!$this->isLoadable($containerName)) {
             throw new \InvalidArgumentException(sprintf('Container:`%s` must be loadable', $containerName));
         }
-        $parser = $this->getParser($containerName);
-        $result = $parser->parse();
+        ob_start();
+        $output = $this->getContext();
+        extract($output);
+        /** @noinspection PhpIncludeInspection */
+        $result = include $this->containerNameToPath($containerName);
+        $output = ob_get_clean();
+        if (!empty($output)) {
+            throw new \RuntimeException(sprintf(
+                'File: `%s` must have empty output: `%s`',
+                $this->containerNameToPath($containerName),
+                $output
+            ));
+        }
         return $result;
     }
 
@@ -77,19 +86,10 @@ class IoC implements LoaderInterface
         return realpath($this->basePath . DIRECTORY_SEPARATOR . $result . '.php');
     }
 
-    private function getParser($containerName)
-    {
-        if (!array_key_exists($containerName, $this->parsers)) {
-            $this->parsers[$containerName] = new Php($this->containerNameToPath($containerName));
-        }
-        $this->parsers[$containerName]->setContext($this->getContext());
-        return $this->parsers[$containerName];
-    }
-
     /**
-     * @return mixed
+     * @return array
      */
-    public function getContext()
+    private function getContext()
     {
         return $this->context;
     }
@@ -97,40 +97,8 @@ class IoC implements LoaderInterface
     /**
      * @param array $context
      */
-    public function setContext(array $context)
+    private function setContext(array $context)
     {
         $this->context = $context;
-    }
-
-    /**
-     * Это вызывается в случае когда у Locator запросили построение дерева зависимостей,
-     * Метод нужен исключительно разработчикам для анализа зависимостей и может не очень быстро работать
-     * на production в обычной ситуации данный метод не должен вызываться
-     * @return array
-     */
-    public function getAllLoadableName()
-    {
-        $result = [];
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($this->basePath,
-                RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST);
-        $iterator->rewind();
-        while ($iterator->valid()) {
-            /** @var RecursiveDirectoryIterator $iterator */
-            if ($iterator->isFile() && 'php' === $iterator->getExtension()) {
-                $result[] = $this->pathToContainerName($iterator->getSubPathName());
-            }
-            $iterator->next();
-        }
-        sort($result);
-        return $result;
-    }
-
-    private function pathToContainerName($path)
-    {
-        $path = substr($path, 0, -4);
-        $result = str_replace(DIRECTORY_SEPARATOR, '_', $path);
-        return $result;
     }
 }

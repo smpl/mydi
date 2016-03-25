@@ -1,7 +1,6 @@
 <?php
-namespace smpl\mydi\tests\unit\container;
+namespace smpl\mydi\container;
 
-use smpl\mydi\container\Lazy;
 use smpl\mydi\LocatorInterface;
 
 class LazyTest extends \PHPUnit_Framework_TestCase

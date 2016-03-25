@@ -1,7 +1,7 @@
 <?php
-namespace smpl\mydi\tests\unit;
+namespace smpl\mydi;
 
-class LocatorArrayTest extends AbstractLoaderTest
+class LocatorArrayTest extends AbstractLocatorTest
 {
 
     /**

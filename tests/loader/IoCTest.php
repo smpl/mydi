@@ -1,11 +1,8 @@
 <?php
-namespace smpl\mydi\tests\unit\loader;
-
-use smpl\mydi\loader\IoC;
+namespace smpl\mydi\loader;
 
 class IoCTest extends \PHPUnit_Framework_TestCase
 {
-    private static $resourceDir;
     /**
      * @var IoC
      */
@@ -14,19 +11,54 @@ class IoCTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        self::$resourceDir = __DIR__
-            . DIRECTORY_SEPARATOR
-            . '..'
-            . DIRECTORY_SEPARATOR
-            . '..'
-            . DIRECTORY_SEPARATOR
-            . 'resource'
-            . DIRECTORY_SEPARATOR
-            . 'unit'
-            . DIRECTORY_SEPARATOR
-            . 'loader'
-            . DIRECTORY_SEPARATOR
-            . 'FileTest';
+
+        $subDirTest = <<<'php'
+<?php
+return 15;
+php;
+        $test = <<<'php'
+<?php
+return 15;
+php;
+        $testContext = <<<'php'
+<?php
+/** @var int $a */
+return 15 + $a;
+php;
+        $testOutput = <<<'php'
+<?php
+echo 'Magic';
+return 15;
+php;
+        $root = __DIR__ . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR;
+        mkdir($root);
+        file_put_contents($root . 'test.php', $test);
+        file_put_contents($root . 'testContext.php', $testContext);
+        file_put_contents($root . 'testOutput.php', $testOutput);
+        mkdir($root . 'subDir');
+        file_put_contents(
+            $root . 'subDir' . DIRECTORY_SEPARATOR . 'test.php',
+            $subDirTest
+        );
+    }
+
+    public static function tearDownAfterClass()
+    {
+        parent::tearDownAfterClass();
+        $root = __DIR__ . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR;
+        unlink($root . 'test.php');
+        unlink($root . 'subDir' . DIRECTORY_SEPARATOR . 'test.php');
+        unlink($root . 'testContext.php');
+        unlink($root . 'testOutput.php');
+
+        rmdir($root . 'subDir');
+        rmdir($root);
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
     }
 
     public function testIsLoadable()
@@ -50,15 +82,13 @@ class IoCTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
+        $this->loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp', ['a' => 5]);
         // Загрузка простого компонента
         $this->assertSame(15, $this->loader->load('test'));
         $this->assertSame(15, $this->loader->load('subDir_test'));
 
         // проверим работу контекста
-        $this->loader->setContext(['a' => 5]);
         $this->assertSame(20, $this->loader->load('testContext'));
-        $this->loader->setContext(['a' => 7]);
-        $this->assertSame(22, $this->loader->load('testContext'));
     }
 
     /**
@@ -80,23 +110,10 @@ class IoCTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
+     * @expectedException \RuntimeException
      */
-    public function getContext()
+    public function testLoadWithOutput()
     {
-        $this->assertSame([], $this->loader->getContext());
+        $this->loader->load('testOutput');
     }
-
-    public function testGetAllLoadableName()
-    {
-        $expected = ['subDir_test', 'test', 'testContext', 'testOutput'];
-        $this->assertSame($expected, $this->loader->getAllLoadableName());
-    }
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->loader = new IoC(self::$resourceDir);
-    }
-
 }

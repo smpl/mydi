@@ -1,13 +1,16 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://raw.github.com/sebastianbergmann/phpunit/4.4/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://raw.github.com/sebastianbergmann/phpunit/5.2/phpunit.xsd"
          colors="true">
     <testsuites>
         <testsuite name="unit">
-            <directory suffix="Test.php">./tests/unit/</directory>
-            <exclude>tests/unit/AbstractLoaderTest.php</exclude>
+            <directory suffix="Test.php">./tests/</directory>
+            <exclude>tests/AbstractLocatorTest.php</exclude>
         </testsuite>
     </testsuites>
-    <logging>
-        <log type="coverage-clover" target="/tmp/coverage.xml"/>
-    </logging>
+
+    <filter>
+        <whitelist>
+            <directory>src</directory>
+        </whitelist>
+    </filter>
 </phpunit>

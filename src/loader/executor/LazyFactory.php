@@ -7,7 +7,7 @@ class LazyFactory extends AbstractExecutor
 {
     public function execute($containerName, $config)
     {
-        return new LazyContainer(parent::execute($containerName, $config));
+        return new LazyContainer($this->getClosure($containerName, $config));
     }
 
 }
