@@ -19,14 +19,6 @@ interface LocatorInterface extends \ArrayAccess
 
     /**
      * Добавить новый контейнер с именем $name и значение $value
-     * @param string $name Имя контейнера должно быть уникально
-     * @param mixed $value Здесь может быть любое значение или даже объект с интерфейсом ContainerInterface
-     * @throws \InvalidArgumentException
-     */
-    public function add($name, $value);
-
-    /**
-     * Добавить новый контейнер с именем $name и значение $value
      * @param string $name Имя контейнера
      * @param mixed $value Здесь может быть любое значение или даже объект с интерфейсом ContainerInterface
      * @throws \InvalidArgumentException

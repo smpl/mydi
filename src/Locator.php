@@ -57,15 +57,7 @@ class Locator extends AbstractLocator
         if (is_null($result)) {
             throw new \InvalidArgumentException(sprintf('Container name: `%s` is not defined', $name));
         }
-        $this->add($name, $result->load($name));
-    }
-
-    public function add($name, $value)
-    {
-        if ($this->has($name)) {
-            throw new \InvalidArgumentException(sprintf('name is already exist, %s', $name));
-        }
-        $this->set($name, $value);
+        $this->set($name, $result->load($name));
     }
 
     public function set($name, $value)
