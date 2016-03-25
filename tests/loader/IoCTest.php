@@ -82,15 +82,13 @@ php;
 
     public function testLoad()
     {
+        $this->loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp', ['a' => 5]);
         // Загрузка простого компонента
         $this->assertSame(15, $this->loader->load('test'));
         $this->assertSame(15, $this->loader->load('subDir_test'));
 
         // проверим работу контекста
-        $this->loader->setContext(['a' => 5]);
         $this->assertSame(20, $this->loader->load('testContext'));
-        $this->loader->setContext(['a' => 7]);
-        $this->assertSame(22, $this->loader->load('testContext'));
     }
 
     /**

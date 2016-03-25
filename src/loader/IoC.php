@@ -89,7 +89,7 @@ class IoC implements LoaderInterface
     /**
      * @return array
      */
-    public function getContext()
+    private function getContext()
     {
         return $this->context;
     }
@@ -97,7 +97,7 @@ class IoC implements LoaderInterface
     /**
      * @param array $context
      */
-    public function setContext(array $context)
+    private function setContext(array $context)
     {
         $this->context = $context;
     }

@@ -65,7 +65,7 @@ class Dependency extends KeyValue
     /**
      * @param string $defaultExecutorName
      */
-    public function setDefaultExecutorName($defaultExecutorName)
+    private function setDefaultExecutorName($defaultExecutorName)
     {
         if (!is_string($defaultExecutorName)) {
             throw new \InvalidArgumentException('Default executor name must be string');
@@ -91,7 +91,7 @@ class Dependency extends KeyValue
     /**
      * @return DependencyExecutorInterface[]
      */
-    public function getExecutors()
+    private function getExecutors()
     {
         return $this->executors;
     }
@@ -99,7 +99,7 @@ class Dependency extends KeyValue
     /**
      * @param DependencyExecutorInterface[] $executors
      */
-    public function setExecutors(array $executors)
+    private function setExecutors(array $executors)
     {
         foreach ($executors as $executorName => $executor) {
             if (!is_string($executorName)) {

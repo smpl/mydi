@@ -14,6 +14,9 @@ class KeyValue implements LoaderInterface
      */
     private $map = [];
 
+    /**
+     * @var \Closure
+     */
     private $loader;
 
     public function __construct(\Closure $loader)
@@ -69,13 +72,5 @@ class KeyValue implements LoaderInterface
             );
         }
         $this->map = $map;
-    }
-
-    /**
-     * @param callable $loader
-     */
-    public function setLoader(callable $loader)
-    {
-        $this->loader = $loader;
     }
 }
