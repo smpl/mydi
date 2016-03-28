@@ -1,7 +1,7 @@
 <?php
-namespace smpl\mydi;
+namespace Smpl\Mydi;
 
-use smpl\mydi\container\Service;
+use Smpl\Mydi\Container\Service;
 
 class LocatorTestTest extends AbstractLocatorTest
 {
@@ -55,13 +55,13 @@ class LocatorTestTest extends AbstractLocatorTest
     }
 
     /**
-     * В случае если добавляется в контейнер объект с интерфейсом \smpl\mydi\ContainerInterface
+     * В случае если добавляется в контейнер объект с интерфейсом \Smpl\Mydi\ContainerInterface
      * должен вызываться метод resolve у объекта, когда у Locator вызывают resolve
      */
     public function testSetContainer()
     {
         $result = 123;
-        $mock = $this->getMock('\smpl\mydi\ContainerInterface');
+        $mock = $this->getMock('\Smpl\Mydi\ContainerInterface');
         $mock->expects($this->any())
             ->method('resolve')
             ->will($this->returnValue($result));
@@ -139,7 +139,7 @@ class LocatorTestTest extends AbstractLocatorTest
      */
     public function resolveUseLoader($name, $value)
     {
-        $loader = $this->getMock('\smpl\mydi\LoaderInterface');
+        $loader = $this->getMock('\Smpl\Mydi\LoaderInterface');
         $loader->expects($this->once())
             ->method('isLoadable')
             ->with($this->equalTo($name))

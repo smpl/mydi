@@ -1,5 +1,5 @@
 <?php
-namespace smpl\mydi;
+namespace Smpl\Mydi;
 
 abstract class AbstractLocatorTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,5 +1,5 @@
 <?php
-namespace smpl\mydi;
+namespace Smpl\Mydi;
 
 interface ContainerInterface
 {

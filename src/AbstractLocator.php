@@ -1,5 +1,5 @@
 <?php
-namespace smpl\mydi;
+namespace Smpl\Mydi;
 
 abstract class AbstractLocator implements LocatorInterface
 {

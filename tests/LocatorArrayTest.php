@@ -1,5 +1,5 @@
 <?php
-namespace smpl\mydi;
+namespace Smpl\Mydi;
 
 class LocatorArrayTest extends AbstractLocatorTest
 {
@@ -54,7 +54,7 @@ class LocatorArrayTest extends AbstractLocatorTest
     public function testArraySetContainer()
     {
         $result = 123;
-        $mock = $this->getMock('\smpl\mydi\ContainerInterface');
+        $mock = $this->getMock('\Smpl\Mydi\ContainerInterface');
         $mock->expects($this->any())
             ->method('resolve')
             ->will($this->returnValue($result));

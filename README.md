@@ -49,7 +49,7 @@
 ### Создание locator зависимостей ###
 ```php
 require 'vendor/autoload.php';
-$locator = new \smpl\mydi\Locator();
+$locator = new \Smpl\Mydi\Locator();
 ```
 В дальнейшем подразумевается что вы уже создали Locator.
 
@@ -91,7 +91,7 @@ $locator->add('dsn', 'mysql:dbname=testdb;host=127.0.0.1');
 $locator->add('user', 'dbuser');
 $locator->add('password', 'dbpass');
 // Через создание Factory
-$locator->add('pdo', new \smpl\mydi\container\Factory(function (LocatorInterface $locator) {
+$locator->add('pdo', new \Smpl\Mydi\Container\Factory(function (LocatorInterface $locator) {
     return new \PDO($locator->resolve('dsn'), $locator->resolve('user'), $locator->resolve('password'));
 }));
 
@@ -115,7 +115,7 @@ $locator->add('dsn', 'mysql:dbname=testdb;host=127.0.0.1');
 $locator->add('user', 'dbuser');
 $locator->add('password', 'dbpass');
 // Через создание Factory
-$locator->add('pdo', new \smpl\mydi\container\Service(function (LocatorInterface $locator) {
+$locator->add('pdo', new \Smpl\Mydi\Container\Service(function (LocatorInterface $locator) {
     return new \PDO($locator->resolve('dsn'), $locator->resolve('user'), $locator->resolve('password'));
 }));
 
@@ -187,8 +187,8 @@ return 123;
 
 Теперь попробуем воспользоваться этим определением файла
 ```php
-$loader = new \smpl\mydi\loader\File(__DIR__ . DIRECTORY_SEPARATOR . 'core');
-$locator = new \smpl\mydi\Locator([$loader]);
+$loader = new \Smpl\Mydi\Loader\File(__DIR__ . DIRECTORY_SEPARATOR . 'core');
+$locator = new \Smpl\Mydi\Locator([$loader]);
 var_dump(123 === $locator->test); // В момент когда вы запросите контейнер test он ещё не определен и будет загружен с помощью указанного вами Loader'a из папки core
 ```
 
@@ -201,9 +201,9 @@ return $a + 5; // Переменная $a будет храниться за п�
 
 Теперь загрузим это на лету
 ```php
-$loader = new \smpl\mydi\loader\File(__DIR__ . DIRECTORY_SEPARATOR . 'core');
+$loader = new \Smpl\Mydi\Loader\File(__DIR__ . DIRECTORY_SEPARATOR . 'core');
 $loader->setContext(['a' => 15]);  //Вот здесь мы передаем переменную в фаил
-$locator = new \smpl\mydi\Locator([$loader]);
+$locator = new \Smpl\Mydi\Locator([$loader]);
 var_dump(20 === $locator['testContext']); // true
 ```
 
@@ -220,8 +220,8 @@ return ['name' => 'b'];
 Мы сделали что объект `a` зависит от `b`
 Теперь вызовим все это
 ```php
-$loader = new \smpl\mydi\loader\File(__DIR__ . DIRECTORY_SEPARATOR . 'core');
-$locator = new \smpl\mydi\Locator([$loader]);
+$loader = new \Smpl\Mydi\Loader\File(__DIR__ . DIRECTORY_SEPARATOR . 'core');
+$locator = new \Smpl\Mydi\Locator([$loader]);
 $loader->setContext('locator' => $locator);
 $locator['a'];
 ```
