@@ -1,5 +1,7 @@
 <?php
-namespace Smpl\Mydi\Loader;
+namespace SmplTest\Mydi\Loader;
+
+use Smpl\Mydi\Loader\IoC;
 
 class IoCTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,12 +55,6 @@ php;
 
         rmdir($root . 'subDir');
         rmdir($root);
-    }
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
     }
 
     public function testIsLoadable()
@@ -115,5 +111,11 @@ php;
     public function testLoadWithOutput()
     {
         $this->loader->load('testOutput');
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
     }
 }

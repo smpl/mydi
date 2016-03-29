@@ -1,5 +1,5 @@
 <?php
-namespace Smpl\Mydi;
+namespace SmplTest\Mydi;
 
 class LocatorArrayTest extends AbstractLocatorTest
 {
@@ -58,7 +58,7 @@ class LocatorArrayTest extends AbstractLocatorTest
         $mock->expects($this->any())
             ->method('resolve')
             ->will($this->returnValue($result));
-        $this->locator['test'] =  $mock;
+        $this->locator['test'] = $mock;
         $this->assertSame($result, $this->locator['test']);
         $this->assertSame(true, isset($this->locator['test']));
         unset($this->locator['test']);

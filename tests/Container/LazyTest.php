@@ -1,6 +1,7 @@
 <?php
-namespace Smpl\Mydi\Container;
+namespace SmplTest\Mydi\Container;
 
+use Smpl\Mydi\Container\Lazy;
 use Smpl\Mydi\LocatorInterface;
 
 class LazyTest extends \PHPUnit_Framework_TestCase

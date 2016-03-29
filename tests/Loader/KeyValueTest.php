@@ -1,5 +1,5 @@
 <?php
-namespace Smpl\Mydi\tests\unit\loader;
+namespace SmplTest\Mydi\tests\unit\loader;
 
 use Smpl\Mydi\Loader\KeyValue;
 

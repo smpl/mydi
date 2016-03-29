@@ -1,7 +1,8 @@
 <?php
-namespace Smpl\Mydi\Loader\Executor;
+namespace SmplTest\Mydi\Loader\Executor;
 
 use Smpl\Mydi\Container\Lazy;
+use Smpl\Mydi\Loader\Executor\LazyFactory;
 use Smpl\Mydi\LocatorInterface;
 
 class LazyFactoryTest extends \PHPUnit_Framework_TestCase

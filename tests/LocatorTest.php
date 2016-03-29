@@ -1,7 +1,8 @@
 <?php
-namespace Smpl\Mydi;
+namespace SmplTest\Mydi;
 
 use Smpl\Mydi\Container\Service;
+use Smpl\Mydi\LoaderInterface;
 
 class LocatorTestTest extends AbstractLocatorTest
 {
@@ -55,7 +56,7 @@ class LocatorTestTest extends AbstractLocatorTest
     }
 
     /**
-     * В случае если добавляется в контейнер объект с интерфейсом \Smpl\Mydi\ContainerInterface
+     * В случае если добавляется в контейнер объект с интерфейсом \SmplTest\Mydi\ContainerInterface
      * должен вызываться метод resolve у объекта, когда у Locator вызывают resolve
      */
     public function testSetContainer()

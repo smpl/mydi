@@ -1,6 +1,8 @@
 <?php
-namespace Smpl\Mydi\Loader;
+namespace SmplTest\Mydi\Loader;
 
+use Smpl\Mydi\Loader\Dependency;
+use Smpl\Mydi\Loader\DependencyExecutorInterface;
 use Smpl\Mydi\Loader\Executor\Factory;
 use Smpl\Mydi\Loader\Executor\Lazy;
 use Smpl\Mydi\Loader\Executor\Service;
