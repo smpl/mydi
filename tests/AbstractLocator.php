@@ -4,7 +4,7 @@ namespace SmplTest\Mydi;
 use Smpl\Mydi\Locator;
 use Smpl\Mydi\LocatorInterface;
 
-abstract class AbstractLocatorTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractLocator extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var LocatorInterface

@@ -1,6 +1,7 @@
 <?php
 namespace SmplTest\Mydi\tests\unit\loader;
 
+use Smpl\Mydi\Loader\File\Readerinterface;
 use Smpl\Mydi\Loader\KeyValue;
 
 class KeyValueTest extends \PHPUnit_Framework_TestCase
@@ -67,8 +68,12 @@ class KeyValueTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->loader = new KeyValue(function () {
-            return $this->parsedConfig;
-        });
+
+        $mock = $this->getMock(ReaderInterface::class);
+        $mock->expects($this->any())
+            ->method('getConfiguration')
+            ->will($this->returnValue($this->parsedConfig));
+        /** @var Readerinterface $mock */
+        $this->loader = new KeyValue($mock);
     }
 }

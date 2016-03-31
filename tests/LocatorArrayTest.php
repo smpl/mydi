@@ -1,7 +1,7 @@
 <?php
 namespace SmplTest\Mydi;
 
-class LocatorArrayTest extends AbstractLocatorTest
+class LocatorArray extends AbstractLocator
 {
 
     /**

@@ -1,0 +1,60 @@
+<?php
+
+namespace Smpl\Mydi\Loader\File;
+
+use InvalidArgumentException;
+
+class PHP extends AbstractReader
+{
+    private $context;
+
+    public function __construct($fileName, $context = [])
+    {
+        parent::__construct($fileName);
+        $this->setContext($context);
+    }
+
+    /**
+     * @return array в случае если фаил пустой или результат не является массивом, вернется пустой массив
+     * @throws InvalidArgumentException в случае если фаил не может быть прочитан.
+     */
+    public function getConfiguration()
+    {
+        if (!is_readable($this->getFileName())) {
+            throw new InvalidArgumentException(sprintf(
+                'FileName: `%s` must be readable',
+                $this->getFileName()
+            ));
+        }
+        ob_start();
+        $context = $this->getContext();
+        extract($context);
+        /** @noinspection PhpIncludeInspection */
+        $result = include $this->getFileName();
+        $output = ob_get_clean();
+        if (!empty($output)) {
+            throw new \RuntimeException(sprintf(
+                'File: `%s` must have empty output: `%s`',
+                $this->getFileName(),
+                $output
+            ));
+        }
+        if (!is_array($result)) {
+            $result = [];
+        }
+        return $result;
+    }
+
+    private function setContext($context)
+    {
+        if (!is_array($context)) {
+            throw new InvalidArgumentException('Context must be array');
+        }
+        $this->context = $context;
+    }
+
+    private function getContext()
+    {
+        return $this->context;
+    }
+}

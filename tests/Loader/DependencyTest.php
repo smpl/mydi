@@ -6,6 +6,7 @@ use Smpl\Mydi\Loader\DependencyExecutorInterface;
 use Smpl\Mydi\Loader\Executor\Factory;
 use Smpl\Mydi\Loader\Executor\Lazy;
 use Smpl\Mydi\Loader\Executor\Service;
+use Smpl\Mydi\Loader\File\Readerinterface;
 
 class DependencyTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,13 +43,13 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         if (is_array($config) && array_key_exists('Executor', $config)) {
             $executors[$config['Executor']] = $executor;
         }
-        $this->dependency = new Dependency(
-            function () {
-                return self::$parsedConfig;
-            },
-            'mock',
-            $executors
-        );
+
+        $mock = $this->getMock(ReaderInterface::class);
+        $mock->expects($this->any())
+            ->method('getConfiguration')
+            ->will($this->returnValue(self::$parsedConfig));
+        /** @var Readerinterface $mock */
+        $this->dependency = new Dependency($mock, 'mock', $executors);
 
         $result = $this->dependency->load($container);
         $this->assertSame($expected, $result);
@@ -88,9 +89,12 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecutorNotString()
     {
-        $this->dependency = new Dependency(function () {
-            return ['test' => ['Executor' => 123]];
-        });
+        $mock = $this->getMock(Readerinterface::class);
+        $mock->expects($this->any())
+            ->method('getConfiguration')
+            ->willReturn(['test' => ['executor' => 123]]);
+        /** @var Readerinterface $mock */
+        $this->dependency = new Dependency($mock);
         $this->dependency->load('test');
     }
 
@@ -100,9 +104,12 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecutorNotFound()
     {
-        $this->dependency = new Dependency(function () {
-            return ['test' => ['Executor' => 'magic']];
-        });
+        $mock = $this->getMock(Readerinterface::class);
+        $mock->expects($this->any())
+            ->method('getConfiguration')
+            ->willReturn(['test' => ['executor' => 'magic']]);
+        /** @var Readerinterface $mock */
+        $this->dependency = new Dependency($mock);
         $this->dependency->load('test');
     }
 
@@ -112,9 +119,13 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetDefaultExecutorNameNotString()
     {
+        $mock = $this->getMock(Readerinterface::class);
+        $mock->expects($this->any())
+            ->method('getConfiguration')
+            ->willReturn(['test' => ['Executor' => 'magic']]);
+        /** @var Readerinterface $mock */
         $this->dependency = new Dependency(
-            function () {
-            },
+            $mock,
             213
         );
     }
@@ -124,9 +135,12 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidConfiguration()
     {
-        $this->dependency = new Dependency(function () {
-            return '123';
-        });
+        $mock = $this->getMock(Readerinterface::class);
+        $mock->expects($this->any())
+            ->method('getConfiguration')
+            ->willReturn('123');
+        /** @var Readerinterface $mock */
+        $this->dependency = new Dependency($mock);
         $this->dependency->load('test');
     }
 
@@ -136,10 +150,14 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetExecutorsNotString()
     {
+        $mock = $this->getMock(Readerinterface::class);
+        $mock->expects($this->any())
+            ->method('getConfiguration')
+            ->willReturn(['test' => ['Executor' => 'magic']]);
+        /** @var Readerinterface $mock */
         $executor = $this->getMock(DependencyExecutorInterface::class);
         $this->dependency = new Dependency(
-            function () {
-            },
+            $mock,
             'valid',
             [123 => $executor]
         );
@@ -151,9 +169,13 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetExecutorsNotImplementInterface()
     {
+        $mock = $this->getMock(Readerinterface::class);
+        $mock->expects($this->any())
+            ->method('getConfiguration')
+            ->willReturn(['test' => ['Executor' => 'magic']]);
+        /** @var Readerinterface $mock */
         $this->dependency = new Dependency(
-            function () {
-            },
+            $mock,
             'valid',
             ['test' => 123]
         );
@@ -162,9 +184,12 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->dependency = new Dependency(function () {
-            return self::$parsedConfig;
-        });
+        $mock = $this->getMock(ReaderInterface::class);
+        $mock->expects($this->any())
+            ->method('getConfiguration')
+            ->will($this->returnValue(self::$parsedConfig));
+        /** @var Readerinterface $mock */
+        $this->dependency = new Dependency($mock);
     }
 
 }

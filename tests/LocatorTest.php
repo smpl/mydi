@@ -4,7 +4,7 @@ namespace SmplTest\Mydi;
 use Smpl\Mydi\Container\Service;
 use Smpl\Mydi\LoaderInterface;
 
-class LocatorTestTest extends AbstractLocatorTest
+class LocatorTest extends AbstractLocator
 {
     /**
      * @param string $name

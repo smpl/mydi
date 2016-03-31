@@ -1,6 +1,7 @@
 <?php
 namespace Smpl\Mydi\Loader;
 
+use Smpl\Mydi\Loader\File\Readerinterface;
 use Smpl\Mydi\LoaderInterface;
 
 class KeyValue implements LoaderInterface
@@ -15,11 +16,11 @@ class KeyValue implements LoaderInterface
     private $map = [];
 
     /**
-     * @var \Closure
+     * @var Readerinterface
      */
     private $loader;
 
-    public function __construct(\Closure $loader)
+    public function __construct(Readerinterface $loader)
     {
         $this->loader = $loader;
     }
@@ -55,7 +56,7 @@ class KeyValue implements LoaderInterface
     private function getConfiguration()
     {
         if ($this->isLoad === false) {
-            $this->setMap((call_user_func($this->loader)));
+            $this->setMap($this->loader->getConfiguration());
             $this->isLoad = true;
         }
         return $this->map;

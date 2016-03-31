@@ -4,6 +4,7 @@ namespace Smpl\Mydi\Loader;
 use Smpl\Mydi\Loader\Executor\Factory;
 use Smpl\Mydi\Loader\Executor\Lazy;
 use Smpl\Mydi\Loader\Executor\Service;
+use Smpl\Mydi\Loader\File\Readerinterface;
 
 class Dependency extends KeyValue
 {
@@ -17,7 +18,7 @@ class Dependency extends KeyValue
      */
     private $executors = [];
 
-    public function __construct(\Closure $parser, $defaultExecutorName = 'service', $executors = null)
+    public function __construct(Readerinterface $parser, $defaultExecutorName = 'service', $executors = null)
     {
         if (is_null($executors)) {
             $executors = self::getDefaultExecutors();
@@ -45,8 +46,8 @@ class Dependency extends KeyValue
     public function load($containerName)
     {
         $config = parent::load($containerName);
-        if (is_array($config) && array_key_exists('Executor', $config)) {
-            $executorName = $config['Executor'];
+        if (is_array($config) && array_key_exists('executor', $config)) {
+            $executorName = $config['executor'];
         } else {
             $executorName = $this->getDefaultExecutorName();
         }
