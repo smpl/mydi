@@ -1,8 +1,8 @@
 <?php
 namespace SmplTest\Mydi\tests\unit\loader;
 
-use Smpl\Mydi\Loader\File\Readerinterface;
 use Smpl\Mydi\Loader\KeyValue;
+use Smpl\Mydi\Loader\Readerinterface;
 
 class KeyValueTest extends \PHPUnit_Framework_TestCase
 {

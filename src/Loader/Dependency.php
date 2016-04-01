@@ -4,7 +4,6 @@ namespace Smpl\Mydi\Loader;
 use Smpl\Mydi\Loader\Executor\Factory;
 use Smpl\Mydi\Loader\Executor\Lazy;
 use Smpl\Mydi\Loader\Executor\Service;
-use Smpl\Mydi\Loader\File\Readerinterface;
 
 class Dependency extends KeyValue
 {

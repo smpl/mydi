@@ -6,7 +6,7 @@ use Smpl\Mydi\Loader\DependencyExecutorInterface;
 use Smpl\Mydi\Loader\Executor\Factory;
 use Smpl\Mydi\Loader\Executor\Lazy;
 use Smpl\Mydi\Loader\Executor\Service;
-use Smpl\Mydi\Loader\File\Readerinterface;
+use Smpl\Mydi\Loader\Readerinterface;
 
 class DependencyTest extends \PHPUnit_Framework_TestCase
 {

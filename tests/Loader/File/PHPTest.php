@@ -2,7 +2,8 @@
 
 namespace SmplTest\Mydi\Loader\File;
 
-use Smpl\Mydi\Loader\File\PHP;
+use Smpl\Mydi\Loader\Reader\PHP;
+use SmplTest\Mydi\Loader\ReaderInterfaceTestTrait;
 
 /**
  * Class PHPTest

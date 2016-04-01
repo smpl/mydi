@@ -1,7 +1,6 @@
 <?php
 namespace Smpl\Mydi\Loader;
 
-use Smpl\Mydi\Loader\File\Readerinterface;
 use Smpl\Mydi\LoaderInterface;
 
 class KeyValue implements LoaderInterface

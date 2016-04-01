@@ -1,8 +1,9 @@
 <?php
 
-namespace SmplTest\Mydi\Loader\File;
+namespace SmplTest\Mydi\Loader\Reader;
 
-use Smpl\Mydi\Loader\File\JSON;
+use Smpl\Mydi\Loader\Reader\JSON;
+use SmplTest\Mydi\Loader\ReaderInterfaceTestTrait;
 
 class JSONTest extends \PHPUnit_Framework_TestCase
 {

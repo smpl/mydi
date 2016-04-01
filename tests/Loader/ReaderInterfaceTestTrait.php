@@ -1,8 +1,8 @@
 <?php
 
-namespace SmplTest\Mydi\Loader\File;
+namespace SmplTest\Mydi\Loader;
 
-use Smpl\Mydi\Loader\File\Readerinterface;
+use Smpl\Mydi\Loader\Readerinterface;
 
 trait ReaderInterfaceTestTrait
 {

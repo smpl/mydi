@@ -1,6 +1,6 @@
 <?php
 
-namespace Smpl\Mydi\Loader\File;
+namespace Smpl\Mydi\Loader\Reader;
 
 use InvalidArgumentException;
 

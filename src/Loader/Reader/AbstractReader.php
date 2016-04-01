@@ -1,6 +1,8 @@
 <?php
 
-namespace Smpl\Mydi\Loader\File;
+namespace Smpl\Mydi\Loader\Reader;
+
+use Smpl\Mydi\Loader\Readerinterface;
 
 abstract class AbstractReader implements Readerinterface
 {
