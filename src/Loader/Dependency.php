@@ -13,7 +13,7 @@ class Dependency extends KeyValue
      */
     private $defaultExecutorName;
     /**
-     * @var DependencyExecutorInterface[]
+     * @var ExecutorInterface[]
      */
     private $executors = [];
 
@@ -28,7 +28,7 @@ class Dependency extends KeyValue
     }
 
     /**
-     * @return DependencyExecutorInterface[]
+     * @return ExecutorInterface[]
      */
     public static function getDefaultExecutors()
     {
@@ -75,7 +75,7 @@ class Dependency extends KeyValue
 
     /**
      * @param string $name
-     * @return DependencyExecutorInterface
+     * @return ExecutorInterface
      */
     private function getExecutorByName($name)
     {
@@ -89,7 +89,7 @@ class Dependency extends KeyValue
     }
 
     /**
-     * @return DependencyExecutorInterface[]
+     * @return ExecutorInterface[]
      */
     private function getExecutors()
     {
@@ -97,7 +97,7 @@ class Dependency extends KeyValue
     }
 
     /**
-     * @param DependencyExecutorInterface[] $executors
+     * @param ExecutorInterface[] $executors
      */
     private function setExecutors(array $executors)
     {
@@ -105,7 +105,7 @@ class Dependency extends KeyValue
             if (!is_string($executorName)) {
                 throw new \InvalidArgumentException('Executor name must be a string');
             }
-            if (!($executor instanceof DependencyExecutorInterface)) {
+            if (!($executor instanceof ExecutorInterface)) {
                 throw new \InvalidArgumentException(
                     sprintf(
                         'Excecutor: `%s`, must implement DependencyExecutorInterface',

@@ -1,10 +1,10 @@
 <?php
 namespace Smpl\Mydi\Loader\Executor;
 
-use Smpl\Mydi\Loader\DependencyExecutorInterface;
+use Smpl\Mydi\Loader\ExecutorInterface;
 use Smpl\Mydi\LocatorInterface;
 
-abstract class AbstractExecutor implements DependencyExecutorInterface
+abstract class AbstractExecutor implements ExecutorInterface
 {
     /**
      * @param $containerName

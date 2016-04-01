@@ -1,7 +1,7 @@
 <?php
 namespace Smpl\Mydi\Loader;
 
-interface DependencyExecutorInterface
+interface ExecutorInterface
 {
     /**
      * @param string $containerName

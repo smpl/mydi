@@ -2,10 +2,10 @@
 namespace SmplTest\Mydi\Loader;
 
 use Smpl\Mydi\Loader\Dependency;
-use Smpl\Mydi\Loader\DependencyExecutorInterface;
 use Smpl\Mydi\Loader\Executor\Factory;
 use Smpl\Mydi\Loader\Executor\Lazy;
 use Smpl\Mydi\Loader\Executor\Service;
+use Smpl\Mydi\Loader\ExecutorInterface;
 use Smpl\Mydi\Loader\Readerinterface;
 
 class DependencyTest extends \PHPUnit_Framework_TestCase
@@ -34,7 +34,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoad($container, $expected, $config)
     {
-        $executor = $this->getMock(DependencyExecutorInterface::class);
+        $executor = $this->getMock(ExecutorInterface::class);
         $executor->expects($this->any())
             ->method('execute')
             ->with($container, self::$parsedConfig[$container])
@@ -155,7 +155,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             ->method('getConfiguration')
             ->willReturn(['test' => ['Executor' => 'magic']]);
         /** @var Readerinterface $mock */
-        $executor = $this->getMock(DependencyExecutorInterface::class);
+        $executor = $this->getMock(ExecutorInterface::class);
         $this->dependency = new Dependency(
             $mock,
             'valid',
