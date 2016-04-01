@@ -14,28 +14,22 @@ class PHP extends AbstractReader
         $this->setContext($context);
     }
 
-    /**
-     * @return array в случае если фаил пустой или результат не является массивом, вернется пустой массив
-     * @throws InvalidArgumentException в случае если фаил не может быть прочитан.
-     */
-    public function getConfiguration()
+    private static function mustRedable($fileName)
     {
-        if (!is_readable($this->getFileName())) {
+        if (!is_readable($fileName)) {
             throw new InvalidArgumentException(sprintf(
                 'FileName: `%s` must be readable',
-                $this->getFileName()
+                $fileName
             ));
         }
-        ob_start();
-        $context = $this->getContext();
-        extract($context);
-        /** @noinspection PhpIncludeInspection */
-        $result = include $this->getFileName();
-        $output = ob_get_clean();
+    }
+
+    private static function getResult($fileName, $result, $output)
+    {
         if (!empty($output)) {
             throw new \RuntimeException(sprintf(
                 'File: `%s` must have empty output: `%s`',
-                $this->getFileName(),
+                $fileName,
                 $output
             ));
         }
@@ -43,6 +37,22 @@ class PHP extends AbstractReader
             $result = [];
         }
         return $result;
+    }
+
+    /**
+     * @return array в случае если фаил пустой или результат не является массивом, вернется пустой массив
+     * @throws InvalidArgumentException в случае если фаил не может быть прочитан.
+     */
+    public function getConfiguration()
+    {
+        self::mustRedable($this->getFileName());
+        ob_start();
+        $context = $this->getContext();
+        extract($context);
+        /** @noinspection PhpIncludeInspection */
+        $result = include $this->getFileName();
+        $output = ob_get_clean();
+        return self::getResult($this->getFileName(), $result, $output);
     }
 
     private function setContext($context)
