@@ -2,12 +2,10 @@
 namespace Smpl\Mydi\Loader;
 
 use Smpl\Mydi\Loader\Executor\Factory;
-use Smpl\Mydi\Loader\Executor\Lazy;
 use Smpl\Mydi\Loader\Executor\Service;
 
 class Dependency extends KeyValue
 {
-    private static $executorsDefault;
     /**
      * @var string
      */
@@ -32,14 +30,10 @@ class Dependency extends KeyValue
      */
     public static function getDefaultExecutors()
     {
-        if (empty(self::$executorsDefault)) {
-            $result = [];
-            $result['service'] = new Service();
-            $result['factory'] = new Factory();
-            $result['lazy'] = new Lazy();
-            self::$executorsDefault = $result;
-        }
-        return self::$executorsDefault;
+        $result = [];
+        $result['service'] = new Service();
+        $result['factory'] = new Factory();
+        return $result;
     }
 
     public function load($containerName)

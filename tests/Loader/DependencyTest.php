@@ -3,7 +3,6 @@ namespace SmplTest\Mydi\Loader;
 
 use Smpl\Mydi\Loader\Dependency;
 use Smpl\Mydi\Loader\Executor\Factory;
-use Smpl\Mydi\Loader\Executor\Lazy;
 use Smpl\Mydi\Loader\Executor\Service;
 use Smpl\Mydi\Loader\ExecutorInterface;
 use Smpl\Mydi\Loader\Readerinterface;
@@ -71,11 +70,10 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     public function testDefaultExecutors()
     {
         $result = Dependency::getDefaultExecutors();
-        $this->assertSame(3, count($result));
+        $this->assertSame(2, count($result));
         $expecteds = [
             'service' => Service::class,
             'factory' => Factory::class,
-            'lazy' => Lazy::class,
         ];
         foreach ($expecteds as $key => $value) {
             $this->assertTrue(array_key_exists($key, $result));
