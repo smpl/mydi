@@ -3,7 +3,6 @@ namespace Smpl\Mydi;
 
 abstract class AbstractLocator implements LocatorInterface
 {
-    protected $dependencyMap = [];
     /**
      * @var LoaderInterface[]
      */

@@ -4,6 +4,7 @@ namespace SmplTest\Mydi;
 use Smpl\Mydi\Container\Service;
 use Smpl\Mydi\LoaderInterface;
 use Smpl\Mydi\Locator;
+use Smpl\Mydi\LocatorInterface;
 
 class LocatorTest extends AbstractLocator
 {
@@ -176,6 +177,52 @@ class LocatorTest extends AbstractLocator
         /** @var LoaderInterface[] $result */
         $this->locator->setLoaders($result);
         $this->assertSame($result, $this->locator->getLoaders());
+    }
+
+    public function testGetDependencyMap()
+    {
+        $this->locator->set('string', 'my string');
+        $this->locator->set('int', 123);
+        $expected = [
+            'string' => [],
+            'int' => []
+        ];
+        $this->assertSame($expected, $this->locator->getDependencyMap());
+        $this->locator->set('service', new Service(function (LocatorInterface $locator) {
+            $result = new \stdClass();
+            $result->string = $locator->resolve('string');
+            $result->int = $locator->resolve('int');
+            return $result;
+        }));
+        $expected += ['service' => ['string', 'int']];
+        $this->assertSame($expected, $this->locator->getDependencyMap());
+        $this->locator->set('main', new Service(function (LocatorInterface $locator) {
+            $result = new \stdClass();
+            $result->service = $locator->resolve('service');
+            return $result;
+        }));
+        $expected += ['main' => ['service']];
+        $this->assertSame($expected, $this->locator->getDependencyMap());
+        $loader = $this->getMock(LoaderInterface::class);
+        $loader->expects($this->once())
+            ->method('getLoadableContainerNames')
+            ->will($this->returnValue(['loader']));
+        $loader->expects($this->once())
+            ->method('isLoadable')
+            ->with('loader')
+            ->will($this->returnValue(true));
+        $loader->expects($this->once())
+            ->method('load')
+            ->with('loader')
+            ->will($this->returnValue(new Service(function (LocatorInterface $locator) {
+                $result = new \stdClass();
+                $result->main = $locator->resolve('main');
+                $result->int = $locator->resolve('int');
+                return $result;
+            })));
+        $this->locator->setLoaders([$loader]);
+        $expected += ['loader' => ['main', 'int']];
+        $this->assertSame($expected, $this->locator->getDependencyMap());
     }
 }
  

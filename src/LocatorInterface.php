@@ -38,6 +38,13 @@ interface LocatorInterface extends \ArrayAccess
     public function has($name);
 
     /**
+     * Строит карту зависимостей проекта
+     * @see https://github.com/smpl/mydi/issues/32
+     * @return array
+     */
+    public function getDependencyMap();
+
+    /**
      * @return LoaderInterface[]
      */
     public function getLoaders();

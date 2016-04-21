@@ -65,6 +65,11 @@ class KeyValueTest extends \PHPUnit_Framework_TestCase
         return $result;
     }
 
+    public function testGetLoadableContainerNames()
+    {
+        $this->assertSame(array_keys($this->parsedConfig), $this->loader->getLoadableContainerNames());
+    }
+
     protected function setUp()
     {
         parent::setUp();
