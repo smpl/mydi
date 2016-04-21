@@ -24,4 +24,11 @@ interface LoaderInterface
      * @return mixed
      */
     public function load($containerName);
+
+    /**
+     * Это вызывается в случае когда у Locator запросили построение дерева зависимостей,
+     * Метод нужен исключительно разработчикам для анализа зависимостей и может не очень быстро работать
+     * @return array
+    */
+    public function getLoadableContainerNames();
 }

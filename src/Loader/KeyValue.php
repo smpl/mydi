@@ -49,6 +49,11 @@ class KeyValue implements LoaderInterface
         return array_key_exists($containerName, $this->getConfiguration());
     }
 
+    public function getLoadableContainerNames()
+    {
+        return array_keys($this->getConfiguration());
+    }
+
     /**
      * @return array
      */

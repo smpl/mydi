@@ -5,6 +5,8 @@ class Locator extends AbstractLocator
 {
     private $containers = [];
     private $calls = [];
+    private $isDependencyMapBuild = false;
+    private $dependencyMap = [];
 
     public function resolve($name)
     {
@@ -19,6 +21,10 @@ class Locator extends AbstractLocator
      */
     private function beforeResolve($name)
     {
+        if ($this->isDependencyMapBuild) {
+            $this->setDependencyMap($name);
+        }
+
         if (array_search($name, $this->calls) !== false) {
             throw new \InvalidArgumentException(
                 sprintf(
@@ -104,5 +110,49 @@ class Locator extends AbstractLocator
             throw new \InvalidArgumentException(sprintf('name is not exist, %s', $name));
         }
         unset($this->containers[$name]);
+    }
+
+    public function getDependencyMap()
+    {
+        $names = $this->getAllName();
+        $this->isDependencyMapBuild = true;
+        foreach ($names as $containerName) {
+            $this->resolve($containerName);
+        }
+        $this->isDependencyMapBuild = false;
+        return $this->dependencyMap;
+    }
+    private function getAllName()
+    {
+        $result = array_keys($this->containers);
+        foreach ($this->loaders as $loader) {
+            $names = $loader->getLoadableContainerNames();
+            foreach ($names as $name) {
+                if (!in_array($name, $result)) {
+                    $result[] = $name;
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @param $name
+     */
+    private function setDependencyMap($name)
+    {
+        if (empty($this->calls)) {
+            $containerName = $name;
+            $containerValue = [];
+        } else {
+            $containerName = $this->calls[count($this->calls) - 1];
+            $containerValue = $name;
+        }
+        if (is_array($containerValue) && !array_key_exists($containerName, $this->dependencyMap)) {
+            $this->dependencyMap[$containerName] = $containerValue;
+        }
+        if (is_string($containerValue)) {
+            $this->dependencyMap[$containerName][] = $containerValue;
+        }
     }
 }

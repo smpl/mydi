@@ -75,6 +75,35 @@ class IoC implements LoaderInterface
         return $result;
     }
 
+    public function getLoadableContainerNames()
+    {
+        $result = [];
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($this->basePath,
+                \RecursiveDirectoryIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::SELF_FIRST);
+        $iterator->rewind();
+        while ($iterator->valid()) {
+            /** @var \RecursiveDirectoryIterator $iterator */
+            if ($iterator->isFile() && 'php' === $iterator->getExtension()) {
+                $path = pathinfo($iterator->getSubPathName());
+                if ($iterator->getSubPath() === '') {
+                    $file = $path['filename'];
+                } else {
+                    $file = $path['dirname'] . DIRECTORY_SEPARATOR . $path['filename'];
+                }
+                $result[] = $this->pathToContainerName($file);
+            }
+            $iterator->next();
+        }
+        return $result;
+    }
+    private function pathToContainerName($path)
+    {
+        $result = str_replace(DIRECTORY_SEPARATOR, '_', $path);
+        return $result;
+    }
+
     /**
      * Можно переопредилить для того чтобы использовать свою структуру поиска файлов в зависимости от имени контейнера
      * @param string $containerName

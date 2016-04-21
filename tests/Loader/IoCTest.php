@@ -113,6 +113,12 @@ php;
         $this->loader->load('testOutput');
     }
 
+    public function testGetLoadableContainerNames()
+    {
+        $expected = ['test', 'testContext', 'testOutput', 'subDir_test'];
+        $this->assertSame($expected, $this->loader->getLoadableContainerNames());
+    }
+
     protected function setUp()
     {
         parent::setUp();
