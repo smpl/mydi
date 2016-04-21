@@ -19,7 +19,8 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "SmplTest\\Mydi\\": "tests/"
+      "SmplTest\\Mydi\\": "tests/",
+      "SmplExample\\Mydi\\": "example/"
     }
   },
   "require": {
