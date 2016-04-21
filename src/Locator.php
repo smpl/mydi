@@ -30,14 +30,15 @@ class Locator extends AbstractLocator
         }
         array_push($this->calls, $name);
 
-        if (!$this->has($name)) {
+        if (!array_key_exists($name, $this->containers)) {
             $this->tryLoadFromLoader($name);
         }
     }
 
     public function has($name)
     {
-        return array_key_exists($name, $this->containers);
+        return array_key_exists($name, $this->containers)
+        || !is_null($this->getLoaderForContainer($name));
     }
 
     /**
@@ -46,14 +47,7 @@ class Locator extends AbstractLocator
      */
     private function tryLoadFromLoader($name)
     {
-        $result = null;
-        /** @var LoaderInterface $loader */
-        foreach ($this->getLoaders() as $loader) {
-            if ($loader->isLoadable($name)) {
-                $result = $loader;
-                break;
-            }
-        }
+        $result = $this->getLoaderForContainer($name);
         if (is_null($result)) {
             throw new \InvalidArgumentException(sprintf('Container name: `%s` is not defined', $name));
         }
@@ -66,6 +60,23 @@ class Locator extends AbstractLocator
             throw new \InvalidArgumentException('name must be string');
         }
         $this->containers[$name] = $value;
+    }
+
+    /**
+     * @param string $name
+     * @return null|LoaderInterface null если Loader не найден
+     */
+    private function getLoaderForContainer($name)
+    {
+        $result = null;
+        /** @var LoaderInterface $loader */
+        foreach ($this->getLoaders() as $loader) {
+            if ($loader->isLoadable($name)) {
+                $result = $loader;
+                break;
+            }
+        }
+        return $result;
     }
 
     /**
@@ -89,7 +100,7 @@ class Locator extends AbstractLocator
 
     public function delete($name)
     {
-        if (!$this->has($name)) {
+        if (!array_key_exists($name, $this->containers)) {
             throw new \InvalidArgumentException(sprintf('name is not exist, %s', $name));
         }
         unset($this->containers[$name]);
