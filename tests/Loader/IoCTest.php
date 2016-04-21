@@ -116,6 +116,7 @@ php;
     public function testGetLoadableContainerNames()
     {
         $expected = ['test', 'testContext', 'testOutput', 'subDir_test'];
+        sort($expected);
         $this->assertSame($expected, $this->loader->getLoadableContainerNames());
     }
 
