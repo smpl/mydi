@@ -3,6 +3,7 @@ namespace SmplTest\Mydi;
 
 use Smpl\Mydi\Container\Service;
 use Smpl\Mydi\LoaderInterface;
+use Smpl\Mydi\Locator;
 
 class LocatorTest extends AbstractLocator
 {
@@ -17,6 +18,19 @@ class LocatorTest extends AbstractLocator
         $this->assertSame($value, $this->locator->resolve($name));
         $this->locator->delete($name);
         $this->assertSame(false, $this->locator->has($name));
+    }
+
+    public function testHasFromLoader()
+    {
+        $mockLoader = $this->getMock(LoaderInterface::class);
+        $mockLoader
+            ->expects($this->once())
+            ->method('isLoadable')
+            ->with($this->equalTo('magic'))
+            ->willReturn(true)
+        ;
+        $locator = new Locator([$mockLoader]);
+        $this->assertTrue($locator->has('magic'));
     }
 
     /**
