@@ -96,6 +96,7 @@ class IoC implements LoaderInterface
             }
             $iterator->next();
         }
+        sort($result);
         return $result;
     }
     private function pathToContainerName($path)
