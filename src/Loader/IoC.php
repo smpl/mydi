@@ -87,7 +87,7 @@ class IoC implements LoaderInterface
             /** @var \RecursiveDirectoryIterator $iterator */
             if ($iterator->isFile() && 'php' === $iterator->getExtension()) {
                 $path = pathinfo($iterator->getSubPathName());
-                if ($iterator->getSubPath() === '') {
+                if (empty($iterator->getSubPath())) {
                     $file = $path['filename'];
                 } else {
                     $file = $path['dirname'] . DIRECTORY_SEPARATOR . $path['filename'];
