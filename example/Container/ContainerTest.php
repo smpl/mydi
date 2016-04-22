@@ -6,7 +6,7 @@ use Smpl\Mydi\Container\Factory;
 use Smpl\Mydi\Container\Service;
 use Smpl\Mydi\Locator;
 
-class ContainerTest
+class ContainerTest extends \PHPUnit_Framework_TestCase
 {
     public function testService()
     {
