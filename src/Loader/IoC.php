@@ -79,29 +79,32 @@ class IoC implements LoaderInterface
     {
         $result = [];
         $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($this->basePath,
-                \RecursiveDirectoryIterator::SKIP_DOTS),
-            \RecursiveIteratorIterator::SELF_FIRST);
-        $iterator->rewind();
-        while ($iterator->valid()) {
-            /** @var \RecursiveDirectoryIterator $iterator */
-            if ($iterator->isFile() && 'php' === $iterator->getExtension()) {
-                $path = pathinfo($iterator->getSubPathName());
-                if (empty($iterator->getSubPath())) {
-                    $file = $path['filename'];
-                } else {
-                    $file = $path['dirname'] . DIRECTORY_SEPARATOR . $path['filename'];
-                }
-                $result[] = $this->pathToContainerName($file);
+            new \RecursiveDirectoryIterator($this->basePath)
+        );
+        /** @var \SplFileInfo $value */
+        foreach ($iterator as $value) {
+            $tmp = $this->fileToContainerName($value);
+            if (!is_null($tmp)) {
+                $result[] = $tmp;
             }
-            $iterator->next();
         }
         sort($result);
         return $result;
     }
-    private function pathToContainerName($path)
+
+    private function fileToContainerName(\SplFileInfo $file)
     {
-        $result = str_replace(DIRECTORY_SEPARATOR, '_', $path);
+        $result = null;
+        if ($file->isFile() && $file->getExtension() === 'php') {
+            $pathInfo = pathinfo(substr($file->getRealPath(), strlen($this->basePath)));
+            if ($pathInfo['dirname'] === '/') {
+                $result = $pathInfo['filename'];
+            } else {
+                $result = str_replace(DIRECTORY_SEPARATOR, '_', substr($pathInfo['dirname'], 1));
+                $result .= '_';
+                $result .= $pathInfo['filename'];
+            }
+        }
         return $result;
     }
 

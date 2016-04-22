@@ -22,7 +22,7 @@ class Locator extends AbstractLocator
     private function beforeResolve($name)
     {
         if ($this->isDependencyMapBuild) {
-            $this->setDependencyMap($name);
+            $this->buildDependencyMap($name);
         }
 
         if (array_search($name, $this->calls) !== false) {
@@ -136,11 +136,7 @@ class Locator extends AbstractLocator
         return $result;
     }
 
-    /**
-     * @param $name
-     */
-    private function setDependencyMap($name)
-    {
+    private function buildDependencyMap($name) {
         if (empty($this->calls)) {
             $containerName = $name;
             $containerValue = [];
@@ -148,11 +144,16 @@ class Locator extends AbstractLocator
             $containerName = $this->calls[count($this->calls) - 1];
             $containerValue = $name;
         }
-        if (is_array($containerValue) && !array_key_exists($containerName, $this->dependencyMap)) {
-            $this->dependencyMap[$containerName] = $containerValue;
+        $this->setDependencyMap($containerName, $containerValue);
+    }
+
+    private function setDependencyMap($name, $value)
+    {
+        if (is_array($value) && !array_key_exists($name, $this->dependencyMap)) {
+            $this->dependencyMap[$name] = $value;
         }
-        if (is_string($containerValue)) {
-            $this->dependencyMap[$containerName][] = $containerValue;
+        if (is_string($value)) {
+            $this->dependencyMap[$name][] = $value;
         }
     }
 }
