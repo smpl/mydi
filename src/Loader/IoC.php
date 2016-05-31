@@ -2,6 +2,7 @@
 namespace Smpl\Mydi\Loader;
 
 use Smpl\Mydi\LoaderInterface;
+use Smpl\Mydi\Locator;
 
 /**
  * Загрузка зависимостей на основе php файлов,
@@ -21,10 +22,10 @@ class IoC implements LoaderInterface
      */
     private $context;
 
-    public function __construct($basePath, $context = [])
+    public function __construct($basePath, array $context = [])
     {
         $this->basePath = realpath($basePath);
-        $this->setContext($context);
+        $this->context = $context;
     }
 
     /**
@@ -40,8 +41,7 @@ class IoC implements LoaderInterface
             throw new \InvalidArgumentException(sprintf('Container:`%s` must be loadable', $containerName));
         }
         ob_start();
-        $output = $this->getContext();
-        extract($output);
+        extract($this->context);
         /** @noinspection PhpIncludeInspection */
         $result = include $this->containerNameToPath($containerName);
         $output = ob_get_clean();
@@ -116,22 +116,7 @@ class IoC implements LoaderInterface
     protected function containerNameToPath($containerName)
     {
         $result = str_replace('_', DIRECTORY_SEPARATOR, $containerName);
+        $result = str_replace('\\', DIRECTORY_SEPARATOR, $result);
         return realpath($this->basePath . DIRECTORY_SEPARATOR . $result . '.php');
-    }
-
-    /**
-     * @return array
-     */
-    private function getContext()
-    {
-        return $this->context;
-    }
-
-    /**
-     * @param array $context
-     */
-    private function setContext(array $context)
-    {
-        $this->context = $context;
     }
 }

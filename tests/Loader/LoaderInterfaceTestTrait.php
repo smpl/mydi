@@ -1,19 +1,18 @@
 <?php
-namespace SmplTest\Mydi\tests\unit\loader;
+namespace SmplTest\Mydi\Loader;
 
-use Smpl\Mydi\Loader\KeyValue;
-use Smpl\Mydi\Loader\Readerinterface;
+use Smpl\Mydi\LoaderInterface;
 
-class KeyValueTest extends \PHPUnit_Framework_TestCase
+trait LoaderInterfaceTestTrait
 {
     /**
-     * @var KeyValue
+     * @var LoaderInterface
      */
     private $loader;
     /**
      * @var array
      */
-    private $parsedConfig = [
+    protected static $exampleConfiguration = [
         "int" => 15,
         "string" => "some string",
         "float" => 0.5,
@@ -32,7 +31,19 @@ class KeyValueTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoad($key, $value)
     {
-        $this->assertSame($value, $this->loader->load($key));
+        assertSame($value, $this->loader->load($key));
+    }
+
+    public function providerData()
+    {
+        $result = [];
+        foreach (self::$exampleConfiguration as $key => $value) {
+            $call = [];
+            $call[] = $key;
+            $call[] = $value;
+            $result[] = $call;
+        }
+        return $result;
     }
 
     /**
@@ -53,32 +64,8 @@ class KeyValueTest extends \PHPUnit_Framework_TestCase
         $this->loader->load('not declared Container');
     }
 
-    public function providerData()
-    {
-        $result = [];
-        foreach ($this->parsedConfig as $key => $value) {
-            $call = [];
-            $call[] = $key;
-            $call[] = $value;
-            $result[] = $call;
-        }
-        return $result;
-    }
-
     public function testGetLoadableContainerNames()
     {
-        $this->assertSame(array_keys($this->parsedConfig), $this->loader->getLoadableContainerNames());
-    }
-
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $mock = $this->getMock(ReaderInterface::class);
-        $mock->expects($this->any())
-            ->method('getConfiguration')
-            ->will($this->returnValue($this->parsedConfig));
-        /** @var Readerinterface $mock */
-        $this->loader = new KeyValue($mock);
+        assertSame(array_keys(self::$exampleConfiguration), $this->loader->getLoadableContainerNames());
     }
 }

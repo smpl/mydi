@@ -3,7 +3,7 @@ namespace Smpl\Mydi\Loader;
 
 use Smpl\Mydi\LoaderInterface;
 
-class KeyValue implements LoaderInterface
+abstract class AbstractKeyValue implements LoaderInterface
 {
     /**
      * @var bool
@@ -12,16 +12,15 @@ class KeyValue implements LoaderInterface
     /**
      * @var array
      */
-    private $map = [];
+    private $configuration = [];
+    private $fileName;
 
-    /**
-     * @var Readerinterface
-     */
-    private $loader;
-
-    public function __construct(Readerinterface $loader)
+    public function __construct($fileName)
     {
-        $this->loader = $loader;
+        if (!is_string($fileName)) {
+            throw new \InvalidArgumentException('FileName must be string');
+        }
+        $this->fileName = $fileName;
     }
 
     /**
@@ -60,22 +59,18 @@ class KeyValue implements LoaderInterface
     private function getConfiguration()
     {
         if ($this->isLoad === false) {
-            $this->setMap($this->loader->getConfiguration());
+            $this->configuration = $this->loadFile($this->fileName);
             $this->isLoad = true;
         }
-        return $this->map;
+        return is_array($this->configuration) ? $this->configuration : [];
     }
 
+
     /**
-     * @param array $map
+     * @param $fileName
+     * @return array
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
      */
-    private function setMap($map)
-    {
-        if (!is_array($map)) {
-            throw new \RuntimeException(
-                'Loader Configuration must return array of configuration'
-            );
-        }
-        $this->map = $map;
-    }
+    protected abstract function loadFile($fileName);
 }
