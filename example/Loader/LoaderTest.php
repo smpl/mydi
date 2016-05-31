@@ -4,6 +4,7 @@ namespace SmplExample\Mydi\Loader;
 
 use Smpl\Mydi\Container\Service;
 use Smpl\Mydi\Loader\KeyValue;
+use Smpl\Mydi\Loader\KeyValueJson;
 use Smpl\Mydi\Loader\Reader\JSON;
 use Smpl\Mydi\Locator;
 use Smpl\Mydi\LocatorInterface;
@@ -13,7 +14,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     public function testExampleLoader()
     {
         $loaders = [];
-        $loaders[] = new KeyValue(new JSON(__DIR__ . DIRECTORY_SEPARATOR . 'example.json'));
+        $loaders[] = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'example.json');
         $locator = new Locator($loaders);
         $locator['example'] = new Service(function(LocatorInterface $l) {
             $result = new \stdClass();
