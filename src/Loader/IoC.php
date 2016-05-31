@@ -2,7 +2,6 @@
 namespace Smpl\Mydi\Loader;
 
 use Smpl\Mydi\LoaderInterface;
-use Smpl\Mydi\Locator;
 
 /**
  * Загрузка зависимостей на основе php файлов,

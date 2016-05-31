@@ -72,5 +72,5 @@ abstract class AbstractKeyValue implements LoaderInterface
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    protected abstract function loadFile($fileName);
+    abstract protected function loadFile($fileName);
 }

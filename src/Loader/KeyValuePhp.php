@@ -4,15 +4,15 @@ namespace Smpl\Mydi\Loader;
 
 class KeyValuePhp extends AbstractKeyValue
 {
-    private $fileName;
+    private $file;
 
 
     protected function loadFile($fileName)
     {
-        $this->fileName = $fileName;
+        $this->file = $fileName;
         ob_start();
         /** @noinspection PhpIncludeInspection */
-        $result = include $this->fileName;
+        $result = include $this->file;
         $output = ob_get_clean();
         if (!empty($output)) {
             throw new \RuntimeException(sprintf(
