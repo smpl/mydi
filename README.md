@@ -43,6 +43,7 @@ composer test
 2. [Знакомствами с ContainerInterface и основными реализациями Service, Factory](example/Container)
 3. [Базовое знакомство с LoaderInterface](example/Loader)
     1. [Загрузчик KeyValue](example/KeyValueLoader)
+    2. [Загрузчик IoC](example/IoC)
 
 [Много теории от Фаулера(EN) расширенная информация](http://www.martinfowler.com/articles/injection.html)
 
