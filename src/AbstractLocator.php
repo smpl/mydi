@@ -27,7 +27,7 @@ abstract class AbstractLocator implements LocatorInterface
     }
 
     /**
-     * @return LoaderInterface
+     * @return LoaderInterface[]
      */
     public function getLoaders()
     {
