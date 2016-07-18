@@ -22,7 +22,7 @@ abstract protected function loadFile($fileName)
 
 который должен читать фаил и возвращать обычный ассоциативный массив php.
 
-Пример для чтения файлов YAML используя 
+Пример для чтения файлов **YAML** используя 
 [symfony/yaml](https://packagist.org/packages/symfony/yaml) компонент 
 (нету в стандартной поставке его надо устанавливать отдельно).
 ```php
