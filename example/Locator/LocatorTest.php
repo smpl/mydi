@@ -49,15 +49,6 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
         assertSame('secretPassword', $db->password);
 
         assertSame($magic->db, $db);
-
-        var_export($locator->getDependencyMap());
-        [
-            'db.dsn' => [],
-            'db.user' => [],
-            'db.password' => [],
-            'magic' => [],
-            'db' => [],
-        ];
     }
 
 }
