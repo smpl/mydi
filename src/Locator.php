@@ -8,22 +8,31 @@ class Locator extends AbstractLocator
     private $isDependencyMapBuild = false;
     private $dependencyMap = [];
 
-    public function resolve($name)
+    private function getDependencyName($name)
     {
-        $this->beforeResolve($name);
-        $result = $this->load($name);
-        $this->afterResolve();
+        $result = $name;
+        if (!empty($this->calls)) {
+            $result = $this->calls[count($this->calls) - 1];
+        }
         return $result;
     }
 
-    /**
-     * @param $name
-     */
-    private function beforeResolve($name)
+    private function updateDependencyMap($name)
     {
-        if ($this->isDependencyMapBuild) {
-            $this->buildDependencyMap($name);
+        $dependencyName = $this->getDependencyName($name);
+        if (!array_key_exists($dependencyName, $this->dependencyMap)) {
+            $this->dependencyMap[$dependencyName] = [];
         }
+        if ($name !== $dependencyName
+            && !in_array($name, $this->dependencyMap[$dependencyName])
+        ) {
+            $this->dependencyMap[$dependencyName] = array_merge($this->dependencyMap[$dependencyName], [$name]);
+        }
+    }
+
+    public function resolve($name)
+    {
+        $this->updateDependencyMap($name);
 
         if (array_search($name, $this->calls) !== false) {
             throw new \InvalidArgumentException(
@@ -36,28 +45,16 @@ class Locator extends AbstractLocator
         }
         array_push($this->calls, $name);
 
-        if (!array_key_exists($name, $this->containers)) {
-            $this->tryLoadFromLoader($name);
-        }
+        $result = $this->load($name);
+
+        array_pop($this->calls);
+        return $result;
     }
 
     public function has($name)
     {
         return array_key_exists($name, $this->containers)
         || !is_null($this->getLoaderForContainer($name));
-    }
-
-    /**
-     * @param $name
-     * @throw \InvalidArgumentException в случае если не сможет найти подходящий Loader
-     */
-    private function tryLoadFromLoader($name)
-    {
-        $result = $this->getLoaderForContainer($name);
-        if (is_null($result)) {
-            throw new \InvalidArgumentException(sprintf('Container name: `%s` is not defined', $name));
-        }
-        $this->set($name, $result->load($name));
     }
 
     public function set($name, $value)
@@ -85,25 +82,6 @@ class Locator extends AbstractLocator
         return $result;
     }
 
-    /**
-     * @param $name
-     * @return mixed
-     */
-    private function load($name)
-    {
-        $result = $this->containers[$name];
-        if ($result instanceof ContainerInterface) {
-            $result = $result->resolve($this);
-            return $result;
-        }
-        return $result;
-    }
-
-    private function afterResolve()
-    {
-        array_pop($this->calls);
-    }
-
     public function delete($name)
     {
         if (!array_key_exists($name, $this->containers)) {
@@ -122,6 +100,7 @@ class Locator extends AbstractLocator
         $this->isDependencyMapBuild = false;
         return $this->dependencyMap;
     }
+
     private function getAllName()
     {
         $result = array_keys($this->containers);
@@ -136,24 +115,21 @@ class Locator extends AbstractLocator
         return $result;
     }
 
-    private function buildDependencyMap($name) {
-        if (empty($this->calls)) {
-            $containerName = $name;
-            $containerValue = [];
-        } else {
-            $containerName = $this->calls[count($this->calls) - 1];
-            $containerValue = $name;
-        }
-        $this->setDependencyMap($containerName, $containerValue);
-    }
-
-    private function setDependencyMap($name, $value)
+    private function load($name)
     {
-        if (is_array($value) && !array_key_exists($name, $this->dependencyMap)) {
-            $this->dependencyMap[$name] = $value;
+        if (!array_key_exists($name, $this->containers)) {
+            $result = $this->getLoaderForContainer($name);
+            if (is_null($result)) {
+                throw new \InvalidArgumentException(sprintf('Container name: `%s` is not defined', $name));
+            }
+            $this->set($name, $result->load($name));
         }
-        if (is_string($value)) {
-            $this->dependencyMap[$name][] = $value;
+
+        $result = $this->containers[$name];
+        if ($result instanceof ContainerInterface) {
+            $result = $result->resolve($this);
+            return $result;
         }
+        return $result;
     }
 }

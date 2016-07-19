@@ -224,5 +224,21 @@ class LocatorTest extends AbstractLocator
         $expected += ['loader' => ['main', 'int']];
         $this->assertSame($expected, $this->locator->getDependencyMap());
     }
+
+    public function testGetDependencyMapWithContainer()
+    {
+        $service = new Service(function (LocatorInterface $l) {
+            $r = new \stdClass();
+            $r->test = $l['test'];
+        });
+        $this->locator->set('test', 'test');
+        $this->locator->set('service', $service);
+        $this->locator['service'];
+        $result = [
+            'service' => ['test'],
+            'test' => [],
+        ];
+        assertSame($result, $this->locator->getDependencyMap());
+    }
 }
  
