@@ -116,29 +116,6 @@ class LocatorTest extends AbstractLocator
     }
 
     /**
-     * @test
-     * @expectedException \PHPUnit_Framework_Error
-     * @dataProvider providerLoadersInvalid
-     * @param $value
-     */
-    public function setLoadersInvalid($value)
-    {
-        $this->locator->setLoaders($value);
-    }
-
-    public function providerLoadersInvalid()
-    {
-        return [
-            [null],
-            [false],
-            [true],
-            [5],
-            ['123'],
-            [new \stdClass()],
-        ];
-    }
-
-    /**
      * @expectedException \InvalidArgumentException
      */
     public function testSetLoadersInvalid()
