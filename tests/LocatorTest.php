@@ -23,7 +23,7 @@ class LocatorTest extends AbstractLocator
 
     public function testHasFromLoader()
     {
-        $mockLoader = $this->getMock(LoaderInterface::class);
+        $mockLoader = $this->createMock(LoaderInterface::class);
         $mockLoader
             ->expects($this->once())
             ->method('isLoadable')
@@ -77,7 +77,7 @@ class LocatorTest extends AbstractLocator
     public function testSetContainer()
     {
         $result = 123;
-        $mock = $this->getMock('\Smpl\Mydi\ContainerInterface');
+        $mock = $this->createMock('\Smpl\Mydi\ContainerInterface');
         $mock->expects($this->any())
             ->method('resolve')
             ->will($this->returnValue($result));
@@ -132,7 +132,7 @@ class LocatorTest extends AbstractLocator
      */
     public function resolveUseLoader($name, $value)
     {
-        $loader = $this->getMock('\Smpl\Mydi\LoaderInterface');
+        $loader = $this->createMock('\Smpl\Mydi\LoaderInterface');
         $loader->expects($this->once())
             ->method('isLoadable')
             ->with($this->equalTo($name))
@@ -150,7 +150,7 @@ class LocatorTest extends AbstractLocator
     {
         $this->assertSame([], $this->locator->getLoaders());
 
-        $result = [$this->getMock(LoaderInterface::class)];
+        $result = [$this->createMock(LoaderInterface::class)];
         /** @var LoaderInterface[] $result */
         $this->locator->setLoaders($result);
         $this->assertSame($result, $this->locator->getLoaders());
@@ -180,7 +180,7 @@ class LocatorTest extends AbstractLocator
         }));
         $expected += ['main' => ['service']];
         $this->assertSame($expected, $this->locator->getDependencyMap());
-        $loader = $this->getMock(LoaderInterface::class);
+        $loader = $this->createMock(LoaderInterface::class);
         $loader->expects($this->once())
             ->method('getLoadableContainerNames')
             ->will($this->returnValue(['loader']));
