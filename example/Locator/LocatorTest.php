@@ -8,22 +8,22 @@ use Smpl\Mydi\Locator;
 
 class LocatorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testDependencyMap()
-    {
-        $json = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'example.json');
-        $ioc = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'example');
-        $loaders = [$json, $ioc];
-
-        $locator = new Locator($loaders);
-
-        assertSame([
-            'db.dsn' => [],
-            'db.user' => [],
-            'db.password' => [],
-            'db' => ['db.dsn', 'db.user', 'db.password'],
-            'magic' => ['db'],
-        ], $locator->getDependencyMap());
-    }
+//    public function testDependencyMap()
+//    {
+//        $json = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'example.json');
+//        $ioc = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'example');
+//        $loaders = [$json, $ioc];
+//
+//        $locator = new Locator($loaders);
+//
+//        assertSame([
+//            'db.dsn' => [],
+//            'db.user' => [],
+//            'db.password' => [],
+//            'db' => ['db.dsn', 'db.user', 'db.password'],
+//            'magic' => ['db'],
+//        ], $locator->getDependencyMap());
+//    }
 
     public function test()
     {
