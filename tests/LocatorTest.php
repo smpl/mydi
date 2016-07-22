@@ -160,10 +160,11 @@ class LocatorTest extends AbstractLocator
     {
         $this->locator->set('string', 'my string');
         $this->locator->set('int', 123);
+        assertSame([], $this->locator->getDependencyMap());
         $expected = [
             'string' => [],
-            'int' => []
         ];
+        $this->locator->resolve('string');
         $this->assertSame($expected, $this->locator->getDependencyMap());
         $this->locator->set('service', new Service(function (LocatorInterface $locator) {
             $result = new \stdClass();
@@ -172,6 +173,8 @@ class LocatorTest extends AbstractLocator
             return $result;
         }));
         $expected += ['service' => ['string', 'int']];
+        $expected += ['int' => []];
+        $this->locator->resolve('service');
         $this->assertSame($expected, $this->locator->getDependencyMap());
         $this->locator->set('main', new Service(function (LocatorInterface $locator) {
             $result = new \stdClass();
@@ -179,9 +182,10 @@ class LocatorTest extends AbstractLocator
             return $result;
         }));
         $expected += ['main' => ['service']];
+        $this->locator->resolve('main');
         $this->assertSame($expected, $this->locator->getDependencyMap());
         $loader = $this->createMock(LoaderInterface::class);
-        $loader->expects($this->once())
+        $loader->expects($this->never())
             ->method('getLoadableContainerNames')
             ->will($this->returnValue(['loader']));
         $loader->expects($this->once())
@@ -199,23 +203,37 @@ class LocatorTest extends AbstractLocator
             })));
         $this->locator->setLoaders([$loader]);
         $expected += ['loader' => ['main', 'int']];
+        $this->locator->resolve('loader');
         $this->assertSame($expected, $this->locator->getDependencyMap());
     }
 
-    public function testGetDependencyMapWithContainer()
+    public function testGetContainers()
     {
-        $service = new Service(function (LocatorInterface $l) {
-            $r = new \stdClass();
-            $r->test = $l['test'];
-        });
-        $this->locator->set('test', 'test');
-        $this->locator->set('service', $service);
-        $this->locator['service'];
-        $result = [
-            'service' => ['test'],
-            'test' => [],
-        ];
-        assertSame($result, $this->locator->getDependencyMap());
+        $locator = $this->locator;
+        assertSame([], $locator->getContainers());
+
+        $locator['test'] = 123;
+        $expected = ['test'];
+        assertSame($expected, $locator->getContainers());
+
+        $loader = $this->getMockBuilder(LoaderInterface::class)->getMock();
+        $loader
+            ->method('getLoadableContainerNames')
+            ->willReturn(['loader']);
+            ;
+        $locator->setLoaders([$loader]);
+        $expected[] = 'loader';
+        assertSame($expected, $locator->getContainers());
+
+        $loader2 = $this->getMockBuilder(LoaderInterface::class)->getMock();
+        $loader2
+            ->method('getLoadableContainerNames')
+            ->willReturn(['loader', 'magic']);
+        ;
+        $locator->setLoaders([$loader2]);
+        $expected[] = 'magic';
+        assertSame($expected, $locator->getContainers());
+
     }
 }
  

@@ -38,11 +38,18 @@ interface LocatorInterface extends \ArrayAccess
     public function has($name);
 
     /**
-     * Строит карту зависимостей проекта
-     * @see https://github.com/smpl/mydi/issues/32
+     * Возвращает описание зависимостей между контейнерами в виде массива
+     *
+     * Где ключ это имя контейнера что вызывали, а массив значений это то что потребовалось вызывать для него
      * @return array
      */
     public function getDependencyMap();
+
+    /**
+     * Получает имена контейнеров
+     * @return string[]
+     */
+    public function getContainers();
 
     /**
      * @return LoaderInterface[]

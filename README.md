@@ -44,12 +44,13 @@ composer test
 сторонний код и используется **\stdClass** в качестве демонстрационного 
 класса и там может быть любой ваш класс или библиотека.
 
-1. [Базовое знакомство с LocatorInterface](example/Locator)
-2. [Знакомствами с ContainerInterface и основными реализациями Service, Factory](example/Container)
-3. [Базовое знакомство с LoaderInterface](example/Loader)
-    1. [Загрузчик KeyValue](example/KeyValueLoader)
-    2. [Загрузчик IoC](example/IoC)
-4. [Лучшие практики и рекомендации](example/best)
+* [Базовое знакомство с LocatorInterface](example/Locator)
+* [Знакомствами с ContainerInterface и основными реализациями Service, Factory](example/Container)
+* [Базовое знакомство с LoaderInterface](example/Loader)
+    * [Загрузчик KeyValue](example/KeyValueLoader)
+    * [Загрузчик IoC](example/IoC)
+* [Лучшие практики и рекомендации](example/best)
+* [Дерево зависимостей проекта](example/Map)
 
 [Много теории от Фаулера(EN) расширенная информация](http://www.martinfowler.com/articles/injection.html)
 

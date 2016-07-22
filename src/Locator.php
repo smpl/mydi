@@ -5,7 +5,6 @@ class Locator extends AbstractLocator
 {
     private $containers = [];
     private $calls = [];
-    private $isDependencyMapBuild = false;
     private $dependencyMap = [];
 
     private function getDependencyName($name)
@@ -22,6 +21,8 @@ class Locator extends AbstractLocator
         $dependencyName = $this->getDependencyName($name);
         if (!array_key_exists($dependencyName, $this->dependencyMap)) {
             $this->dependencyMap[$dependencyName] = [];
+        } else if (!array_key_exists($name, $this->dependencyMap)) {
+            $this->dependencyMap[$name] = [];
         }
         if ($name !== $dependencyName
             && !in_array($name, $this->dependencyMap[$dependencyName])
@@ -92,16 +93,10 @@ class Locator extends AbstractLocator
 
     public function getDependencyMap()
     {
-        $names = $this->getAllName();
-        $this->isDependencyMapBuild = true;
-        foreach ($names as $containerName) {
-            $this->resolve($containerName);
-        }
-        $this->isDependencyMapBuild = false;
         return $this->dependencyMap;
     }
 
-    private function getAllName()
+    public function getContainers()
     {
         $result = array_keys($this->containers);
         foreach ($this->loaders as $loader) {
