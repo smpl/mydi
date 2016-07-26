@@ -207,14 +207,14 @@ class LocatorTest extends AbstractLocator
         $this->assertSame($expected, $this->locator->getDependencyMap());
     }
 
-    public function testGetContainers()
+    public function testGetContainerNames()
     {
         $locator = $this->locator;
-        assertSame([], $locator->getContainers());
+        assertSame([], $locator->getContainerNames());
 
         $locator['test'] = 123;
         $expected = ['test'];
-        assertSame($expected, $locator->getContainers());
+        assertSame($expected, $locator->getContainerNames());
 
         $loader = $this->getMockBuilder(LoaderInterface::class)->getMock();
         $loader
@@ -223,7 +223,7 @@ class LocatorTest extends AbstractLocator
             ;
         $locator->setLoaders([$loader]);
         $expected[] = 'loader';
-        assertSame($expected, $locator->getContainers());
+        assertSame($expected, $locator->getContainerNames());
 
         $loader2 = $this->getMockBuilder(LoaderInterface::class)->getMock();
         $loader2
@@ -232,7 +232,7 @@ class LocatorTest extends AbstractLocator
         ;
         $locator->setLoaders([$loader2]);
         $expected[] = 'magic';
-        assertSame($expected, $locator->getContainers());
+        assertSame($expected, $locator->getContainerNames());
 
     }
 }

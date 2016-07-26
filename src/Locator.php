@@ -96,7 +96,7 @@ class Locator extends AbstractLocator
         return $this->dependencyMap;
     }
 
-    public function getContainers()
+    public function getContainerNames()
     {
         $result = array_keys($this->containers);
         foreach ($this->loaders as $loader) {
