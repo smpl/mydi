@@ -15,7 +15,7 @@ interface LocatorInterface extends \ArrayAccess
      * @return mixed Значение которое хранилось в этом контейнере
      * @throws \InvalidArgumentException
      */
-    public function resolve($name);
+    public function get($name);
 
     /**
      * Добавить новый контейнер с именем $name и значение $value

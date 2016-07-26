@@ -45,7 +45,7 @@ KeyValue хранилище.
 #### Простая загрузка объекта с интерфейсом ContainerInterface
 
 Также как в *простой загрузке*, только value является объектом с интерфейсом 
-**ContainerInterface**, у данного объекта вызывается метод resolve в 
+**ContainerInterface**, у данного объекта вызывается метод get в 
 качестве аргумента, туда передается текущий locator, [подробней](../Container)
 
 #### Отложенная загрузка.
@@ -67,7 +67,7 @@ KeyValue хранилище.
     Поместим в KeyValue хранилише то что вернет Loader
 $result равен value из KeyValue хранилища
 Если результат реализует интерфейс ContainerInterface
-    $result = $result->resolve($this)
+    $result = $result->get($this)
 Возвращаем $result
 ```
 

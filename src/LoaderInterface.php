@@ -2,7 +2,7 @@
 namespace Smpl\Mydi;
 
 /**
- * Предназначен для определения зависимостей на лету (в момент когда их запросят через LocatorInterface->resolve)
+ * Предназначен для определения зависимостей на лету (в момент когда их запросят через LocatorInterface->get)
  *
  * Interface LoaderInterface
  * @package Smpl\Mydi

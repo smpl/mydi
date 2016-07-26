@@ -46,7 +46,7 @@ class LocatorArray extends AbstractLocator
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testArrayResolveNameNotExist()
+    public function testArrayGetNameNotExist()
     {
         $this->locator['test'];
     }
@@ -56,7 +56,7 @@ class LocatorArray extends AbstractLocator
         $result = 123;
         $mock = $this->getMockBuilder('\Smpl\Mydi\ContainerInterface')->getMock();
         $mock->expects($this->any())
-            ->method('resolve')
+            ->method('get')
             ->will($this->returnValue($result));
         $this->locator['test'] = $mock;
         $this->assertSame($result, $this->locator['test']);

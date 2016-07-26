@@ -31,7 +31,7 @@ class Locator extends AbstractLocator
         }
     }
 
-    public function resolve($name)
+    public function get($name)
     {
         $this->updateDependencyMap($name);
 
@@ -122,7 +122,7 @@ class Locator extends AbstractLocator
 
         $result = $this->containers[$name];
         if ($result instanceof ContainerInterface) {
-            $result = $result->resolve($this);
+            $result = $result->get($this);
             return $result;
         }
         return $result;
