@@ -75,7 +75,7 @@ class Locator extends AbstractLocator
         $result = null;
         /** @var LoaderInterface $loader */
         foreach ($this->getLoaders() as $loader) {
-            if ($loader->isLoadable($name)) {
+            if ($loader->has($name)) {
                 $result = $loader;
                 break;
             }

@@ -57,23 +57,23 @@ php;
         rmdir($root);
     }
 
-    public function testIsLoadable()
+    public function testhas()
     {
-        $this->assertSame(true, $this->loader->isLoadable('test'));
-        $this->assertSame(false, $this->loader->isLoadable('invalidName'));
-        $this->assertSame(true, $this->loader->isLoadable('subDir_test'));
+        $this->assertSame(true, $this->loader->has('test'));
+        $this->assertSame(false, $this->loader->has('invalidName'));
+        $this->assertSame(true, $this->loader->has('subDir_test'));
 
         // Попытаемся загрузить что то за пределами указанного каталога (не должно грузить)
-        $this->assertSame(false, $this->loader->isLoadable('../test'));
+        $this->assertSame(false, $this->loader->has('../test'));
     }
 
     /**
      * @expectedException \InvalidArgumentException
      * @exceptedExceptionMessage Container name must be string
      */
-    public function testIsLoadableNotString()
+    public function testhasNotString()
     {
-        $this->loader->isLoadable(1);
+        $this->loader->has(1);
     }
 
     public function testGet()

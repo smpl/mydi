@@ -15,7 +15,7 @@ interface LoaderInterface
      * @throws \InvalidArgumentException если имя не строка
      * @return bool
      */
-    public function isLoadable($containerName);
+    public function has($containerName);
 
     /**
      * Загрузка контейнера

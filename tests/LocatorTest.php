@@ -26,7 +26,7 @@ class LocatorTest extends AbstractLocator
         $mockLoader = $this->getMockBuilder(LoaderInterface::class)->getMock();
         $mockLoader
             ->expects($this->once())
-            ->method('isLoadable')
+            ->method('has')
             ->with($this->equalTo('magic'))
             ->willReturn(true)
         ;
@@ -134,7 +134,7 @@ class LocatorTest extends AbstractLocator
     {
         $loader = $this->getMockBuilder('\Smpl\Mydi\LoaderInterface')->getMock();
         $loader->expects($this->once())
-            ->method('isLoadable')
+            ->method('has')
             ->with($this->equalTo($name))
             ->will($this->returnValue(true));
         $loader->expects($this->once())
@@ -189,7 +189,7 @@ class LocatorTest extends AbstractLocator
             ->method('getLoadableContainerNames')
             ->will($this->returnValue(['loader']));
         $loader->expects($this->once())
-            ->method('isLoadable')
+            ->method('has')
             ->with('loader')
             ->will($this->returnValue(true));
         $loader->expects($this->once())

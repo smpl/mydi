@@ -31,7 +31,7 @@ abstract class AbstractKeyValue implements LoaderInterface
      */
     public function get($containerName)
     {
-        if (!$this->isLoadable($containerName)) {
+        if (!$this->has($containerName)) {
             throw new \InvalidArgumentException(sprintf('Container:`%s`, must be loadable', $containerName));
         }
         return $this->getConfiguration()[$containerName];
@@ -43,7 +43,7 @@ abstract class AbstractKeyValue implements LoaderInterface
      * @throws \InvalidArgumentException если имя не строка
      * @return bool
      */
-    public function isLoadable($containerName)
+    public function has($containerName)
     {
         return array_key_exists($containerName, $this->getConfiguration());
     }
