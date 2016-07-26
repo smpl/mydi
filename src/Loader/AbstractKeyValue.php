@@ -23,12 +23,6 @@ abstract class AbstractKeyValue implements LoaderInterface
         $this->fileName = $fileName;
     }
 
-    /**
-     * Загрузка контейнера
-     * @param string $containerName
-     * @throws \InvalidArgumentException если имя нельзя загрузить
-     * @return mixed
-     */
     public function get($containerName)
     {
         if (!$this->has($containerName)) {
@@ -37,12 +31,6 @@ abstract class AbstractKeyValue implements LoaderInterface
         return $this->getConfiguration()[$containerName];
     }
 
-    /**
-     * Проверяет может ли загрузить данный контейнер этот Loader
-     * @param string $containerName
-     * @throws \InvalidArgumentException если имя не строка
-     * @return bool
-     */
     public function has($containerName)
     {
         return array_key_exists($containerName, $this->getConfiguration());
