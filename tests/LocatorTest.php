@@ -23,7 +23,7 @@ class LocatorTest extends AbstractLocator
 
     public function testHasFromLoader()
     {
-        $mockLoader = $this->createMock(LoaderInterface::class);
+        $mockLoader = $this->getMockBuilder(LoaderInterface::class)->getMock();
         $mockLoader
             ->expects($this->once())
             ->method('isLoadable')
@@ -77,7 +77,7 @@ class LocatorTest extends AbstractLocator
     public function testSetContainer()
     {
         $result = 123;
-        $mock = $this->createMock('\Smpl\Mydi\ContainerInterface');
+        $mock = $this->getMockBuilder('\Smpl\Mydi\ContainerInterface')->getMock();
         $mock->expects($this->any())
             ->method('resolve')
             ->will($this->returnValue($result));
@@ -132,7 +132,7 @@ class LocatorTest extends AbstractLocator
      */
     public function resolveUseLoader($name, $value)
     {
-        $loader = $this->createMock('\Smpl\Mydi\LoaderInterface');
+        $loader = $this->getMockBuilder('\Smpl\Mydi\LoaderInterface')->getMock();
         $loader->expects($this->once())
             ->method('isLoadable')
             ->with($this->equalTo($name))
@@ -150,7 +150,7 @@ class LocatorTest extends AbstractLocator
     {
         $this->assertSame([], $this->locator->getLoaders());
 
-        $result = [$this->createMock(LoaderInterface::class)];
+        $result = [$this->getMockBuilder(LoaderInterface::class)->getMock()];
         /** @var LoaderInterface[] $result */
         $this->locator->setLoaders($result);
         $this->assertSame($result, $this->locator->getLoaders());
@@ -184,7 +184,7 @@ class LocatorTest extends AbstractLocator
         $expected += ['main' => ['service']];
         $this->locator->resolve('main');
         $this->assertSame($expected, $this->locator->getDependencyMap());
-        $loader = $this->createMock(LoaderInterface::class);
+        $loader = $this->getMockBuilder(LoaderInterface::class)->getMock();
         $loader->expects($this->never())
             ->method('getLoadableContainerNames')
             ->will($this->returnValue(['loader']));
