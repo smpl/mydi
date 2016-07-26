@@ -100,7 +100,7 @@ class Locator extends AbstractLocator
     {
         $result = array_keys($this->containers);
         foreach ($this->loaders as $loader) {
-            $names = $loader->getLoadableContainerNames();
+            $names = $loader->getContainerNames();
             foreach ($names as $name) {
                 if (!in_array($name, $result)) {
                     $result[] = $name;

@@ -186,7 +186,7 @@ class LocatorTest extends AbstractLocator
         $this->assertSame($expected, $this->locator->getDependencyMap());
         $loader = $this->getMockBuilder(LoaderInterface::class)->getMock();
         $loader->expects($this->never())
-            ->method('getLoadableContainerNames')
+            ->method('getContainerNames')
             ->will($this->returnValue(['loader']));
         $loader->expects($this->once())
             ->method('has')
@@ -218,7 +218,7 @@ class LocatorTest extends AbstractLocator
 
         $loader = $this->getMockBuilder(LoaderInterface::class)->getMock();
         $loader
-            ->method('getLoadableContainerNames')
+            ->method('getContainerNames')
             ->willReturn(['loader']);
             ;
         $locator->setLoaders([$loader]);
@@ -227,7 +227,7 @@ class LocatorTest extends AbstractLocator
 
         $loader2 = $this->getMockBuilder(LoaderInterface::class)->getMock();
         $loader2
-            ->method('getLoadableContainerNames')
+            ->method('getContainerNames')
             ->willReturn(['loader', 'magic']);
         ;
         $locator->setLoaders([$loader2]);

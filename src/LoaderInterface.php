@@ -30,5 +30,5 @@ interface LoaderInterface
      * Метод нужен исключительно разработчикам для анализа зависимостей и может не очень быстро работать
      * @return array
     */
-    public function getLoadableContainerNames();
+    public function getContainerNames();
 }

@@ -48,7 +48,7 @@ abstract class AbstractKeyValue implements LoaderInterface
         return array_key_exists($containerName, $this->getConfiguration());
     }
 
-    public function getLoadableContainerNames()
+    public function getContainerNames()
     {
         return array_keys($this->getConfiguration());
     }

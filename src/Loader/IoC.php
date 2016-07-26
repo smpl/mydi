@@ -74,7 +74,7 @@ class IoC implements LoaderInterface
         return $result;
     }
 
-    public function getLoadableContainerNames()
+    public function getContainerNames()
     {
         $result = [];
         $iterator = new \RecursiveIteratorIterator(

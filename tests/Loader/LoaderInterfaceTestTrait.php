@@ -64,8 +64,8 @@ trait LoaderInterfaceTestTrait
         $this->loader->get('not declared Container');
     }
 
-    public function testGetLoadableContainerNames()
+    public function testGetContainerNames()
     {
-        assertSame(array_keys(self::$exampleConfiguration), $this->loader->getLoadableContainerNames());
+        assertSame(array_keys(self::$exampleConfiguration), $this->loader->getContainerNames());
     }
 }

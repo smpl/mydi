@@ -113,11 +113,11 @@ php;
         $this->loader->get('testOutput');
     }
 
-    public function testGetLoadableContainerNames()
+    public function testGetContainerNames()
     {
         $expected = ['test', 'testContext', 'testOutput', 'subDir_test'];
         sort($expected);
-        $this->assertSame($expected, $this->loader->getLoadableContainerNames());
+        $this->assertSame($expected, $this->loader->getContainerNames());
     }
 
     protected function setUp()
