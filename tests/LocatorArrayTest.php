@@ -54,7 +54,7 @@ class LocatorArray extends AbstractLocator
     public function testArraySetContainer()
     {
         $result = 123;
-        $mock = $this->createMock('\Smpl\Mydi\ContainerInterface');
+        $mock = $this->getMockBuilder('\Smpl\Mydi\ContainerInterface')->getMock();
         $mock->expects($this->any())
             ->method('resolve')
             ->will($this->returnValue($result));
