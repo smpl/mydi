@@ -138,7 +138,7 @@ class LocatorTest extends AbstractLocator
             ->with($this->equalTo($name))
             ->will($this->returnValue(true));
         $loader->expects($this->once())
-            ->method('load')
+            ->method('get')
             ->with($this->equalTo($name))
             ->will($this->returnValue($value));
         /** @var LoaderInterface $loader */
@@ -193,7 +193,7 @@ class LocatorTest extends AbstractLocator
             ->with('loader')
             ->will($this->returnValue(true));
         $loader->expects($this->once())
-            ->method('load')
+            ->method('get')
             ->with('loader')
             ->will($this->returnValue(new Service(function (LocatorInterface $locator) {
                 $result = new \stdClass();

@@ -34,7 +34,7 @@ class IoC implements LoaderInterface
      * @throws \RuntimeException если у файла что подгружаем будет выводиться какой то текст
      * @return mixed
      */
-    public function load($containerName)
+    public function get($containerName)
     {
         if (!$this->isLoadable($containerName)) {
             throw new \InvalidArgumentException(sprintf('Container:`%s` must be loadable', $containerName));

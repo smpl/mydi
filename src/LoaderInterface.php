@@ -23,7 +23,7 @@ interface LoaderInterface
      * @throws \InvalidArgumentException если имя нельзя загрузить
      * @return mixed
      */
-    public function load($containerName);
+    public function get($containerName);
 
     /**
      * Это вызывается в случае когда у Locator запросили построение дерева зависимостей,

@@ -76,15 +76,15 @@ php;
         $this->loader->isLoadable(1);
     }
 
-    public function testLoad()
+    public function testGet()
     {
         $this->loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp', ['a' => 5]);
         // Загрузка простого компонента
-        $this->assertSame(15, $this->loader->load('test'));
-        $this->assertSame(15, $this->loader->load('subDir_test'));
+        $this->assertSame(15, $this->loader->get('test'));
+        $this->assertSame(15, $this->loader->get('subDir_test'));
 
         // проверим работу контекста
-        $this->assertSame(20, $this->loader->load('testContext'));
+        $this->assertSame(20, $this->loader->get('testContext'));
     }
 
     /**
@@ -93,7 +93,7 @@ php;
      */
     public function testLoadInvalidContainer()
     {
-        $this->loader->load('invalid');
+        $this->loader->get('invalid');
     }
 
     /**
@@ -102,7 +102,7 @@ php;
      */
     public function testLoadNotString()
     {
-        $this->loader->load(1);
+        $this->loader->get(1);
     }
 
     /**
@@ -110,7 +110,7 @@ php;
      */
     public function testLoadWithOutput()
     {
-        $this->loader->load('testOutput');
+        $this->loader->get('testOutput');
     }
 
     public function testGetLoadableContainerNames()

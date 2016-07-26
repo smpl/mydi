@@ -35,7 +35,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
     public function testNotReadable()
     {
         $loader = new KeyValueJson('not found');
-        $loader->load('test');
+        $loader->get('test');
     }
 
     /**
@@ -45,7 +45,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
     public function testEmptyFile()
     {
         $loader = new KeyValueJson('empty');
-        $loader->load('test');
+        $loader->get('test');
     }
 
     /**

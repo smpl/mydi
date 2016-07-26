@@ -117,7 +117,7 @@ class Locator extends AbstractLocator
             if (is_null($result)) {
                 throw new \InvalidArgumentException(sprintf('Container name: `%s` is not defined', $name));
             }
-            $this->set($name, $result->load($name));
+            $this->set($name, $result->get($name));
         }
 
         $result = $this->containers[$name];

@@ -29,7 +29,7 @@ abstract class AbstractKeyValue implements LoaderInterface
      * @throws \InvalidArgumentException если имя нельзя загрузить
      * @return mixed
      */
-    public function load($containerName)
+    public function get($containerName)
     {
         if (!$this->isLoadable($containerName)) {
             throw new \InvalidArgumentException(sprintf('Container:`%s`, must be loadable', $containerName));
