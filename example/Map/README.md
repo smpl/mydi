@@ -29,7 +29,7 @@ $service = $locator['service'];
 var_dump($locator->getDependencyMap()); // ['test' => [], 'service' => ['test', 'magic'], 'magic' => []]
 ```
 
-## getContainers
+## getContainerNames
 
 Метод который возвращает имена всех контейнеров которые могут быть 
 загруженный, он опрашивает в том числе и каждый известный LoaderInteface 
@@ -38,14 +38,14 @@ var_dump($locator->getDependencyMap()); // ['test' => [], 'service' => ['test', 
 ### Как получить дерево всех зависимостей проекта.
 
 Иногда охото проанализировать все зависимости проекта, а не только те 
-что использовались, тут нам поможет **getContainers**
+что использовались, тут нам поможет **getContainerNames**
 
 ```php
 
 $locator = new Locator();
 $locator['test'] = 123;
 $locator['magic'] = 456;
-$containersName = $locator->getContainers();
+$containersName = $locator->getContainerNames();
 foreach($containersName as $name) {
     $locator[$name];
 }

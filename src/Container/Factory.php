@@ -24,7 +24,7 @@ class Factory implements ContainerInterface
         $this->callback = $callback;
     }
 
-    public function resolve(LocatorInterface $locator)
+    public function get(LocatorInterface $locator)
     {
         return call_user_func_array($this->callback, [$locator]);
     }

@@ -13,10 +13,10 @@ class Service extends Factory
     private $result;
     private $isCalled = false;
 
-    public function resolve(LocatorInterface $locator)
+    public function get(LocatorInterface $locator)
     {
         if (!$this->isCalled) {
-            $this->result = parent::resolve($locator);
+            $this->result = parent::get($locator);
             $this->isCalled = true;
         }
         return $this->result;

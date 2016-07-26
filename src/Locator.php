@@ -31,7 +31,7 @@ class Locator extends AbstractLocator
         }
     }
 
-    public function resolve($name)
+    public function get($name)
     {
         $this->updateDependencyMap($name);
 
@@ -75,7 +75,7 @@ class Locator extends AbstractLocator
         $result = null;
         /** @var LoaderInterface $loader */
         foreach ($this->getLoaders() as $loader) {
-            if ($loader->isLoadable($name)) {
+            if ($loader->has($name)) {
                 $result = $loader;
                 break;
             }
@@ -96,11 +96,11 @@ class Locator extends AbstractLocator
         return $this->dependencyMap;
     }
 
-    public function getContainers()
+    public function getContainerNames()
     {
         $result = array_keys($this->containers);
         foreach ($this->loaders as $loader) {
-            $names = $loader->getLoadableContainerNames();
+            $names = $loader->getContainerNames();
             foreach ($names as $name) {
                 if (!in_array($name, $result)) {
                     $result[] = $name;
@@ -117,12 +117,12 @@ class Locator extends AbstractLocator
             if (is_null($result)) {
                 throw new \InvalidArgumentException(sprintf('Container name: `%s` is not defined', $name));
             }
-            $this->set($name, $result->load($name));
+            $this->set($name, $result->get($name));
         }
 
         $result = $this->containers[$name];
         if ($result instanceof ContainerInterface) {
-            $result = $result->resolve($this);
+            $result = $result->get($this);
             return $result;
         }
         return $result;

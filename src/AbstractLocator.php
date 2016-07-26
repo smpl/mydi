@@ -23,7 +23,7 @@ abstract class AbstractLocator implements LocatorInterface
 
     public function offsetGet($offset)
     {
-        return $this->resolve($offset);
+        return $this->get($offset);
     }
 
     /**

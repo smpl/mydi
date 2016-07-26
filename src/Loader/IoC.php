@@ -34,9 +34,9 @@ class IoC implements LoaderInterface
      * @throws \RuntimeException если у файла что подгружаем будет выводиться какой то текст
      * @return mixed
      */
-    public function load($containerName)
+    public function get($containerName)
     {
-        if (!$this->isLoadable($containerName)) {
+        if (!$this->has($containerName)) {
             throw new \InvalidArgumentException(sprintf('Container:`%s` must be loadable', $containerName));
         }
         ob_start();
@@ -60,7 +60,7 @@ class IoC implements LoaderInterface
      * @throws \InvalidArgumentException если имя не строка
      * @return bool
      */
-    public function isLoadable($containerName)
+    public function has($containerName)
     {
         if (!is_string($containerName)) {
             throw new \InvalidArgumentException('Container name must be string');
@@ -74,7 +74,7 @@ class IoC implements LoaderInterface
         return $result;
     }
 
-    public function getLoadableContainerNames()
+    public function getContainerNames()
     {
         $result = [];
         $iterator = new \RecursiveIteratorIterator(

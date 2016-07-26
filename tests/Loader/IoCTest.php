@@ -57,34 +57,34 @@ php;
         rmdir($root);
     }
 
-    public function testIsLoadable()
+    public function testhas()
     {
-        $this->assertSame(true, $this->loader->isLoadable('test'));
-        $this->assertSame(false, $this->loader->isLoadable('invalidName'));
-        $this->assertSame(true, $this->loader->isLoadable('subDir_test'));
+        $this->assertSame(true, $this->loader->has('test'));
+        $this->assertSame(false, $this->loader->has('invalidName'));
+        $this->assertSame(true, $this->loader->has('subDir_test'));
 
         // Попытаемся загрузить что то за пределами указанного каталога (не должно грузить)
-        $this->assertSame(false, $this->loader->isLoadable('../test'));
+        $this->assertSame(false, $this->loader->has('../test'));
     }
 
     /**
      * @expectedException \InvalidArgumentException
      * @exceptedExceptionMessage Container name must be string
      */
-    public function testIsLoadableNotString()
+    public function testhasNotString()
     {
-        $this->loader->isLoadable(1);
+        $this->loader->has(1);
     }
 
-    public function testLoad()
+    public function testGet()
     {
         $this->loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp', ['a' => 5]);
         // Загрузка простого компонента
-        $this->assertSame(15, $this->loader->load('test'));
-        $this->assertSame(15, $this->loader->load('subDir_test'));
+        $this->assertSame(15, $this->loader->get('test'));
+        $this->assertSame(15, $this->loader->get('subDir_test'));
 
         // проверим работу контекста
-        $this->assertSame(20, $this->loader->load('testContext'));
+        $this->assertSame(20, $this->loader->get('testContext'));
     }
 
     /**
@@ -93,7 +93,7 @@ php;
      */
     public function testLoadInvalidContainer()
     {
-        $this->loader->load('invalid');
+        $this->loader->get('invalid');
     }
 
     /**
@@ -102,7 +102,7 @@ php;
      */
     public function testLoadNotString()
     {
-        $this->loader->load(1);
+        $this->loader->get(1);
     }
 
     /**
@@ -110,14 +110,14 @@ php;
      */
     public function testLoadWithOutput()
     {
-        $this->loader->load('testOutput');
+        $this->loader->get('testOutput');
     }
 
-    public function testGetLoadableContainerNames()
+    public function testGetContainerNames()
     {
         $expected = ['test', 'testContext', 'testOutput', 'subDir_test'];
         sort($expected);
-        $this->assertSame($expected, $this->loader->getLoadableContainerNames());
+        $this->assertSame($expected, $this->loader->getContainerNames());
     }
 
     protected function setUp()

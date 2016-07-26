@@ -2,7 +2,7 @@
 namespace Smpl\Mydi;
 
 /**
- * Предназначен для определения зависимостей на лету (в момент когда их запросят через LocatorInterface->resolve)
+ * Предназначен для определения зависимостей на лету (в момент когда их запросят через LocatorInterface->get)
  *
  * Interface LoaderInterface
  * @package Smpl\Mydi
@@ -10,25 +10,23 @@ namespace Smpl\Mydi;
 interface LoaderInterface
 {
     /**
-     * Проверяет может ли загрузить данный контейнер этот Loader
+     * Проверяет может ли быть загружен контейнер
      * @param string $containerName
-     * @throws \InvalidArgumentException если имя не строка
      * @return bool
      */
-    public function isLoadable($containerName);
+    public function has($containerName);
 
     /**
      * Загрузка контейнера
      * @param string $containerName
-     * @throws \InvalidArgumentException если имя нельзя загрузить
+     * @throws \InvalidArgumentException если имя нельзя загрузить или некорректное имя
      * @return mixed
      */
-    public function load($containerName);
+    public function get($containerName);
 
     /**
-     * Это вызывается в случае когда у Locator запросили построение дерева зависимостей,
-     * Метод нужен исключительно разработчикам для анализа зависимостей и может не очень быстро работать
+     * Возвращает имена всех контейнеров что могут быть загружены.
      * @return array
     */
-    public function getLoadableContainerNames();
+    public function getContainerNames();
 }

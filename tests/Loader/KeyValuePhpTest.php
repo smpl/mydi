@@ -32,9 +32,9 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \RuntimeException
      */
-    public function testLoadWithOutput()
+    public function testGetWithOutput()
     {
         $loader = new KeyValuePhp('withOutput');
-        $loader->load('test');
+        $loader->get('test');
     }
 }

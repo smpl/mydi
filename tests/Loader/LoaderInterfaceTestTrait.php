@@ -29,9 +29,9 @@ trait LoaderInterfaceTestTrait
      * @param $key
      * @param $value
      */
-    public function testLoad($key, $value)
+    public function testGet($key, $value)
     {
-        assertSame($value, $this->loader->load($key));
+        assertSame($value, $this->loader->get($key));
     }
 
     public function providerData()
@@ -52,20 +52,20 @@ trait LoaderInterfaceTestTrait
      */
     public function testInvalidConfiguration()
     {
-        $this->loader->load('test');
+        $this->loader->get('test');
     }
 
     /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Container:`not declared Container`, must be loadable
      */
-    public function testLoadNotDeclared()
+    public function testGetNotDeclared()
     {
-        $this->loader->load('not declared Container');
+        $this->loader->get('not declared Container');
     }
 
-    public function testGetLoadableContainerNames()
+    public function testGetContainerNames()
     {
-        assertSame(array_keys(self::$exampleConfiguration), $this->loader->getLoadableContainerNames());
+        assertSame(array_keys(self::$exampleConfiguration), $this->loader->getContainerNames());
     }
 }

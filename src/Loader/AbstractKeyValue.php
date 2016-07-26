@@ -23,32 +23,20 @@ abstract class AbstractKeyValue implements LoaderInterface
         $this->fileName = $fileName;
     }
 
-    /**
-     * Загрузка контейнера
-     * @param string $containerName
-     * @throws \InvalidArgumentException если имя нельзя загрузить
-     * @return mixed
-     */
-    public function load($containerName)
+    public function get($containerName)
     {
-        if (!$this->isLoadable($containerName)) {
+        if (!$this->has($containerName)) {
             throw new \InvalidArgumentException(sprintf('Container:`%s`, must be loadable', $containerName));
         }
         return $this->getConfiguration()[$containerName];
     }
 
-    /**
-     * Проверяет может ли загрузить данный контейнер этот Loader
-     * @param string $containerName
-     * @throws \InvalidArgumentException если имя не строка
-     * @return bool
-     */
-    public function isLoadable($containerName)
+    public function has($containerName)
     {
         return array_key_exists($containerName, $this->getConfiguration());
     }
 
-    public function getLoadableContainerNames()
+    public function getContainerNames()
     {
         return array_keys($this->getConfiguration());
     }

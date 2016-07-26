@@ -7,15 +7,8 @@ namespace Smpl\Mydi;
  * Каждой зависимости при добавление присвайвается уникальное имя, а для её разрешения его необходимо указать
  * @package Smpl\Mydi
  */
-interface LocatorInterface extends \ArrayAccess
+interface LocatorInterface extends \ArrayAccess, LoaderInterface
 {
-    /**
-     * Разрешить зависимость по её имени
-     * @param string $name имя зависимости
-     * @return mixed Значение которое хранилось в этом контейнере
-     * @throws \InvalidArgumentException
-     */
-    public function resolve($name);
 
     /**
      * Добавить новый контейнер с именем $name и значение $value
@@ -32,24 +25,12 @@ interface LocatorInterface extends \ArrayAccess
     public function delete($name);
 
     /**
-     * @param string $name
-     * @return bool
-     */
-    public function has($name);
-
-    /**
      * Возвращает описание зависимостей между контейнерами в виде массива
      *
      * Где ключ это имя контейнера что вызывали, а массив значений это то что потребовалось вызывать для него
      * @return array
      */
     public function getDependencyMap();
-
-    /**
-     * Получает имена контейнеров
-     * @return string[]
-     */
-    public function getContainers();
 
     /**
      * @return LoaderInterface[]
