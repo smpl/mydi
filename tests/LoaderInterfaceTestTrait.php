@@ -1,14 +1,15 @@
 <?php
-namespace SmplTest\Mydi\Loader;
+namespace SmplTest\Mydi;
 
 use Smpl\Mydi\LoaderInterface;
 
 trait LoaderInterfaceTestTrait
 {
     /**
-     * @var LoaderInterface
+     * @return LoaderInterface
      */
-    private $loader;
+    abstract public function getLoaderInterfaceObject();
+
     /**
      * @var array
      */
@@ -31,7 +32,7 @@ trait LoaderInterfaceTestTrait
      */
     public function testGet($key, $value)
     {
-        assertSame($value, $this->loader->get($key));
+        assertSame($value, $this->getLoaderInterfaceObject()->get($key));
     }
 
     public function providerData()
@@ -52,7 +53,7 @@ trait LoaderInterfaceTestTrait
      */
     public function testInvalidConfiguration()
     {
-        $this->loader->get('test');
+        $this->getLoaderInterfaceObject()->get('test');
     }
 
     /**
@@ -61,11 +62,11 @@ trait LoaderInterfaceTestTrait
      */
     public function testGetNotDeclared()
     {
-        $this->loader->get('not declared Container');
+        $this->getLoaderInterfaceObject()->get('not declared Container');
     }
 
     public function testGetContainerNames()
     {
-        assertSame(array_keys(self::$exampleConfiguration), $this->loader->getContainerNames());
+        assertSame(array_keys(self::$exampleConfiguration), $this->getLoaderInterfaceObject()->getContainerNames());
     }
 }

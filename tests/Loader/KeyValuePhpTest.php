@@ -3,16 +3,19 @@
 namespace SmplTest\Mydi\Loader;
 
 use Smpl\Mydi\Loader\KeyValuePhp;
+use Smpl\Mydi\LoaderInterface;
+use SmplTest\Mydi\LoaderInterfaceTestTrait;
 
 class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
 {
     use LoaderInterfaceTestTrait;
 
-    protected function setUp()
+    /**
+     * @return LoaderInterface
+     */
+    public function getLoaderInterfaceObject()
     {
-        parent::setUp();
-
-        $this->loader = new KeyValuePhp('t.php');
+        return new KeyValuePhp('t.php');
     }
 
     public static function setUpBeforeClass()
