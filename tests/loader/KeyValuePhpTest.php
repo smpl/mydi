@@ -1,10 +1,10 @@
 <?php
 
-namespace SmplTest\Mydi\Loader;
+namespace smpl\mydi\test\Loader;
 
-use Smpl\Mydi\Loader\KeyValuePhp;
-use Smpl\Mydi\LoaderInterface;
-use SmplTest\Mydi\LoaderInterfaceTestTrait;
+use smpl\mydi\loader\KeyValuePhp;
+use smpl\mydi\LoaderInterface;
+use smpl\mydi\test\LoaderInterfaceTestTrait;
 
 class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,7 +1,7 @@
 <?php
-namespace SmplTest\Mydi;
+namespace smpl\mydi\test;
 
-use Smpl\Mydi\LocatorInterface;
+use smpl\mydi\LocatorInterface;
 
 trait LocatorInterfaceTestTrait
 {

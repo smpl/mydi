@@ -1,13 +1,11 @@
 <?php
 
-namespace SmplExample\Mydi\Loader;
+namespace smpl\mydi\example\Loader;
 
-use Smpl\Mydi\Container\Service;
-use Smpl\Mydi\Loader\KeyValue;
-use Smpl\Mydi\Loader\KeyValueJson;
-use Smpl\Mydi\Loader\Reader\JSON;
-use Smpl\Mydi\Locator;
-use Smpl\Mydi\LocatorInterface;
+use smpl\mydi\container\Service;
+use smpl\mydi\loader\KeyValueJson;
+use smpl\mydi\Locator;
+use smpl\mydi\LocatorInterface;
 
 class LoaderTest extends \PHPUnit_Framework_TestCase
 {

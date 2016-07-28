@@ -1,10 +1,10 @@
 <?php
-namespace SmplTest\Mydi;
+namespace smpl\mydi\test;
 
-use Smpl\Mydi\Container\Service;
-use Smpl\Mydi\LoaderInterface;
-use Smpl\Mydi\Locator;
-use Smpl\Mydi\LocatorInterface;
+use smpl\mydi\container\Service;
+use smpl\mydi\LoaderInterface;
+use smpl\mydi\Locator;
+use smpl\mydi\LocatorInterface;
 
 class LocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,7 +22,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     {
         $result = 123;
         $locator = new Locator();
-        $mock = $this->getMockBuilder('\Smpl\Mydi\ContainerInterface')->getMock();
+        $mock = $this->getMockBuilder('\smpl\mydi\ContainerInterface')->getMock();
         $mock->expects($this->any())
             ->method('get')
             ->will($this->returnValue($result));
@@ -99,14 +99,14 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * В случае если добавляется в контейнер объект с интерфейсом \SmplTest\Mydi\ContainerInterface
+     * В случае если добавляется в контейнер объект с интерфейсом \smpl\mydi\test\сontainerInterface
      * должен вызываться метод get у объекта, когда у Locator вызывают get
      */
     public function testSetContainer()
     {
         $result = 123;
         $locator = new Locator();
-        $mock = $this->getMockBuilder('\Smpl\Mydi\ContainerInterface')->getMock();
+        $mock = $this->getMockBuilder('\smpl\mydi\ContainerInterface')->getMock();
         $mock->expects($this->any())
             ->method('get')
             ->will($this->returnValue($result));
@@ -163,7 +163,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     public function getUseLoader($name, $value)
     {
         $locator = new Locator();
-        $loader = $this->getMockBuilder('\Smpl\Mydi\LoaderInterface')->getMock();
+        $loader = $this->getMockBuilder('\smpl\mydi\LoaderInterface')->getMock();
         $loader->expects($this->once())
             ->method('has')
             ->with($this->equalTo($name))

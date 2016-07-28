@@ -1,5 +1,5 @@
 <?php
-namespace Smpl\Mydi;
+namespace smpl\mydi;
 
 class Locator extends AbstractLocator
 {

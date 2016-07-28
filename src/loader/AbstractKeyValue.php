@@ -1,7 +1,7 @@
 <?php
-namespace Smpl\Mydi\Loader;
+namespace smpl\mydi\loader;
 
-use Smpl\Mydi\LoaderInterface;
+use smpl\mydi\LoaderInterface;
 
 abstract class AbstractKeyValue implements LoaderInterface
 {

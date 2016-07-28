@@ -1,10 +1,10 @@
 <?php
 
-namespace SmplTest\Mydi\Loader;
+namespace smpl\mydi\test\Loader;
 
-use Smpl\Mydi\Loader\KeyValueJson;
-use Smpl\Mydi\LoaderInterface;
-use SmplTest\Mydi\LoaderInterfaceTestTrait;
+use smpl\mydi\loader\KeyValueJson;
+use smpl\mydi\LoaderInterface;
+use smpl\mydi\test\LoaderInterfaceTestTrait;
 
 class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
 {

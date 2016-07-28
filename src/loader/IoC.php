@@ -1,14 +1,14 @@
 <?php
-namespace Smpl\Mydi\Loader;
+namespace smpl\mydi\loader;
 
-use Smpl\Mydi\LoaderInterface;
+use smpl\mydi\LoaderInterface;
 
 /**
  * Загрузка зависимостей на основе php файлов,
  * в случае если в имени контенейра указано _ то он трансформируется в DIRECTORY_SEPARATOR
  *
  * Class File
- * @package Smpl\Mydi\Loader
+ * @package smpl\mydi\loader
  */
 class IoC implements LoaderInterface
 {

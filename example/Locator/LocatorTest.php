@@ -1,29 +1,13 @@
 <?php
 
-namespace SmplExample\Mydi\Locator;
+namespace smpl\mydi\example\Locator;
 
-use Smpl\Mydi\Loader\IoC;
-use Smpl\Mydi\Loader\KeyValueJson;
-use Smpl\Mydi\Locator;
+use smpl\mydi\loader\IoC;
+use smpl\mydi\loader\KeyValueJson;
+use smpl\mydi\Locator;
 
 class LocatorTest extends \PHPUnit_Framework_TestCase
 {
-//    public function testDependencyMap()
-//    {
-//        $json = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'example.json');
-//        $ioc = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'example');
-//        $loaders = [$json, $ioc];
-//
-//        $locator = new Locator($loaders);
-//
-//        assertSame([
-//            'db.dsn' => [],
-//            'db.user' => [],
-//            'db.password' => [],
-//            'db' => ['db.dsn', 'db.user', 'db.password'],
-//            'magic' => ['db'],
-//        ], $locator->getDependencyMap());
-//    }
 
     public function test()
     {

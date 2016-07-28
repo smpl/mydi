@@ -1,12 +1,12 @@
 <?php
-namespace Smpl\Mydi\Container;
+namespace smpl\mydi\container;
 
-use Smpl\Mydi\ContainerInterface;
-use Smpl\Mydi\LocatorInterface;
+use smpl\mydi\ContainerInterface;
+use smpl\mydi\LocatorInterface;
 
 /**
  * Class Factory
- * @package Smpl\Mydi\Container
+ * @package smpl\mydi\container
  * @see https://github.com/smpl/mydi/issues/2
  */
 class Factory implements ContainerInterface
