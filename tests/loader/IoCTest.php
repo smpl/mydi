@@ -45,6 +45,14 @@ php;
             $root . 'subDir' . DIRECTORY_SEPARATOR . 'test.php',
             $subDirTest
         );
+        $root = __DIR__ . DIRECTORY_SEPARATOR . 'interface' . DIRECTORY_SEPARATOR;
+        mkdir($root);
+        file_put_contents($root . 'test.php', $test);
+        mkdir($root . 'subDir');
+        file_put_contents(
+            $root . 'subDir' . DIRECTORY_SEPARATOR . 'test.php',
+            $subDirTest
+        );
     }
 
     public static function tearDownAfterClass()
@@ -56,6 +64,12 @@ php;
         unlink($root . 'testContext.php');
         unlink($root . 'testOutput.php');
 
+        rmdir($root . 'subDir');
+        rmdir($root);
+
+        $root = __DIR__ . DIRECTORY_SEPARATOR . 'interface' . DIRECTORY_SEPARATOR;
+        unlink($root . 'test.php');
+        unlink($root . 'subDir' . DIRECTORY_SEPARATOR . 'test.php');
         rmdir($root . 'subDir');
         rmdir($root);
     }
@@ -130,6 +144,14 @@ php;
      */
     protected function createLoaderInterfaceObject()
     {
-        return  new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
+        return new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'interface');
+    }
+
+    protected static function getLoadertInterfaceConfiguration()
+    {
+        return [
+            'subDir_test' => 15,
+            'test' => 15,
+        ];
     }
 }

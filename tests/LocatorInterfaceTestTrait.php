@@ -28,7 +28,7 @@ trait LocatorInterfaceTestTrait
      * @param $value
      * @dataProvider providerValidParams
      */
-    public function testArrayParams($name, $value)
+    public function testLocatorInterfacArrayParams($name, $value)
     {
         $locator = $this->createLocatorInterfaceObject();
         $locator[$name] = $value;
@@ -39,7 +39,7 @@ trait LocatorInterfaceTestTrait
     }
 
 
-    public function testArraySetNameExist()
+    public function testLocatorInterfacArraySetNameExist()
     {
         $locator['test'] = 1;
         $this->assertSame(1, $locator['test']);
@@ -50,7 +50,7 @@ trait LocatorInterfaceTestTrait
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testArraySetNameNotString()
+    public function testLocatorInterfacArraySetNameNotString()
     {
         $locator = $this->createLocatorInterfaceObject();
         $locator[1] = 1;
@@ -59,7 +59,7 @@ trait LocatorInterfaceTestTrait
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testArrayDeleteNotExist()
+    public function testLocatorInterfacArrayDeleteNotExist()
     {
         $locator = $this->createLocatorInterfaceObject();
         unset($locator['test']);
@@ -68,7 +68,7 @@ trait LocatorInterfaceTestTrait
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testArrayGetNameNotExist()
+    public function testLocatorInterfacArrayGetNameNotExist()
     {
         $locator = $this->createLocatorInterfaceObject();
         $locator['test'];

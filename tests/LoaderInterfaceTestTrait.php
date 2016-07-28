@@ -29,16 +29,16 @@ trait LoaderInterfaceTestTrait
     }
 
     /**
-     * @dataProvider providerData
+     * @dataProvider providerDataLoadertInterface
      * @param $key
      * @param $value
      */
-    public function testGet($key, $value)
+    public function testLoadertInterfaceGet($key, $value)
     {
         assertSame($value, $this->createLoaderInterfaceObject()->get($key));
     }
 
-    public function providerData()
+    public function providerDataLoadertInterface()
     {
         $result = [];
         foreach (self::getLoadertInterfaceConfiguration() as $key => $value) {
@@ -54,7 +54,7 @@ trait LoaderInterfaceTestTrait
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Container: `dsfdsfsdfds`, is not defined
      */
-    public function testInvalidConfiguration()
+    public function testLoadertInterfaceInvalidConfiguration()
     {
         $this->createLoaderInterfaceObject()->get('dsfdsfsdfds');
     }
@@ -63,12 +63,12 @@ trait LoaderInterfaceTestTrait
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Container: `not declared Container`, is not defined
      */
-    public function testGetNotDeclared()
+    public function testLoadertInterfaceGetNotDeclared()
     {
         $this->createLoaderInterfaceObject()->get('not declared Container');
     }
 
-    public function testGetContainerNames()
+    public function testLoadertInterfaceGetContainerNames()
     {
         assertSame(array_keys(self::getLoadertInterfaceConfiguration()),
             $this->createLoaderInterfaceObject()->getContainerNames());
