@@ -1,25 +1,28 @@
 <?php
 
-namespace SmplTest\Mydi\Loader;
+namespace smpl\mydi\test\Loader;
 
-use Smpl\Mydi\Loader\KeyValueJson;
+use smpl\mydi\loader\KeyValueJson;
+use smpl\mydi\LoaderInterface;
+use smpl\mydi\test\LoaderInterfaceTestTrait;
 
 class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
 {
     use LoaderInterfaceTestTrait;
 
+    /**
+     * @return LoaderInterface
+     */
+    protected function createLoaderInterfaceObject()
+    {
+        return new KeyValueJson('test.json');
+    }
+
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        file_put_contents('test.json', json_encode(self::$exampleConfiguration));
+        file_put_contents('test.json', json_encode(self::getLoadertInterfaceConfiguration()));
         file_put_contents('empty', '');
-    }
-
-
-    protected function setUp()
-    {
-        parent::setUp();
-        $this->loader = new KeyValueJson('test.json');
     }
 
     public static function tearDownAfterClass()
@@ -40,7 +43,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Container:`test`, must be loadable
+     * @expectedExceptionMessage Container: `test`, is not defined
      */
     public function testEmptyFile()
     {
@@ -56,6 +59,4 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
     {
         new KeyValueJson(null);
     }
-
-
 }

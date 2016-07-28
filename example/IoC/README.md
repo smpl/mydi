@@ -56,9 +56,9 @@ KeyValueLoader.
 
 например для basePath = /var/www/ioc, а для windows С:\www\ioc
 
-Имя запрошенного контейнера **\Smpl\Mydi\Locator**
+Имя запрошенного контейнера **\smpl\mydi\Locator**
 Путь в Linux: /var/www/ioc/Smpl/Mydi/Locator.php
-Путь в Windows: C:\www\ioc\Smpl\Mydi\Locator.php
+Путь в Windows: C:\www\ioc\smpl\mydi\Locator.php
 
 ## Демонстрация работы
 

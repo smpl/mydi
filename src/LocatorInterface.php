@@ -1,11 +1,11 @@
 <?php
-namespace Smpl\Mydi;
+namespace smpl\mydi;
 
 /**
  * Interface LocatorInterface
  * Отвечает за добавление, хранение и разрешение зависимостей.
  * Каждой зависимости при добавление присвайвается уникальное имя, а для её разрешения его необходимо указать
- * @package Smpl\Mydi
+ * @package smpl\mydi
  */
 interface LocatorInterface extends \ArrayAccess, LoaderInterface
 {

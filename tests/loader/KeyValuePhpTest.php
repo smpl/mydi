@@ -1,24 +1,27 @@
 <?php
 
-namespace SmplTest\Mydi\Loader;
+namespace smpl\mydi\test\Loader;
 
-use Smpl\Mydi\Loader\KeyValuePhp;
+use smpl\mydi\loader\KeyValuePhp;
+use smpl\mydi\LoaderInterface;
+use smpl\mydi\test\LoaderInterfaceTestTrait;
 
 class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
 {
     use LoaderInterfaceTestTrait;
 
-    protected function setUp()
+    /**
+     * @return LoaderInterface
+     */
+    protected function createLoaderInterfaceObject()
     {
-        parent::setUp();
-
-        $this->loader = new KeyValuePhp('t.php');
+        return new KeyValuePhp('t.php');
     }
 
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        file_put_contents('t.php', '<?php return ' . var_export(self::$exampleConfiguration, true) . ';');
+        file_put_contents('t.php', '<?php return ' . var_export(self::getLoadertInterfaceConfiguration(), true) . ';');
         file_put_contents('withOutput', '123');
     }
 

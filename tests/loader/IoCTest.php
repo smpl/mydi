@@ -1,10 +1,13 @@
 <?php
-namespace SmplTest\Mydi\Loader;
+namespace smpl\mydi\test\Loader;
 
-use Smpl\Mydi\Loader\IoC;
+use smpl\mydi\loader\IoC;
+use smpl\mydi\LoaderInterface;
+use smpl\mydi\test\LoaderInterfaceTestTrait;
 
 class IoCTest extends \PHPUnit_Framework_TestCase
 {
+    use LoaderInterfaceTestTrait;
     /**
      * @var IoC
      */
@@ -42,6 +45,14 @@ php;
             $root . 'subDir' . DIRECTORY_SEPARATOR . 'test.php',
             $subDirTest
         );
+        $root = __DIR__ . DIRECTORY_SEPARATOR . 'interface' . DIRECTORY_SEPARATOR;
+        mkdir($root);
+        file_put_contents($root . 'test.php', $test);
+        mkdir($root . 'subDir');
+        file_put_contents(
+            $root . 'subDir' . DIRECTORY_SEPARATOR . 'test.php',
+            $subDirTest
+        );
     }
 
     public static function tearDownAfterClass()
@@ -53,6 +64,12 @@ php;
         unlink($root . 'testContext.php');
         unlink($root . 'testOutput.php');
 
+        rmdir($root . 'subDir');
+        rmdir($root);
+
+        $root = __DIR__ . DIRECTORY_SEPARATOR . 'interface' . DIRECTORY_SEPARATOR;
+        unlink($root . 'test.php');
+        unlink($root . 'subDir' . DIRECTORY_SEPARATOR . 'test.php');
         rmdir($root . 'subDir');
         rmdir($root);
     }
@@ -67,13 +84,9 @@ php;
         $this->assertSame(false, $this->loader->has('../test'));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @exceptedExceptionMessage Container name must be string
-     */
     public function testhasNotString()
     {
-        $this->loader->has(1);
+        assertFalse($this->loader->has(1));
     }
 
     public function testGet()
@@ -124,5 +137,21 @@ php;
     {
         parent::setUp();
         $this->loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
+    }
+
+    /**
+     * @return LoaderInterface
+     */
+    protected function createLoaderInterfaceObject()
+    {
+        return new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'interface');
+    }
+
+    protected static function getLoadertInterfaceConfiguration()
+    {
+        return [
+            'subDir_test' => 15,
+            'test' => 15,
+        ];
     }
 }

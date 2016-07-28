@@ -1,10 +1,10 @@
 <?php
 
-namespace SmplExample\Mydi\Container;
+namespace smpl\mydi\example\Container;
 
-use Smpl\Mydi\Container\Factory;
-use Smpl\Mydi\Container\Service;
-use Smpl\Mydi\Locator;
+use smpl\mydi\container\Factory;
+use smpl\mydi\container\Service;
+use smpl\mydi\Locator;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {

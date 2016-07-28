@@ -1,10 +1,10 @@
 <?php
 
-namespace SmplExample\Mydi\KeyValueLoader;
+namespace smpl\mydi\example\KeyValueLoader;
 
-use Smpl\Mydi\Loader\KeyValueJson;
-use Smpl\Mydi\Loader\KeyValuePhp;
-use Smpl\Mydi\Locator;
+use smpl\mydi\loader\KeyValueJson;
+use smpl\mydi\loader\KeyValuePhp;
+use smpl\mydi\Locator;
 
 class KeyValueLoaderTest extends \PHPUnit_Framework_TestCase
 {

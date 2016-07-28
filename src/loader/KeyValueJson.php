@@ -1,6 +1,6 @@
 <?php
 
-namespace Smpl\Mydi\Loader;
+namespace smpl\mydi\loader;
 
 class KeyValueJson extends AbstractKeyValue
 {

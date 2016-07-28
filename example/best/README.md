@@ -67,7 +67,7 @@ app.json
 {
     "address": "127.0.0.1",
     "user": "root",
-    "password: "password"
+    "password": "password"
 }
 ```
 
@@ -119,8 +119,8 @@ current.app.json
 MagicInterface.php
 
 ```php
-use Smpl\Mydi\Container\Service;
-use Smpl\Mydi\LocatorInterface;
+use smpl\mydi\container\Service;
+use smpl\mydi\LocatorInterface;
 
 return new Service(function (LocatorInterface $l) {
     return $l[A::class];
@@ -146,8 +146,8 @@ return new Service(function (LocatorInterface $l) {
 MagicInterface.php
 
 ```php
-use Smpl\Mydi\Container\Service;
-use Smpl\Mydi\LocatorInterface;
+use smpl\mydi\container\Service;
+use smpl\mydi\LocatorInterface;
 
 
 return new Service(function (LocatorInterface $l) {

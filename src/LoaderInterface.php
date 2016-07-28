@@ -1,11 +1,11 @@
 <?php
-namespace Smpl\Mydi;
+namespace smpl\mydi;
 
 /**
  * Предназначен для определения зависимостей на лету (в момент когда их запросят через LocatorInterface->get)
  *
  * Interface LoaderInterface
- * @package Smpl\Mydi
+ * @package smpl\mydi
  */
 interface LoaderInterface
 {

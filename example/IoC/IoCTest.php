@@ -1,9 +1,9 @@
 <?php
 
-namespace SmplExample\IoC;
+namespace smpl\mydi\example\IoC;
 
-use Smpl\Mydi\Loader\IoC;
-use Smpl\Mydi\Locator;
+use smpl\mydi\loader\IoC;
+use smpl\mydi\Locator;
 
 class IoCTest extends \PHPUnit_Framework_TestCase
 {
