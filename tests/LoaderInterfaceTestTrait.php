@@ -8,22 +8,25 @@ trait LoaderInterfaceTestTrait
     /**
      * @return LoaderInterface
      */
-    abstract public function getLoaderInterfaceObject();
+    abstract protected function createLoaderInterfaceObject();
 
     /**
-     * @var array
+     * @return array
      */
-    protected static $exampleConfiguration = [
-        "int" => 15,
-        "string" => "some string",
-        "float" => 0.5,
-        "null" => null,
-        "arrayWithKeyInt" => ["test0", "test1"],
-        "arrayWithKeyString" => [
-            "key1" => "value1",
-            "key2" => 15
-        ]
-    ];
+    protected static function getLoadertInterfaceConfiguration()
+    {
+        return [
+            "int" => 15,
+            "string" => "some string",
+            "float" => 0.5,
+            "null" => null,
+            "arrayWithKeyInt" => ["test0", "test1"],
+            "arrayWithKeyString" => [
+                "key1" => "value1",
+                "key2" => 15
+            ]
+        ];
+    }
 
     /**
      * @dataProvider providerData
@@ -32,13 +35,13 @@ trait LoaderInterfaceTestTrait
      */
     public function testGet($key, $value)
     {
-        assertSame($value, $this->getLoaderInterfaceObject()->get($key));
+        assertSame($value, $this->createLoaderInterfaceObject()->get($key));
     }
 
     public function providerData()
     {
         $result = [];
-        foreach (self::$exampleConfiguration as $key => $value) {
+        foreach (self::getLoadertInterfaceConfiguration() as $key => $value) {
             $call = [];
             $call[] = $key;
             $call[] = $value;
@@ -49,24 +52,25 @@ trait LoaderInterfaceTestTrait
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Container:`test`, must be loadable
+     * @expectedExceptionMessage Container: `dsfdsfsdfds`, is not defined
      */
     public function testInvalidConfiguration()
     {
-        $this->getLoaderInterfaceObject()->get('test');
+        $this->createLoaderInterfaceObject()->get('dsfdsfsdfds');
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Container:`not declared Container`, must be loadable
+     * @expectedExceptionMessage Container: `not declared Container`, is not defined
      */
     public function testGetNotDeclared()
     {
-        $this->getLoaderInterfaceObject()->get('not declared Container');
+        $this->createLoaderInterfaceObject()->get('not declared Container');
     }
 
     public function testGetContainerNames()
     {
-        assertSame(array_keys(self::$exampleConfiguration), $this->getLoaderInterfaceObject()->getContainerNames());
+        assertSame(array_keys(self::getLoadertInterfaceConfiguration()),
+            $this->createLoaderInterfaceObject()->getContainerNames());
     }
 }

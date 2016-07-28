@@ -26,7 +26,7 @@ abstract class AbstractKeyValue implements LoaderInterface
     public function get($containerName)
     {
         if (!$this->has($containerName)) {
-            throw new \InvalidArgumentException(sprintf('Container:`%s`, must be loadable', $containerName));
+            throw new \InvalidArgumentException(sprintf('Container: `%s`, is not defined', $containerName));
         }
         return $this->getConfiguration()[$containerName];
     }

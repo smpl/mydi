@@ -5,6 +5,7 @@ use smpl\mydi\LocatorInterface;
 
 trait LocatorInterfaceTestTrait
 {
+    use LoaderInterfaceTestTrait;
     /**
      * @return LocatorInterface
      */

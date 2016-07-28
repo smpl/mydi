@@ -13,7 +13,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
     /**
      * @return LoaderInterface
      */
-    public function getLoaderInterfaceObject()
+    protected function createLoaderInterfaceObject()
     {
         return new KeyValueJson('test.json');
     }
@@ -21,7 +21,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        file_put_contents('test.json', json_encode(self::$exampleConfiguration));
+        file_put_contents('test.json', json_encode(self::getLoadertInterfaceConfiguration()));
         file_put_contents('empty', '');
     }
 
@@ -43,7 +43,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Container:`test`, must be loadable
+     * @expectedExceptionMessage Container: `test`, is not defined
      */
     public function testEmptyFile()
     {

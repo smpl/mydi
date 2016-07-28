@@ -10,12 +10,21 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
 {
     use LocatorInterfaceTestTrait;
 
+    protected function createLoaderInterfaceObject()
+    {
+        $locator = new Locator();
+        foreach (self::getLoadertInterfaceConfiguration() as $key => $value) {
+            $locator[$key] = $value;
+        }
+        return $locator;
+    }
+
     /**
      * @return LocatorInterface
      */
     protected function createLocatorInterfaceObject()
     {
-        return new Locator();
+       return $this->createLoaderInterfaceObject();
     }
 
     public function testArraySetContainer()
@@ -90,7 +99,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Container name: `test` is not defined
+     * @expectedExceptionMessage Container: `test`, is not defined
      */
     public function testGetNameNotExist()
     {

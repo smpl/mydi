@@ -37,7 +37,7 @@ class IoC implements LoaderInterface
     public function get($containerName)
     {
         if (!$this->has($containerName)) {
-            throw new \InvalidArgumentException(sprintf('Container:`%s` must be loadable', $containerName));
+            throw new \InvalidArgumentException(sprintf('Container: `%s`, is not defined', $containerName));
         }
         ob_start();
         extract($this->context);
@@ -62,14 +62,12 @@ class IoC implements LoaderInterface
      */
     public function has($containerName)
     {
-        if (!is_string($containerName)) {
-            throw new \InvalidArgumentException('Container name must be string');
-        }
-        $path = $this->containerNameToPath($containerName);
-        if (substr($path, 0, strlen($this->basePath)) === $this->basePath) {
-            $result = is_readable($this->containerNameToPath($containerName));
-        } else {
-            $result = false;    // Пытаются загрузить что то за пределами указанной папки
+        $result = false;
+        if (is_string($containerName)) {
+            $path = $this->containerNameToPath($containerName);
+            if (substr($path, 0, strlen($this->basePath)) === $this->basePath) {
+                $result = is_readable($this->containerNameToPath($containerName));
+            }
         }
         return $result;
     }

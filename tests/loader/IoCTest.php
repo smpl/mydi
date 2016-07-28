@@ -2,9 +2,12 @@
 namespace smpl\mydi\test\Loader;
 
 use smpl\mydi\loader\IoC;
+use smpl\mydi\LoaderInterface;
+use smpl\mydi\test\LoaderInterfaceTestTrait;
 
 class IoCTest extends \PHPUnit_Framework_TestCase
 {
+    use LoaderInterfaceTestTrait;
     /**
      * @var IoC
      */
@@ -67,13 +70,9 @@ php;
         $this->assertSame(false, $this->loader->has('../test'));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @exceptedExceptionMessage Container name must be string
-     */
     public function testhasNotString()
     {
-        $this->loader->has(1);
+        assertFalse($this->loader->has(1));
     }
 
     public function testGet()
@@ -124,5 +123,13 @@ php;
     {
         parent::setUp();
         $this->loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
+    }
+
+    /**
+     * @return LoaderInterface
+     */
+    protected function createLoaderInterfaceObject()
+    {
+        return  new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
     }
 }

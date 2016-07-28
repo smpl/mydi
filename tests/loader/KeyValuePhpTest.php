@@ -13,7 +13,7 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
     /**
      * @return LoaderInterface
      */
-    public function getLoaderInterfaceObject()
+    protected function createLoaderInterfaceObject()
     {
         return new KeyValuePhp('t.php');
     }
@@ -21,7 +21,7 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        file_put_contents('t.php', '<?php return ' . var_export(self::$exampleConfiguration, true) . ';');
+        file_put_contents('t.php', '<?php return ' . var_export(self::getLoadertInterfaceConfiguration(), true) . ';');
         file_put_contents('withOutput', '123');
     }
 
