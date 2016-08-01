@@ -24,7 +24,11 @@
     }
   },
   "require": {
-    "php": ">=5.5.0"
+    "php": ">=5.5.0",
+    "container-interop/container-interop": "@stable"
+  },
+  "provide": {
+    "container-interop/container-interop": "@stable"
   },
   "require-dev": {
     "phpunit/phpunit": "@stable"

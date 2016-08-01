@@ -2,10 +2,11 @@
 
 namespace smpl\mydi\loader;
 
+use smpl\mydi\ContainerException;
+
 class KeyValuePhp extends AbstractKeyValue
 {
     private $file;
-
 
     protected function loadFile($fileName)
     {
@@ -15,7 +16,7 @@ class KeyValuePhp extends AbstractKeyValue
         $result = include $this->file;
         $output = ob_get_clean();
         if (!empty($output)) {
-            throw new \RuntimeException(sprintf(
+            throw new ContainerException(sprintf(
                 'File: `%s` must have empty output: `%s`',
                 $fileName,
                 $output

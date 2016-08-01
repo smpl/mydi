@@ -1,11 +1,66 @@
 <?php
 namespace smpl\mydi;
 
-class Locator extends AbstractLocator
+class Locator implements LocatorInterface
 {
     private $containers = [];
     private $calls = [];
     private $dependencyMap = [];
+
+    /**
+     * @var LoaderInterface[]
+     */
+    protected $loaders;
+
+    /**
+     * @param LoaderInterface[] $loader
+     */
+    public function __construct(array $loader = [])
+    {
+        $this->setLoaders($loader);
+    }
+
+    public function offsetExists($offset)
+    {
+        return $this->has($offset);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->get($offset);
+    }
+
+    /**
+     * @return LoaderInterface[]
+     */
+    public function getLoaders()
+    {
+        return $this->loaders;
+    }
+
+    /**
+     * @param LoaderInterface[] $loaders
+     * @throw \InvalidArgumentException
+     */
+    public function setLoaders(array $loaders)
+    {
+        foreach($loaders as $loader) {
+            if (!$loader instanceof LoaderInterface) {
+                throw new \InvalidArgumentException('Loaders array must instance of LoaderInterface');
+            }
+        }
+        $this->loaders = $loaders;
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        $this->set($offset, $value);
+    }
+
+    public function offsetUnset($offset)
+    {
+        $this->delete($offset);
+    }
 
     private function getDependencyName($name)
     {
@@ -115,7 +170,7 @@ class Locator extends AbstractLocator
         if (!array_key_exists($name, $this->containers)) {
             $result = $this->getLoaderForContainer($name);
             if (is_null($result)) {
-                throw new \InvalidArgumentException(sprintf('Container: `%s`, is not defined', $name));
+                throw new NotFoundException(sprintf('Container: `%s`, is not defined', $name));
             }
             $this->set($name, $result->get($name));
         }

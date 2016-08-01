@@ -2,6 +2,7 @@
 namespace smpl\mydi\loader;
 
 use smpl\mydi\LoaderInterface;
+use smpl\mydi\NotFoundException;
 
 abstract class AbstractKeyValue implements LoaderInterface
 {
@@ -26,7 +27,7 @@ abstract class AbstractKeyValue implements LoaderInterface
     public function get($containerName)
     {
         if (!$this->has($containerName)) {
-            throw new \InvalidArgumentException(sprintf('Container: `%s`, is not defined', $containerName));
+            throw new NotFoundException(sprintf('Container: `%s`, is not defined', $containerName));
         }
         return $this->getConfiguration()[$containerName];
     }
@@ -57,8 +58,6 @@ abstract class AbstractKeyValue implements LoaderInterface
     /**
      * @param $fileName
      * @return array
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
      */
     abstract protected function loadFile($fileName);
 }

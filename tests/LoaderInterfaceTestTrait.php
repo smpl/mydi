@@ -51,7 +51,7 @@ trait LoaderInterfaceTestTrait
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \smpl\mydi\NotFoundException
      * @expectedExceptionMessage Container: `dsfdsfsdfds`, is not defined
      */
     public function testLoadertInterfaceInvalidConfiguration()
@@ -60,7 +60,7 @@ trait LoaderInterfaceTestTrait
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \smpl\mydi\NotFoundException
      * @expectedExceptionMessage Container: `not declared Container`, is not defined
      */
     public function testLoadertInterfaceGetNotDeclared()

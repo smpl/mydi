@@ -2,6 +2,7 @@
 namespace smpl\mydi\loader;
 
 use smpl\mydi\LoaderInterface;
+use smpl\mydi\NotFoundException;
 
 /**
  * Загрузка зависимостей на основе php файлов,
@@ -37,7 +38,7 @@ class IoC implements LoaderInterface
     public function get($containerName)
     {
         if (!$this->has($containerName)) {
-            throw new \InvalidArgumentException(sprintf('Container: `%s`, is not defined', $containerName));
+            throw new NotFoundException(sprintf('Container: `%s`, is not defined', $containerName));
         }
         ob_start();
         extract($this->context);

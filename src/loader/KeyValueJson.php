@@ -2,13 +2,15 @@
 
 namespace smpl\mydi\loader;
 
+use smpl\mydi\ContainerException;
+
 class KeyValueJson extends AbstractKeyValue
 {
 
     protected function loadFile($fileName)
     {
         if (!is_readable($fileName)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new ContainerException(sprintf(
                     'FileName: `%s` must be readable',
                     $fileName)
             );

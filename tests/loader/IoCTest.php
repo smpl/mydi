@@ -101,7 +101,7 @@ php;
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \smpl\mydi\NotFoundException
      * @exceptedExceptionMessage Container:`invalid` must be loadable
      */
     public function testLoadInvalidContainer()
@@ -110,7 +110,7 @@ php;
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \smpl\mydi\NotFoundException
      * @exceptedExceptionMessage Container name must be string
      */
     public function testLoadNotString()

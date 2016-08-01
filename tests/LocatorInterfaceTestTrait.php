@@ -66,7 +66,7 @@ trait LocatorInterfaceTestTrait
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \smpl\mydi\NotFoundException
      */
     public function testLocatorInterfacArrayGetNameNotExist()
     {

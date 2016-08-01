@@ -33,7 +33,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
     }
     
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \smpl\mydi\ContainerException
      */
     public function testNotReadable()
     {
@@ -42,7 +42,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \smpl\mydi\NotFoundException
      * @expectedExceptionMessage Container: `test`, is not defined
      */
     public function testEmptyFile()
