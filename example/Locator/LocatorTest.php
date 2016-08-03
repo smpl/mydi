@@ -2,8 +2,8 @@
 
 namespace smpl\mydi\example\Locator;
 
-use smpl\mydi\loader\IoC;
-use smpl\mydi\loader\KeyValueJson;
+use smpl\mydi\container\IoC;
+use smpl\mydi\container\KeyValueJson;
 use smpl\mydi\Locator;
 
 class LocatorTest extends \PHPUnit_Framework_TestCase

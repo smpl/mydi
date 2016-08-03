@@ -2,7 +2,7 @@
 
 namespace smpl\mydi\example\IoC;
 
-use smpl\mydi\loader\IoC;
+use smpl\mydi\container\IoC;
 use smpl\mydi\Locator;
 
 class IoCTest extends \PHPUnit_Framework_TestCase

@@ -1,5 +1,5 @@
 <?php
-namespace smpl\mydi\container;
+namespace smpl\mydi\loader;
 
 use smpl\mydi\LocatorInterface;
 

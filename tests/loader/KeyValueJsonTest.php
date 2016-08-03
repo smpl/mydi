@@ -2,22 +2,10 @@
 
 namespace smpl\mydi\test\Loader;
 
-use smpl\mydi\loader\KeyValueJson;
-use smpl\mydi\LoaderInterface;
-use smpl\mydi\test\LoaderInterfaceTestTrait;
+use smpl\mydi\container\KeyValueJson;
 
 class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
 {
-    use LoaderInterfaceTestTrait;
-
-    /**
-     * @return LoaderInterface
-     */
-    protected function createLoaderInterfaceObject()
-    {
-        return new KeyValueJson('test.json');
-    }
-
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
@@ -31,7 +19,68 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
         unlink('test.json');
         unlink('empty');
     }
-    
+
+    /**
+     * @dataProvider providerDataLoadertInterface
+     * @param $key
+     * @param $value
+     */
+    public function testLoadertInterfaceGet($key, $value)
+    {
+        $loader = new KeyValueJson('test.json');
+        assertSame($value, $loader->get($key));
+    }
+
+    public function providerDataLoadertInterface()
+    {
+        $result = [];
+        foreach (self::getLoadertInterfaceConfiguration() as $key => $value) {
+            $call = [];
+            $call[] = $key;
+            $call[] = $value;
+            $result[] = $call;
+        }
+        return $result;
+    }
+
+    /**
+     * @return array
+     */
+    protected static function getLoadertInterfaceConfiguration()
+    {
+        return [
+            "int" => 15,
+            "string" => "some string",
+            "float" => 0.5,
+            "null" => null,
+            "arrayWithKeyInt" => ["test0", "test1"],
+            "arrayWithKeyString" => [
+                "key1" => "value1",
+                "key2" => 15
+            ]
+        ];
+    }
+
+    /**
+     * @expectedException \smpl\mydi\NotFoundException
+     * @expectedExceptionMessage Container: `dsfdsfsdfds`, is not defined
+     */
+    public function testLoadertInterfaceInvalidConfiguration()
+    {
+        $loader = new KeyValueJson('test.json');
+        $loader->get('dsfdsfsdfds');
+    }
+
+    /**
+     * @expectedException \smpl\mydi\NotFoundException
+     * @expectedExceptionMessage Container: `not declared Container`, is not defined
+     */
+    public function testLoadertInterfaceGetNotDeclared()
+    {
+        $loader = new KeyValueJson('test.json');
+        $loader->get('not declared Container');
+    }
+
     /**
      * @expectedException \smpl\mydi\ContainerException
      */

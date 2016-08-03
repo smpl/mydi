@@ -1,7 +1,7 @@
 <?php
-namespace smpl\mydi\loader;
+namespace smpl\mydi\container;
 
-use smpl\mydi\LoaderInterface;
+use Interop\Container\ContainerInterface;
 use smpl\mydi\NotFoundException;
 
 /**
@@ -11,7 +11,7 @@ use smpl\mydi\NotFoundException;
  * Class File
  * @package smpl\mydi\loader
  */
-class IoC implements LoaderInterface
+class IoC implements ContainerInterface
 {
     /**
      * @var string
@@ -68,39 +68,6 @@ class IoC implements LoaderInterface
             $path = $this->containerNameToPath($containerName);
             if (substr($path, 0, strlen($this->basePath)) === $this->basePath) {
                 $result = is_readable($this->containerNameToPath($containerName));
-            }
-        }
-        return $result;
-    }
-
-    public function getContainerNames()
-    {
-        $result = [];
-        $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($this->basePath)
-        );
-        /** @var \SplFileInfo $value */
-        foreach ($iterator as $value) {
-            $tmp = $this->fileToContainerName($value);
-            if (!is_null($tmp)) {
-                $result[] = $tmp;
-            }
-        }
-        sort($result);
-        return $result;
-    }
-
-    private function fileToContainerName(\SplFileInfo $file)
-    {
-        $result = null;
-        if ($file->isFile() && $file->getExtension() === 'php') {
-            $pathInfo = pathinfo(substr($file->getRealPath(), strlen($this->basePath)));
-            if ($pathInfo['dirname'] === '/') {
-                $result = $pathInfo['filename'];
-            } else {
-                $result = str_replace(DIRECTORY_SEPARATOR, '_', substr($pathInfo['dirname'], 1));
-                $result .= '_';
-                $result .= $pathInfo['filename'];
             }
         }
         return $result;

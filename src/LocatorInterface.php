@@ -1,13 +1,15 @@
 <?php
 namespace smpl\mydi;
 
+use Interop\Container\ContainerInterface;
+
 /**
  * Interface LocatorInterface
  * Отвечает за добавление, хранение и разрешение зависимостей.
  * Каждой зависимости при добавление присвайвается уникальное имя, а для её разрешения его необходимо указать
  * @package smpl\mydi
  */
-interface LocatorInterface extends \ArrayAccess, LoaderInterface
+interface LocatorInterface extends \ArrayAccess, ContainerInterface
 {
 
     /**

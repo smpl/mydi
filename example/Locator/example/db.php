@@ -1,5 +1,5 @@
 <?php
-use smpl\mydi\container\Service;
+use smpl\mydi\loader\Service;
 use smpl\mydi\LocatorInterface;
 
 return new Service(function (LocatorInterface $l) {

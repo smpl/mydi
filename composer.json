@@ -1,8 +1,6 @@
 {
   "name": "smpl/mydi",
   "description": "My small dependency injection implementation",
-  "minimum-stability": "stable",
-  "prefer-stable": true,
   "license": "GNUv2",
   "authors": [
     {

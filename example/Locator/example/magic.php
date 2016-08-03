@@ -1,6 +1,6 @@
 <?php
 
-use smpl\mydi\container\Service;
+use smpl\mydi\loader\Service;
 
 return new Service(function (\smpl\mydi\LocatorInterface $l) {
     $magic = new stdClass();

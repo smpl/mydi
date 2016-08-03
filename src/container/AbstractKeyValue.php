@@ -1,10 +1,10 @@
 <?php
-namespace smpl\mydi\loader;
+namespace smpl\mydi\container;
 
-use smpl\mydi\LoaderInterface;
+use Interop\Container\ContainerInterface;
 use smpl\mydi\NotFoundException;
 
-abstract class AbstractKeyValue implements LoaderInterface
+abstract class AbstractKeyValue implements ContainerInterface
 {
     /**
      * @var bool
@@ -35,11 +35,6 @@ abstract class AbstractKeyValue implements LoaderInterface
     public function has($containerName)
     {
         return array_key_exists($containerName, $this->getConfiguration());
-    }
-
-    public function getContainerNames()
-    {
-        return array_keys($this->getConfiguration());
     }
 
     /**

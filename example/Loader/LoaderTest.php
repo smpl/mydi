@@ -2,8 +2,8 @@
 
 namespace smpl\mydi\example\Loader;
 
-use smpl\mydi\container\Service;
-use smpl\mydi\loader\KeyValueJson;
+use smpl\mydi\container\KeyValueJson;
+use smpl\mydi\loader\Service;
 use smpl\mydi\Locator;
 use smpl\mydi\LocatorInterface;
 
@@ -14,7 +14,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $loaders = [];
         $loaders[] = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'example.json');
         $locator = new Locator($loaders);
-        $locator['example'] = new Service(function(LocatorInterface $l) {
+        $locator['example'] = new Service(function (LocatorInterface $l) {
             $result = new \stdClass();
             $result->address = $l['address'];
             $result->username = $l['username'];

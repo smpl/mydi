@@ -2,8 +2,8 @@
 
 namespace smpl\mydi\example\Container;
 
-use smpl\mydi\container\Factory;
-use smpl\mydi\container\Service;
+use smpl\mydi\loader\Factory;
+use smpl\mydi\loader\Service;
 use smpl\mydi\Locator;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase

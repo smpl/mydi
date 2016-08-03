@@ -2,8 +2,8 @@
 
 namespace smpl\mydi\example\KeyValueLoader;
 
-use smpl\mydi\loader\KeyValueJson;
-use smpl\mydi\loader\KeyValuePhp;
+use smpl\mydi\container\KeyValueJson;
+use smpl\mydi\container\KeyValuePhp;
 use smpl\mydi\Locator;
 
 class KeyValueLoaderTest extends \PHPUnit_Framework_TestCase

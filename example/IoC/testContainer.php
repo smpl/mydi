@@ -1,6 +1,6 @@
 <?php
 
-use smpl\mydi\container\Factory;
+use smpl\mydi\loader\Factory;
 
 return new Factory(function () {
     static $a = 0;

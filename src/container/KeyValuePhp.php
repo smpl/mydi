@@ -1,6 +1,5 @@
 <?php
-
-namespace smpl\mydi\loader;
+namespace smpl\mydi\container;
 
 use smpl\mydi\ContainerException;
 

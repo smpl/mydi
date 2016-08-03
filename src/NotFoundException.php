@@ -1,7 +1,9 @@
 <?php
 namespace smpl\mydi;
 
-class NotFoundException extends \RuntimeException implements \Interop\Container\Exception\NotFoundException
+use Interop\Container\Exception\NotFoundException as NotFoundInteropException;
+
+class NotFoundException extends \RuntimeException implements NotFoundInteropException
 {
 
 }

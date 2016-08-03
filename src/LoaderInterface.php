@@ -1,20 +1,12 @@
 <?php
 namespace smpl\mydi;
 
-use Interop\Container\ContainerInterface;
-
-/**
- * Предназначен для определения зависимостей на лету (в момент когда их запросят через LocatorInterface->get)
- *
- * Interface LoaderInterface
- * @package smpl\mydi
- */
-interface LoaderInterface extends ContainerInterface
+interface LoaderInterface
 {
-
     /**
-     * Возвращает имена всех контейнеров что могут быть загружены.
-     * @return array
-    */
-    public function getContainerNames();
+     * Данный метод вызывается у контейнера когда кто то запросил у LocatorInterface вызвал метод get
+     * @param LocatorInterface $locator
+     * @return mixed значение которое храниться в данном контейнере
+     */
+    public function get(LocatorInterface $locator);
 }
