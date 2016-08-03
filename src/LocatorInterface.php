@@ -5,8 +5,6 @@ use Interop\Container\ContainerInterface;
 
 /**
  * Interface LocatorInterface
- * Отвечает за добавление, хранение и разрешение зависимостей.
- * Каждой зависимости при добавление присвайвается уникальное имя, а для её разрешения его необходимо указать
  * @package smpl\mydi
  */
 interface LocatorInterface extends \ArrayAccess, ContainerInterface
@@ -37,11 +35,11 @@ interface LocatorInterface extends \ArrayAccess, ContainerInterface
     /**
      * @return LoaderInterface[]
      */
-    public function getLoaders();
+    public function getContainers();
 
     /**
      * @param LoaderInterface[] $loader
      * @throw \InvalidArgumentException
      */
-    public function setLoaders(array $loader);
+    public function setContainers(array $loader);
 }
