@@ -70,10 +70,6 @@ class Locator implements LocatorInterface
         return $this->dependencyMap;
     }
 
-    /**
-     * @param ContainerInterface[] $containers
-     * @throw \InvalidArgumentException
-     */
     public function setContainers(array $containers)
     {
         foreach ($containers as $loader) {
@@ -84,9 +80,6 @@ class Locator implements LocatorInterface
         $this->containers = $containers;
     }
 
-    /**
-     * @return ContainerInterface[]
-     */
     public function getContainers()
     {
         return $this->containers;
@@ -112,14 +105,9 @@ class Locator implements LocatorInterface
         $this->delete($offset);
     }
 
-    /**
-     * @param string $name
-     * @return null|ContainerInterface null если Loader не найден
-     */
     private function getLoaderForContainer($name)
     {
         $result = null;
-        /** @var ContainerInterface $loader */
         foreach ($this->getContainers() as $loader) {
             if ($loader->has($name)) {
                 $result = $loader;

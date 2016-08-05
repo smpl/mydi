@@ -242,5 +242,17 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
         $locator = new Locator();
         $locator['test'];
     }
+
+    public function testGetDependencyMap()
+    {
+        $locator = new Locator();
+        $result = [];
+        assertSame($result, $locator->getDependencyMap());
+        $locator['test'] = 'magic';
+        assertSame($result, $locator->getDependencyMap());
+        $locator['test'];
+        $result += ['test' => []];
+        assertSame($result, $locator->getDependencyMap());
+    }
 }
  

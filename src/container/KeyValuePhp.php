@@ -15,11 +15,13 @@ class KeyValuePhp extends AbstractKeyValue
         $result = include $this->file;
         $output = ob_get_clean();
         if (!empty($output)) {
-            throw new ContainerException(sprintf(
-                'File: `%s` must have empty output: `%s`',
-                $fileName,
-                $output
-            ));
+            throw new ContainerException(
+                sprintf(
+                    'File: `%s` must have empty output: `%s`',
+                    $fileName,
+                    $output
+                )
+            );
         }
         return $result;
     }

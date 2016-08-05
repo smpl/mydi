@@ -1,12 +1,18 @@
 <?php
 namespace smpl\mydi;
 
+/**
+ * Interface LoaderInterface
+ *
+ * Отложенная загрузка, которая вызывается каждый раз, как запросят элемент в LocatorInterface
+ * @package smpl\mydi
+ */
 interface LoaderInterface
 {
     /**
-     * Данный метод вызывается у контейнера когда кто то запросил у LocatorInterface вызвал метод get
+     * Получает значение
      * @param LocatorInterface $locator
-     * @return mixed значение которое храниться в данном контейнере
+     * @return mixed
      */
     public function get(LocatorInterface $locator);
 }

@@ -2,51 +2,32 @@
 namespace smpl\mydi\container;
 
 use Interop\Container\ContainerInterface;
+use smpl\mydi\ContainerException;
 use smpl\mydi\NotFoundException;
 
-/**
- * Загрузка зависимостей на основе php файлов,
- * в случае если в имени контенейра указано _ то он трансформируется в DIRECTORY_SEPARATOR
- *
- * Class File
- * @package smpl\mydi\loader
- */
 class IoC implements ContainerInterface
 {
     /**
      * @var string
      */
     private $basePath;
-    /**
-     * @var array
-     */
-    private $context;
 
-    public function __construct($basePath, array $context = [])
+    public function __construct($basePath)
     {
         $this->basePath = realpath($basePath);
-        $this->context = $context;
     }
 
-    /**
-     * Загрузка контейнера
-     * @param string $containerName
-     * @throws \InvalidArgumentException если имя нельзя загрузить
-     * @throws \RuntimeException если у файла что подгружаем будет выводиться какой то текст
-     * @return mixed
-     */
     public function get($containerName)
     {
         if (!$this->has($containerName)) {
             throw new NotFoundException(sprintf('Container: `%s`, is not defined', $containerName));
         }
         ob_start();
-        extract($this->context);
         /** @noinspection PhpIncludeInspection */
         $result = include $this->containerNameToPath($containerName);
         $output = ob_get_clean();
         if (!empty($output)) {
-            throw new \RuntimeException(sprintf(
+            throw new ContainerException(sprintf(
                 'File: `%s` must have empty output: `%s`',
                 $this->containerNameToPath($containerName),
                 $output
@@ -55,12 +36,6 @@ class IoC implements ContainerInterface
         return $result;
     }
 
-    /**
-     * Проверяет может ли загрузить данный контейнер этот Loader
-     * @param string $containerName
-     * @throws \InvalidArgumentException если имя не строка
-     * @return bool
-     */
     public function has($containerName)
     {
         $result = false;

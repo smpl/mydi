@@ -5,13 +5,18 @@ use Interop\Container\ContainerInterface;
 
 /**
  * Interface LocatorInterface
+ *
+ * Расширенный ContainerInterface который позволяет
+ *  * Использовать ArrayAccess
+ *  * Смотреть карту зависимостей
+ *  * Использовать другие ContainerInterface для разрешения зависимостей.
  * @package smpl\mydi
  */
 interface LocatorInterface extends \ArrayAccess, ContainerInterface
 {
 
     /**
-     * Добавить новый контейнер с именем $name и значение $value
+     * Добавить новое значение в контейнер
      * @param string $name Имя контейнера
      * @param mixed $value Здесь может быть любое значение или даже объект с интерфейсом ContainerInterface
      * @throws \InvalidArgumentException
@@ -19,26 +24,25 @@ interface LocatorInterface extends \ArrayAccess, ContainerInterface
     public function set($name, $value);
 
     /**
+     * Удалить значение по имени
      * @param $name
      * @throws \InvalidArgumentException
      */
     public function delete($name);
 
     /**
-     * Возвращает описание зависимостей между контейнерами в виде массива
-     *
-     * Где ключ это имя контейнера что вызывали, а массив значений это то что потребовалось вызывать для него
+     * Возвращает карту зависимостей
      * @return array
      */
     public function getDependencyMap();
 
     /**
-     * @return LoaderInterface[]
+     * @return ContainerInterface[]
      */
     public function getContainers();
 
     /**
-     * @param LoaderInterface[] $loader
+     * @param ContainerInterface[] $loader
      * @throw \InvalidArgumentException
      */
     public function setContainers(array $loader);

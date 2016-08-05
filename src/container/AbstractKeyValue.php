@@ -2,6 +2,7 @@
 namespace smpl\mydi\container;
 
 use Interop\Container\ContainerInterface;
+use smpl\mydi\ContainerException;
 use smpl\mydi\NotFoundException;
 
 abstract class AbstractKeyValue implements ContainerInterface
@@ -49,10 +50,10 @@ abstract class AbstractKeyValue implements ContainerInterface
         return is_array($this->configuration) ? $this->configuration : [];
     }
 
-
     /**
      * @param $fileName
      * @return array
+     * @throws ContainerException
      */
     abstract protected function loadFile($fileName);
 }

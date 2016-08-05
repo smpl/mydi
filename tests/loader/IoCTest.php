@@ -19,11 +19,6 @@ php;
 <?php
 return 15;
 php;
-        $testContext = <<<'php'
-<?php
-/** @var int $a */
-return 15 + $a;
-php;
         $testOutput = <<<'php'
 <?php
 echo 'Magic';
@@ -32,16 +27,7 @@ php;
         $root = __DIR__ . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR;
         mkdir($root);
         file_put_contents($root . 'test.php', $test);
-        file_put_contents($root . 'testContext.php', $testContext);
         file_put_contents($root . 'testOutput.php', $testOutput);
-        mkdir($root . 'subDir');
-        file_put_contents(
-            $root . 'subDir' . DIRECTORY_SEPARATOR . 'test.php',
-            $subDirTest
-        );
-        $root = __DIR__ . DIRECTORY_SEPARATOR . 'interface' . DIRECTORY_SEPARATOR;
-        mkdir($root);
-        file_put_contents($root . 'test.php', $test);
         mkdir($root . 'subDir');
         file_put_contents(
             $root . 'subDir' . DIRECTORY_SEPARATOR . 'test.php',
@@ -55,15 +41,8 @@ php;
         $root = __DIR__ . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR;
         unlink($root . 'test.php');
         unlink($root . 'subDir' . DIRECTORY_SEPARATOR . 'test.php');
-        unlink($root . 'testContext.php');
         unlink($root . 'testOutput.php');
 
-        rmdir($root . 'subDir');
-        rmdir($root);
-
-        $root = __DIR__ . DIRECTORY_SEPARATOR . 'interface' . DIRECTORY_SEPARATOR;
-        unlink($root . 'test.php');
-        unlink($root . 'subDir' . DIRECTORY_SEPARATOR . 'test.php');
         rmdir($root . 'subDir');
         rmdir($root);
     }
@@ -83,7 +62,7 @@ php;
      */
     protected function createLoaderInterfaceObject()
     {
-        return new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'interface');
+        return new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
     }
 
     public function providerDataLoadertInterface()
@@ -126,7 +105,7 @@ php;
 
     public function testHas()
     {
-        $loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'interface');
+        $loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
         $this->assertSame(true, $loader->has('test'));
         $this->assertSame(false, $loader->has('invalidName'));
         $this->assertSame(true, $loader->has('subDir_test'));
@@ -147,9 +126,6 @@ php;
         // Загрузка простого компонента
         $this->assertSame(15, $loader->get('test'));
         $this->assertSame(15, $loader->get('subDir_test'));
-
-        // проверим работу контекста
-        $this->assertSame(20, $loader->get('testContext'));
     }
 
     /**
@@ -168,7 +144,7 @@ php;
      */
     public function testLoadNotString()
     {
-        $loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'interface');
+        $loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
         $loader->get(1);
     }
 
@@ -177,7 +153,7 @@ php;
      */
     public function testLoadWithOutput()
     {
-        $loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'interface');
+        $loader = new IoC(__DIR__ . DIRECTORY_SEPARATOR . 'tmp');
         $loader->get('testOutput');
     }
 }
