@@ -26,7 +26,7 @@
     "container-interop/container-interop": "@stable"
   },
   "provide": {
-    "container-interop/container-interop": "@stable"
+    "container-interop/container-interop-implementation": "@stable"
   },
   "require-dev": {
     "phpunit/phpunit": "@stable"
