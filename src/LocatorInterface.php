@@ -1,17 +1,22 @@
 <?php
 namespace smpl\mydi;
 
+use Interop\Container\ContainerInterface;
+
 /**
  * Interface LocatorInterface
- * Отвечает за добавление, хранение и разрешение зависимостей.
- * Каждой зависимости при добавление присвайвается уникальное имя, а для её разрешения его необходимо указать
+ *
+ * Расширенный ContainerInterface который позволяет
+ *  * Использовать ArrayAccess
+ *  * Смотреть карту зависимостей
+ *  * Использовать другие ContainerInterface для разрешения зависимостей.
  * @package smpl\mydi
  */
-interface LocatorInterface extends \ArrayAccess, LoaderInterface
+interface LocatorInterface extends \ArrayAccess, ContainerInterface
 {
 
     /**
-     * Добавить новый контейнер с именем $name и значение $value
+     * Добавить новое значение в контейнер
      * @param string $name Имя контейнера
      * @param mixed $value Здесь может быть любое значение или даже объект с интерфейсом ContainerInterface
      * @throws \InvalidArgumentException
@@ -19,27 +24,26 @@ interface LocatorInterface extends \ArrayAccess, LoaderInterface
     public function set($name, $value);
 
     /**
+     * Удалить значение по имени
      * @param $name
      * @throws \InvalidArgumentException
      */
     public function delete($name);
 
     /**
-     * Возвращает описание зависимостей между контейнерами в виде массива
-     *
-     * Где ключ это имя контейнера что вызывали, а массив значений это то что потребовалось вызывать для него
+     * Возвращает карту зависимостей
      * @return array
      */
     public function getDependencyMap();
 
     /**
-     * @return LoaderInterface[]
+     * @return ContainerInterface[]
      */
-    public function getLoaders();
+    public function getContainers();
 
     /**
-     * @param LoaderInterface[] $loader
+     * @param ContainerInterface[] $loader
      * @throw \InvalidArgumentException
      */
-    public function setLoaders(array $loader);
+    public function setContainers(array $loader);
 }

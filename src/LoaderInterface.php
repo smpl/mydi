@@ -2,31 +2,18 @@
 namespace smpl\mydi;
 
 /**
- * Предназначен для определения зависимостей на лету (в момент когда их запросят через LocatorInterface->get)
- *
  * Interface LoaderInterface
+ *
+ * Отложенная загрузка, которая вызывается каждый раз, как запросят элемент в LocatorInterface
+ * Которая должна вернуть результат, который вернет LocatorInterface
  * @package smpl\mydi
  */
 interface LoaderInterface
 {
     /**
-     * Проверяет может ли быть загружен контейнер
-     * @param string $containerName
-     * @return bool
-     */
-    public function has($containerName);
-
-    /**
-     * Загрузка контейнера
-     * @param string $containerName
-     * @throws \InvalidArgumentException если имя нельзя загрузить или некорректное имя
+     * Получает значение
+     * @param LocatorInterface $locator
      * @return mixed
      */
-    public function get($containerName);
-
-    /**
-     * Возвращает имена всех контейнеров что могут быть загружены.
-     * @return array
-    */
-    public function getContainerNames();
+    public function get(LocatorInterface $locator);
 }

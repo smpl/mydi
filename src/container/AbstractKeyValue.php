@@ -1,9 +1,11 @@
 <?php
-namespace smpl\mydi\loader;
+namespace smpl\mydi\container;
 
-use smpl\mydi\LoaderInterface;
+use Interop\Container\ContainerInterface;
+use smpl\mydi\ContainerException;
+use smpl\mydi\NotFoundException;
 
-abstract class AbstractKeyValue implements LoaderInterface
+abstract class AbstractKeyValue implements ContainerInterface
 {
     /**
      * @var bool
@@ -26,7 +28,7 @@ abstract class AbstractKeyValue implements LoaderInterface
     public function get($containerName)
     {
         if (!$this->has($containerName)) {
-            throw new \InvalidArgumentException(sprintf('Container: `%s`, is not defined', $containerName));
+            throw new NotFoundException(sprintf('Container: `%s`, is not defined', $containerName));
         }
         return $this->getConfiguration()[$containerName];
     }
@@ -34,11 +36,6 @@ abstract class AbstractKeyValue implements LoaderInterface
     public function has($containerName)
     {
         return array_key_exists($containerName, $this->getConfiguration());
-    }
-
-    public function getContainerNames()
-    {
-        return array_keys($this->getConfiguration());
     }
 
     /**
@@ -53,12 +50,10 @@ abstract class AbstractKeyValue implements LoaderInterface
         return is_array($this->configuration) ? $this->configuration : [];
     }
 
-
     /**
      * @param $fileName
      * @return array
-     * @throws \InvalidArgumentException
-     * @throws \RuntimeException
+     * @throws ContainerException
      */
     abstract protected function loadFile($fileName);
 }

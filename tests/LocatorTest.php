@@ -1,37 +1,18 @@
 <?php
 namespace smpl\mydi\test;
 
-use smpl\mydi\container\Service;
+use Interop\Container\ContainerInterface;
+use smpl\mydi\loader\Service;
 use smpl\mydi\LoaderInterface;
 use smpl\mydi\Locator;
-use smpl\mydi\LocatorInterface;
 
 class LocatorTest extends \PHPUnit_Framework_TestCase
 {
-    use LocatorInterfaceTestTrait;
-
-    protected function createLoaderInterfaceObject()
-    {
-        $locator = new Locator();
-        foreach (self::getLoadertInterfaceConfiguration() as $key => $value) {
-            $locator[$key] = $value;
-        }
-        return $locator;
-    }
-
-    /**
-     * @return LocatorInterface
-     */
-    protected function createLocatorInterfaceObject()
-    {
-       return $this->createLoaderInterfaceObject();
-    }
-
     public function testArraySetContainer()
     {
         $result = 123;
         $locator = new Locator();
-        $mock = $this->getMockBuilder('\smpl\mydi\ContainerInterface')->getMock();
+        $mock = $this->getMockBuilder(LoaderInterface::class)->getMock();
         $mock->expects($this->any())
             ->method('get')
             ->will($this->returnValue($result));
@@ -58,7 +39,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testHasFromLoader()
     {
-        $mockLoader = $this->getMockBuilder(LoaderInterface::class)->getMock();
+        $mockLoader = $this->getMockBuilder(ContainerInterface::class)->getMock();
         $mockLoader
             ->expects($this->once())
             ->method('has')
@@ -80,12 +61,12 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * В качестве ключа может быть строка это определено в интерфейсе смотри LocatorInterface и @see https://github.com/smpl/mydi/issues/18
      * @expectedException \InvalidArgumentException
      */
     public function testSetNameNotString()
     {
-        $this->createLocatorInterfaceObject()->set(1, 1);
+        $locator = new Locator();
+        $locator->set(1, 1);
     }
 
     /**
@@ -98,7 +79,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \smpl\mydi\NotFoundException
      * @expectedExceptionMessage Container: `test`, is not defined
      */
     public function testGetNameNotExist()
@@ -115,7 +96,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     {
         $result = 123;
         $locator = new Locator();
-        $mock = $this->getMockBuilder('\smpl\mydi\ContainerInterface')->getMock();
+        $mock = $this->getMockBuilder(LoaderInterface::class)->getMock();
         $mock->expects($this->any())
             ->method('get')
             ->will($this->returnValue($result));
@@ -133,9 +114,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Бесконечное разрешение зависимостей #10 @see https://github.com/smpl/mydi/issues/10
-     * Классный способ создать багию используя магические методы @see https://github.com/smpl/mydi/issues/13
-     * @expectedException \InvalidArgumentException
+     * @expectedException \smpl\mydi\ContainerException
      */
     public function testNotCorrectConfiguration()
     {
@@ -150,7 +129,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
             $obj->test = $locator->get('a');
             return $obj;
         }));
-        $locator->get('a');    // InvalidArgumentException
+        $locator->get('a');
     }
 
     /**
@@ -159,20 +138,18 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     public function testSetLoadersInvalid()
     {
         $locator = new Locator();
-        $locator->setLoaders([1]);
+        $locator->setContainers([1]);
     }
 
     /**
-     * @test
-     * @see https://github.com/smpl/mydi/issues/22
      * @dataProvider providerValidParams
      * @param string $name
      * @param mixed $value
      */
-    public function getUseLoader($name, $value)
+    public function testGetUseLoader($name, $value)
     {
         $locator = new Locator();
-        $loader = $this->getMockBuilder('\smpl\mydi\LoaderInterface')->getMock();
+        $loader = $this->getMockBuilder(ContainerInterface::class)->getMock();
         $loader->expects($this->once())
             ->method('has')
             ->with($this->equalTo($name))
@@ -182,98 +159,95 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($name))
             ->will($this->returnValue($value));
         /** @var LoaderInterface $loader */
-        $locator->setLoaders([$loader]);
+        $locator->setContainers([$loader]);
         $this->assertSame($value, $locator->get($name));
     }
 
     public function testGetLoader()
     {
         $locator = new Locator();
-        $this->assertSame([], $locator->getLoaders());
+        $this->assertSame([], $locator->getContainers());
 
-        $result = [$this->getMockBuilder(LoaderInterface::class)->getMock()];
+        $result = [$this->getMockBuilder(ContainerInterface::class)->getMock()];
         /** @var LoaderInterface[] $result */
-        $locator->setLoaders($result);
-        $this->assertSame($result, $locator->getLoaders());
+        $locator->setContainers($result);
+        $this->assertSame($result, $locator->getContainers());
+    }
+
+    public function providerValidParams()
+    {
+        return [
+            ['int', 1],
+            ['float', 0.5],
+            ['bool', true],
+            ['string', 'test'],
+            ['object', new \stdClass()],
+            ['null', null]
+        ];
+    }
+
+    /**
+     * @param $name
+     * @param $value
+     * @dataProvider providerValidParams
+     */
+    public function testArrayParams($name, $value)
+    {
+        $locator = new Locator();
+        $locator[$name] = $value;
+        $this->assertSame($value, $locator[$name]);
+        $this->assertSame(true, isset($locator[$name]));
+        unset($locator[$name]);
+        $this->assertSame(false, isset($locator[$name]));
+    }
+
+
+    public function testArraySetNameExist()
+    {
+        $locator = new Locator();
+        $locator['test'] = 1;
+        $this->assertSame(1, $locator['test']);
+        $locator['test'] = 2;
+        $this->assertSame(2, $locator['test']);
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testArraySetNameNotString()
+    {
+        $locator = new Locator();
+        $locator[1] = 1;
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testArrayDeleteNotExist()
+    {
+        $locator = new Locator();
+        unset($locator['test']);
+    }
+
+    /**
+     * @expectedException \smpl\mydi\NotFoundException
+     */
+    public function testArrayGetNameNotExist()
+    {
+        $locator = new Locator();
+        $locator['test'];
     }
 
     public function testGetDependencyMap()
     {
         $locator = new Locator();
-        $locator->set('string', 'my string');
-        $locator->set('int', 123);
-        assertSame([], $locator->getDependencyMap());
-        $expected = [
-            'string' => [],
-        ];
-        $locator->get('string');
-        $this->assertSame($expected, $locator->getDependencyMap());
-        $locator->set('service', new Service(function (LocatorInterface $locator) {
-            $result = new \stdClass();
-            $result->string = $locator->get('string');
-            $result->int = $locator->get('int');
-            return $result;
-        }));
-        $expected += ['service' => ['string', 'int']];
-        $expected += ['int' => []];
-        $locator->get('service');
-        $this->assertSame($expected, $locator->getDependencyMap());
-        $locator->set('main', new Service(function (LocatorInterface $locator) {
-            $result = new \stdClass();
-            $result->service = $locator->get('service');
-            return $result;
-        }));
-        $expected += ['main' => ['service']];
-        $locator->get('main');
-        $this->assertSame($expected, $locator->getDependencyMap());
-        $loader = $this->getMockBuilder(LoaderInterface::class)->getMock();
-        $loader->expects($this->never())
-            ->method('getContainerNames')
-            ->will($this->returnValue(['loader']));
-        $loader->expects($this->once())
-            ->method('has')
-            ->with('loader')
-            ->will($this->returnValue(true));
-        $loader->expects($this->once())
-            ->method('get')
-            ->with('loader')
-            ->will($this->returnValue(new Service(function (LocatorInterface $locator) {
-                $result = new \stdClass();
-                $result->main = $locator->get('main');
-                $result->int = $locator->get('int');
-                return $result;
-            })));
-        $locator->setLoaders([$loader]);
-        $expected += ['loader' => ['main', 'int']];
-        $locator->get('loader');
-        $this->assertSame($expected, $locator->getDependencyMap());
-    }
-
-    public function testGetContainerNames()
-    {
-        $locator = new Locator();
-        assertSame([], $locator->getContainerNames());
-
-        $locator['test'] = 123;
-        $expected = ['test'];
-        assertSame($expected, $locator->getContainerNames());
-
-        $loader = $this->getMockBuilder(LoaderInterface::class)->getMock();
-        $loader
-            ->method('getContainerNames')
-            ->willReturn(['loader']);;
-        $locator->setLoaders([$loader]);
-        $expected[] = 'loader';
-        assertSame($expected, $locator->getContainerNames());
-
-        $loader2 = $this->getMockBuilder(LoaderInterface::class)->getMock();
-        $loader2
-            ->method('getContainerNames')
-            ->willReturn(['loader', 'magic']);;
-        $locator->setLoaders([$loader2]);
-        $expected[] = 'magic';
-        assertSame($expected, $locator->getContainerNames());
-
+        $result = [];
+        assertSame($result, $locator->getDependencyMap());
+        $locator['test'] = 'magic';
+        assertSame($result, $locator->getDependencyMap());
+        $locator['test'];
+        $result += ['test' => []];
+        assertSame($result, $locator->getDependencyMap());
     }
 }
  

@@ -1,8 +1,6 @@
 {
   "name": "smpl/mydi",
   "description": "My small dependency injection implementation",
-  "minimum-stability": "stable",
-  "prefer-stable": true,
   "license": "GNUv2",
   "authors": [
     {
@@ -12,19 +10,20 @@
   ],
   "autoload": {
     "psr-4": {
-      "smpl\\mydi\\": [
-        "src/"
-      ]
+      "smpl\\mydi\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "smpl\\mydi\\test\\": "tests/",
-      "smpl\\mydi\\example\\": "example/"
+      "smpl\\mydi\\test\\": "tests/"
     }
   },
   "require": {
-    "php": ">=5.5.0"
+    "php": ">=5.5.0",
+    "container-interop/container-interop": "@stable"
+  },
+  "provide": {
+    "container-interop/container-interop-implementation": "@stable"
   },
   "require-dev": {
     "phpunit/phpunit": "@stable"

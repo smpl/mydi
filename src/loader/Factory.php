@@ -1,15 +1,13 @@
 <?php
-namespace smpl\mydi\container;
+namespace smpl\mydi\loader;
 
-use smpl\mydi\ContainerInterface;
+use smpl\mydi\LoaderInterface;
 use smpl\mydi\LocatorInterface;
 
 /**
  * Class Factory
- * @package smpl\mydi\container
- * @see https://github.com/smpl/mydi/issues/2
  */
-class Factory implements ContainerInterface
+class Factory implements LoaderInterface
 {
     /**
      * @var callable

@@ -2,22 +2,10 @@
 
 namespace smpl\mydi\test\Loader;
 
-use smpl\mydi\loader\KeyValuePhp;
-use smpl\mydi\LoaderInterface;
-use smpl\mydi\test\LoaderInterfaceTestTrait;
+use smpl\mydi\container\KeyValuePhp;
 
 class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
 {
-    use LoaderInterfaceTestTrait;
-
-    /**
-     * @return LoaderInterface
-     */
-    protected function createLoaderInterfaceObject()
-    {
-        return new KeyValuePhp('t.php');
-    }
-
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
@@ -30,6 +18,67 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
         parent::tearDownAfterClass();
         unlink('t.php');
         unlink('withOutput');
+    }
+
+    /**
+     * @dataProvider providerDataLoadertInterface
+     * @param $key
+     * @param $value
+     */
+    public function testLoadertInterfaceGet($key, $value)
+    {
+        $loader = new KeyValuePhp('t.php');
+        assertSame($value, $loader->get($key));
+    }
+
+    public function providerDataLoadertInterface()
+    {
+        $result = [];
+        foreach (self::getLoadertInterfaceConfiguration() as $key => $value) {
+            $call = [];
+            $call[] = $key;
+            $call[] = $value;
+            $result[] = $call;
+        }
+        return $result;
+    }
+
+    /**
+     * @return array
+     */
+    protected static function getLoadertInterfaceConfiguration()
+    {
+        return [
+            "int" => 15,
+            "string" => "some string",
+            "float" => 0.5,
+            "null" => null,
+            "arrayWithKeyInt" => ["test0", "test1"],
+            "arrayWithKeyString" => [
+                "key1" => "value1",
+                "key2" => 15
+            ]
+        ];
+    }
+
+    /**
+     * @expectedException \smpl\mydi\NotFoundException
+     * @expectedExceptionMessage Container: `dsfdsfsdfds`, is not defined
+     */
+    public function testLoadertInterfaceInvalidConfiguration()
+    {
+        $loader = new KeyValuePhp('t.php');
+        $loader->get('dsfdsfsdfds');
+    }
+
+    /**
+     * @expectedException \smpl\mydi\NotFoundException
+     * @expectedExceptionMessage Container: `not declared Container`, is not defined
+     */
+    public function testLoadertInterfaceGetNotDeclared()
+    {
+        $loader = new KeyValuePhp('t.php');
+        $loader->get('not declared Container');
     }
 
     /**
