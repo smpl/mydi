@@ -61,7 +61,6 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * В качестве ключа может быть строка это определено в интерфейсе смотри LocatorInterface и @see https://github.com/smpl/mydi/issues/18
      * @expectedException \InvalidArgumentException
      */
     public function testSetNameNotString()
@@ -115,8 +114,6 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Бесконечное разрешение зависимостей #10 @see https://github.com/smpl/mydi/issues/10
-     * Классный способ создать багию используя магические методы @see https://github.com/smpl/mydi/issues/13
      * @expectedException \smpl\mydi\ContainerException
      */
     public function testNotCorrectConfiguration()
@@ -145,13 +142,11 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @test
-     * @see https://github.com/smpl/mydi/issues/22
      * @dataProvider providerValidParams
      * @param string $name
      * @param mixed $value
      */
-    public function getUseLoader($name, $value)
+    public function testGetUseLoader($name, $value)
     {
         $locator = new Locator();
         $loader = $this->getMockBuilder(ContainerInterface::class)->getMock();
@@ -196,7 +191,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
      * @param $value
      * @dataProvider providerValidParams
      */
-    public function testLocatorInterfacArrayParams($name, $value)
+    public function testArrayParams($name, $value)
     {
         $locator = new Locator();
         $locator[$name] = $value;
@@ -207,7 +202,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testLocatorInterfacArraySetNameExist()
+    public function testArraySetNameExist()
     {
         $locator = new Locator();
         $locator['test'] = 1;
@@ -219,7 +214,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testLocatorInterfacArraySetNameNotString()
+    public function testArraySetNameNotString()
     {
         $locator = new Locator();
         $locator[1] = 1;
@@ -228,7 +223,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testLocatorInterfacArrayDeleteNotExist()
+    public function testArrayDeleteNotExist()
     {
         $locator = new Locator();
         unset($locator['test']);
@@ -237,7 +232,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \smpl\mydi\NotFoundException
      */
-    public function testLocatorInterfacArrayGetNameNotExist()
+    public function testArrayGetNameNotExist()
     {
         $locator = new Locator();
         $locator['test'];

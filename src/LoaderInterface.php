@@ -5,6 +5,7 @@ namespace smpl\mydi;
  * Interface LoaderInterface
  *
  * Отложенная загрузка, которая вызывается каждый раз, как запросят элемент в LocatorInterface
+ * Которая должна вернуть результат, который вернет LocatorInterface
  * @package smpl\mydi
  */
 interface LoaderInterface

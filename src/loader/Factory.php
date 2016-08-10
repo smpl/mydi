@@ -6,8 +6,6 @@ use smpl\mydi\LocatorInterface;
 
 /**
  * Class Factory
- * @package smpl\mydi\container
- * @see https://github.com/smpl/mydi/issues/2
  */
 class Factory implements LoaderInterface
 {

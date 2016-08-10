@@ -5,8 +5,6 @@ use smpl\mydi\LocatorInterface;
 
 /**
  * Class Service
- * @package smpl\mydi\container
- * @see https://github.com/smpl/mydi/issues/2
  */
 class Service extends Factory
 {
