@@ -120,13 +120,7 @@ class Locator implements LocatorInterface
     private function updateDependencyMap($name)
     {
         $dependencyName = $this->getDependencyName($name);
-        if (!array_key_exists($dependencyName, $this->dependencyMap)) {
-            $this->dependencyMap[$dependencyName] = [];
-        } else {
-            if (!array_key_exists($name, $this->dependencyMap)) {
-                $this->dependencyMap[$name] = [];
-            }
-        }
+        $this->prepareDependencyMap($name, $dependencyName);
         if ($name !== $dependencyName
             && !in_array($name, $this->dependencyMap[$dependencyName])
         ) {
@@ -159,5 +153,16 @@ class Locator implements LocatorInterface
             return $result;
         }
         return $result;
+    }
+
+    private function prepareDependencyMap($name, $dependencyName)
+    {
+        if (!array_key_exists($dependencyName, $this->dependencyMap)) {
+            $this->dependencyMap[$dependencyName] = [];
+        } else {
+            if (!array_key_exists($name, $this->dependencyMap)) {
+                $this->dependencyMap[$name] = [];
+            }
+        }
     }
 }

@@ -6,20 +6,7 @@ use smpl\mydi\container\KeyValuePhp;
 
 class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        parent::setUpBeforeClass();
-        file_put_contents('t.php', '<?php return ' . var_export(self::getLoadertInterfaceConfiguration(), true) . ';');
-        file_put_contents('withOutput', '123');
-    }
-
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        unlink('t.php');
-        unlink('withOutput');
-    }
-
+    private $pathConfiguration = __DIR__ . DIRECTORY_SEPARATOR . 'KeyValuePhpExample' . DIRECTORY_SEPARATOR;
     /**
      * @dataProvider providerDataLoadertInterface
      * @param $key
@@ -27,36 +14,27 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadertInterfaceGet($key, $value)
     {
-        $loader = new KeyValuePhp('t.php');
+        $loader = new KeyValuePhp($this->pathConfiguration . 't.php');
         assertSame($value, $loader->get($key));
     }
 
     public function providerDataLoadertInterface()
     {
-        $result = [];
-        foreach (self::getLoadertInterfaceConfiguration() as $key => $value) {
-            $call = [];
-            $call[] = $key;
-            $call[] = $value;
-            $result[] = $call;
-        }
-        return $result;
-    }
-
-    /**
-     * @return array
-     */
-    protected static function getLoadertInterfaceConfiguration()
-    {
         return [
-            "int" => 15,
-            "string" => "some string",
-            "float" => 0.5,
-            "null" => null,
-            "arrayWithKeyInt" => ["test0", "test1"],
-            "arrayWithKeyString" => [
-                "key1" => "value1",
-                "key2" => 15
+            ["int", 15],
+            ["string", "some string"],
+            ["float", 0.5],
+            ["null", null],
+            [
+                "arrayWithKeyInt",
+                ["test0", "test1"]
+            ],
+            [
+                "arrayWithKeyString",
+                [
+                    "key1" => "value1",
+                    "key2" => 15
+                ]
             ]
         ];
     }
@@ -67,7 +45,7 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadertInterfaceInvalidConfiguration()
     {
-        $loader = new KeyValuePhp('t.php');
+        $loader = new KeyValuePhp($this->pathConfiguration . 't.php');
         $loader->get('dsfdsfsdfds');
     }
 
@@ -77,7 +55,7 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadertInterfaceGetNotDeclared()
     {
-        $loader = new KeyValuePhp('t.php');
+        $loader = new KeyValuePhp($this->pathConfiguration . 't.php');
         $loader->get('not declared Container');
     }
 
@@ -86,7 +64,7 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWithOutput()
     {
-        $loader = new KeyValuePhp('withOutput');
+        $loader = new KeyValuePhp($this->pathConfiguration . 'withOutput');
         $loader->get('test');
     }
 }

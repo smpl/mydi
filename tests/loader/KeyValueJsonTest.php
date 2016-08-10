@@ -6,19 +6,6 @@ use smpl\mydi\container\KeyValueJson;
 
 class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
 {
-    public static function setUpBeforeClass()
-    {
-        parent::setUpBeforeClass();
-        file_put_contents('test.json', json_encode(self::getLoadertInterfaceConfiguration()));
-        file_put_contents('empty', '');
-    }
-
-    public static function tearDownAfterClass()
-    {
-        parent::tearDownAfterClass();
-        unlink('test.json');
-        unlink('empty');
-    }
 
     /**
      * @dataProvider providerDataLoadertInterface
@@ -27,36 +14,28 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadertInterfaceGet($key, $value)
     {
-        $loader = new KeyValueJson('test.json');
+        $loader = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'KeyValueJsonExample' . DIRECTORY_SEPARATOR . 'test.json');
         assertSame($value, $loader->get($key));
     }
 
     public function providerDataLoadertInterface()
     {
-        $result = [];
-        foreach (self::getLoadertInterfaceConfiguration() as $key => $value) {
-            $call = [];
-            $call[] = $key;
-            $call[] = $value;
-            $result[] = $call;
-        }
-        return $result;
-    }
 
-    /**
-     * @return array
-     */
-    protected static function getLoadertInterfaceConfiguration()
-    {
         return [
-            "int" => 15,
-            "string" => "some string",
-            "float" => 0.5,
-            "null" => null,
-            "arrayWithKeyInt" => ["test0", "test1"],
-            "arrayWithKeyString" => [
-                "key1" => "value1",
-                "key2" => 15
+            ["int", 15],
+            ["string", "some string"],
+            ["float", 0.5],
+            ["null", null],
+            [
+                "arrayWithKeyInt",
+                ["test0", "test1"]
+            ],
+            [
+                "arrayWithKeyString",
+                [
+                    "key1" => "value1",
+                    "key2" => 15
+                ]
             ]
         ];
     }
@@ -67,7 +46,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadertInterfaceInvalidConfiguration()
     {
-        $loader = new KeyValueJson('test.json');
+        $loader = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'KeyValueJsonExample' . DIRECTORY_SEPARATOR . 'test.json');
         $loader->get('dsfdsfsdfds');
     }
 
@@ -77,7 +56,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadertInterfaceGetNotDeclared()
     {
-        $loader = new KeyValueJson('test.json');
+        $loader = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'KeyValueJsonExample' . DIRECTORY_SEPARATOR . 'test.json');
         $loader->get('not declared Container');
     }
 
@@ -96,7 +75,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyFile()
     {
-        $loader = new KeyValueJson('empty');
+        $loader = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'KeyValueJsonExample' . DIRECTORY_SEPARATOR . 'empty.txt');
         $loader->get('test');
     }
 
