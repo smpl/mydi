@@ -1,5 +1,5 @@
 <?php
-namespace smpl\mydi\test\Loader;
+namespace smpl\mydi\test\loader;
 
 use Interop\Container\ContainerInterface;
 use smpl\mydi\container\IoC;

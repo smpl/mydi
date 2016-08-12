@@ -1,6 +1,5 @@
 <?php
-
-namespace smpl\mydi\test\Loader;
+namespace smpl\mydi\test\loader;
 
 use smpl\mydi\container\KeyValueJson;
 
