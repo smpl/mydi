@@ -1,5 +1,5 @@
 <?php
-namespace smpl\mydi\test;
+namespace smpl\mydi\test\unit;
 
 use Interop\Container\ContainerInterface;
 use smpl\mydi\loader\Service;
@@ -8,7 +8,7 @@ use smpl\mydi\Locator;
 
 class LocatorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testArraySetContainer()
+    public function testSetLoaderToArray()
     {
         $result = 123;
         $locator = new Locator();
@@ -49,10 +49,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($locator->has('magic'));
     }
 
-    /**
-     * Есть возможность заменить существующий контейнер на новое значение
-     */
-    public function testSetAddNameExist()
+    public function testSetReplace()
     {
         $locator = new Locator();
         $locator->set('test', 1);
@@ -79,7 +76,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \smpl\mydi\NotFoundException
+     * @expectedException \Interop\Container\Exception\NotFoundException
      * @expectedExceptionMessage Container: `test`, is not defined
      */
     public function testGetNameNotExist()
@@ -88,11 +85,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
         $locator->get('test');
     }
 
-    /**
-     * В случае если добавляется в контейнер объект с интерфейсом \smpl\mydi\test\сontainerInterface
-     * должен вызываться метод get у объекта, когда у Locator вызывают get
-     */
-    public function testSetContainer()
+    public function testSetLoader()
     {
         $result = 123;
         $locator = new Locator();

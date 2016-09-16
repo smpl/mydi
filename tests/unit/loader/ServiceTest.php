@@ -1,5 +1,5 @@
 <?php
-namespace smpl\mydi\test\сontainer;
+namespace smpl\mydi\test\unit\loader;
 
 use smpl\mydi\loader\Service;
 use smpl\mydi\LocatorInterface;

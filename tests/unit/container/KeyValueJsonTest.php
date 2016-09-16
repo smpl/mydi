@@ -1,23 +1,24 @@
 <?php
-namespace smpl\mydi\test\loader;
+namespace smpl\mydi\test\unit\container;
 
 use smpl\mydi\container\KeyValueJson;
 
 class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
 {
+    private $pathConfiguration = __DIR__ . DIRECTORY_SEPARATOR . 'KeyValueJsonExample' . DIRECTORY_SEPARATOR;
 
     /**
-     * @dataProvider providerDataLoadertInterface
+     * @dataProvider providerData
      * @param $key
      * @param $value
      */
-    public function testLoadertInterfaceGet($key, $value)
+    public function testGet($key, $value)
     {
-        $loader = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'KeyValueJsonExample' . DIRECTORY_SEPARATOR . 'test.json');
+        $loader = new KeyValueJson($this->pathConfiguration . 'test.json');
         assertSame($value, $loader->get($key));
     }
 
-    public function providerDataLoadertInterface()
+    public function providerData()
     {
 
         return [
@@ -39,13 +40,20 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testHas()
+    {
+        $loader = new KeyValueJson($this->pathConfiguration . 'test.json');
+        assertTrue($loader->has("int"));
+        assertFalse($loader->has('invalid name'));
+    }
+
     /**
      * @expectedException \smpl\mydi\NotFoundException
      * @expectedExceptionMessage Container: `dsfdsfsdfds`, is not defined
      */
-    public function testLoadertInterfaceInvalidConfiguration()
+    public function testInvalidConfiguration()
     {
-        $loader = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'KeyValueJsonExample' . DIRECTORY_SEPARATOR . 'test.json');
+        $loader = new KeyValueJson($this->pathConfiguration . 'test.json');
         $loader->get('dsfdsfsdfds');
     }
 
@@ -53,9 +61,9 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
      * @expectedException \smpl\mydi\NotFoundException
      * @expectedExceptionMessage Container: `not declared Container`, is not defined
      */
-    public function testLoadertInterfaceGetNotDeclared()
+    public function testGetNotDeclared()
     {
-        $loader = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'KeyValueJsonExample' . DIRECTORY_SEPARATOR . 'test.json');
+        $loader = new KeyValueJson($this->pathConfiguration . 'test.json');
         $loader->get('not declared Container');
     }
 
@@ -74,7 +82,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyFile()
     {
-        $loader = new KeyValueJson(__DIR__ . DIRECTORY_SEPARATOR . 'KeyValueJsonExample' . DIRECTORY_SEPARATOR . 'empty.txt');
+        $loader = new KeyValueJson($this->pathConfiguration . 'empty.txt');
         $loader->get('test');
     }
 

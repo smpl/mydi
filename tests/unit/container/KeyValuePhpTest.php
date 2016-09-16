@@ -1,5 +1,5 @@
 <?php
-namespace smpl\mydi\test\loader;
+namespace smpl\mydi\test\unit\container;
 
 use smpl\mydi\container\KeyValuePhp;
 
@@ -7,17 +7,17 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
 {
     private $pathConfiguration = __DIR__ . DIRECTORY_SEPARATOR . 'KeyValuePhpExample' . DIRECTORY_SEPARATOR;
     /**
-     * @dataProvider providerDataLoadertInterface
+     * @dataProvider providerDatae
      * @param $key
      * @param $value
      */
-    public function testLoadertInterfaceGet($key, $value)
+    public function testeGet($key, $value)
     {
         $loader = new KeyValuePhp($this->pathConfiguration . 't.php');
         assertSame($value, $loader->get($key));
     }
 
-    public function providerDataLoadertInterface()
+    public function providerDatae()
     {
         return [
             ["int", 15],
@@ -42,7 +42,7 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
      * @expectedException \smpl\mydi\NotFoundException
      * @expectedExceptionMessage Container: `dsfdsfsdfds`, is not defined
      */
-    public function testLoadertInterfaceInvalidConfiguration()
+    public function testeInvalidConfiguration()
     {
         $loader = new KeyValuePhp($this->pathConfiguration . 't.php');
         $loader->get('dsfdsfsdfds');
@@ -52,7 +52,7 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
      * @expectedException \smpl\mydi\NotFoundException
      * @expectedExceptionMessage Container: `not declared Container`, is not defined
      */
-    public function testLoadertInterfaceGetNotDeclared()
+    public function testeGetNotDeclared()
     {
         $loader = new KeyValuePhp($this->pathConfiguration . 't.php');
         $loader->get('not declared Container');
