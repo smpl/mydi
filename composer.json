@@ -1,7 +1,7 @@
 {
   "name": "smpl/mydi",
   "description": "My small dependency injection implementation",
-  "license": "GNUv2",
+    "license": "GNUv3",
   "authors": [
     {
       "name": "Evgeniy Kuvshinov",
