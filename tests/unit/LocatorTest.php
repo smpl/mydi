@@ -8,21 +8,6 @@ use smpl\mydi\Locator;
 
 class LocatorTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSetLoaderToArray()
-    {
-        $result = 123;
-        $locator = new Locator();
-        $mock = $this->getMockBuilder(LoaderInterface::class)->getMock();
-        $mock->expects($this->any())
-            ->method('get')
-            ->will($this->returnValue($result));
-        $locator['test'] = $mock;
-        $this->assertSame($result, $locator['test']);
-        $this->assertSame(true, isset($locator['test']));
-        unset($locator['test']);
-        $this->assertSame(false, isset($locator['test']));
-    }
-
     /**
      * @param string $name
      * @param $value
@@ -179,66 +164,14 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @param $name
-     * @param $value
-     * @dataProvider providerValidParams
-     */
-    public function testArrayParams($name, $value)
-    {
-        $locator = new Locator();
-        $locator[$name] = $value;
-        $this->assertSame($value, $locator[$name]);
-        $this->assertSame(true, isset($locator[$name]));
-        unset($locator[$name]);
-        $this->assertSame(false, isset($locator[$name]));
-    }
-
-
-    public function testArraySetNameExist()
-    {
-        $locator = new Locator();
-        $locator['test'] = 1;
-        $this->assertSame(1, $locator['test']);
-        $locator['test'] = 2;
-        $this->assertSame(2, $locator['test']);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testArraySetNameNotString()
-    {
-        $locator = new Locator();
-        $locator[1] = 1;
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testArrayDeleteNotExist()
-    {
-        $locator = new Locator();
-        unset($locator['test']);
-    }
-
-    /**
-     * @expectedException \smpl\mydi\NotFoundException
-     */
-    public function testArrayGetNameNotExist()
-    {
-        $locator = new Locator();
-        $locator['test'];
-    }
-
     public function testGetDependencyMap()
     {
         $locator = new Locator();
         $result = [];
         assertSame($result, $locator->getDependencyMap());
-        $locator['test'] = 'magic';
+        $locator->set('test', 'magic');
         assertSame($result, $locator->getDependencyMap());
-        $locator['test'];
+        $locator->get('test');
         $result += ['test' => []];
         assertSame($result, $locator->getDependencyMap());
     }

@@ -42,81 +42,6 @@ class Locator implements LocatorInterface
         return $result;
     }
 
-    public function set($name, $value)
-    {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('name must be string');
-        }
-        $this->values[$name] = $value;
-    }
-
-    public function has($name)
-    {
-        return array_key_exists($name, $this->values)
-        || !is_null($this->getLoaderForContainer($name));
-    }
-
-
-    public function delete($name)
-    {
-        if (!array_key_exists($name, $this->values)) {
-            throw new \InvalidArgumentException(sprintf('name is not exist, %s', $name));
-        }
-        unset($this->values[$name]);
-    }
-
-    public function getDependencyMap()
-    {
-        return $this->dependencyMap;
-    }
-
-    public function setContainers(array $containers)
-    {
-        foreach ($containers as $loader) {
-            if (!$loader instanceof ContainerInterface) {
-                throw new \InvalidArgumentException('Containers array must instance of ContainerInterface');
-            }
-        }
-        $this->containers = $containers;
-    }
-
-    public function getContainers()
-    {
-        return $this->containers;
-    }
-
-    public function offsetSet($offset, $value)
-    {
-        $this->set($offset, $value);
-    }
-
-    public function offsetGet($offset)
-    {
-        return $this->get($offset);
-    }
-
-    public function offsetExists($offset)
-    {
-        return $this->has($offset);
-    }
-
-    public function offsetUnset($offset)
-    {
-        $this->delete($offset);
-    }
-
-    private function getLoaderForContainer($name)
-    {
-        $result = null;
-        foreach ($this->getContainers() as $loader) {
-            if ($loader->has($name)) {
-                $result = $loader;
-                break;
-            }
-        }
-        return $result;
-    }
-
     private function updateDependencyMap($name)
     {
         $dependencyName = $this->getDependencyName($name);
@@ -137,6 +62,17 @@ class Locator implements LocatorInterface
         return $result;
     }
 
+    private function prepareDependencyMap($name, $dependencyName)
+    {
+        if (!array_key_exists($dependencyName, $this->dependencyMap)) {
+            $this->dependencyMap[$dependencyName] = [];
+        } else {
+            if (!array_key_exists($name, $this->dependencyMap)) {
+                $this->dependencyMap[$name] = [];
+            }
+        }
+    }
+
     private function load($name)
     {
         if (!array_key_exists($name, $this->values)) {
@@ -155,14 +91,57 @@ class Locator implements LocatorInterface
         return $result;
     }
 
-    private function prepareDependencyMap($name, $dependencyName)
+    private function getLoaderForContainer($name)
     {
-        if (!array_key_exists($dependencyName, $this->dependencyMap)) {
-            $this->dependencyMap[$dependencyName] = [];
-        } else {
-            if (!array_key_exists($name, $this->dependencyMap)) {
-                $this->dependencyMap[$name] = [];
+        $result = null;
+        foreach ($this->getContainers() as $loader) {
+            if ($loader->has($name)) {
+                $result = $loader;
+                break;
             }
         }
+        return $result;
+    }
+
+    public function getContainers()
+    {
+        return $this->containers;
+    }
+
+    public function setContainers(array $containers)
+    {
+        foreach ($containers as $loader) {
+            if (!$loader instanceof ContainerInterface) {
+                throw new \InvalidArgumentException('Containers array must instance of ContainerInterface');
+            }
+        }
+        $this->containers = $containers;
+    }
+
+    public function set($name, $value)
+    {
+        if (!is_string($name)) {
+            throw new \InvalidArgumentException('name must be string');
+        }
+        $this->values[$name] = $value;
+    }
+
+    public function has($name)
+    {
+        return array_key_exists($name, $this->values)
+            || !is_null($this->getLoaderForContainer($name));
+    }
+
+    public function delete($name)
+    {
+        if (!array_key_exists($name, $this->values)) {
+            throw new \InvalidArgumentException(sprintf('name is not exist, %s', $name));
+        }
+        unset($this->values[$name]);
+    }
+
+    public function getDependencyMap()
+    {
+        return $this->dependencyMap;
     }
 }

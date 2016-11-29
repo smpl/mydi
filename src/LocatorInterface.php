@@ -12,7 +12,7 @@ use Interop\Container\ContainerInterface;
  *  * Использовать другие ContainerInterface для разрешения зависимостей.
  * @package smpl\mydi
  */
-interface LocatorInterface extends \ArrayAccess, ContainerInterface
+interface LocatorInterface extends ContainerInterface
 {
 
     /**
