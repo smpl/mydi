@@ -15,7 +15,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "smpl\\mydi\\test\\": "tests/"
+      "smpl\\mydi\\test\\": "test/"
     }
   },
   "require": {
