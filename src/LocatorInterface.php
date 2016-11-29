@@ -18,7 +18,7 @@ interface LocatorInterface extends ContainerInterface
     /**
      * Добавить новое значение в контейнер
      * @param string $name Имя контейнера
-     * @param mixed $value Здесь может быть любое значение или даже объект с интерфейсом ContainerInterface
+     * @param mixed $value Здесь может быть любое значение.
      * @throws \InvalidArgumentException
      */
     public function set($name, $value);
@@ -35,15 +35,4 @@ interface LocatorInterface extends ContainerInterface
      * @return array
      */
     public function getDependencyMap();
-
-    /**
-     * @return ContainerInterface[]
-     */
-    public function getContainers();
-
-    /**
-     * @param ContainerInterface[] $loader
-     * @throw \InvalidArgumentException
-     */
-    public function setContainers(array $loader);
 }

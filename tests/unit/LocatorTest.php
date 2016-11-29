@@ -115,8 +115,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetLoadersInvalid()
     {
-        $locator = new Locator();
-        $locator->setContainers([1]);
+        new Locator([1]);
     }
 
     /**
@@ -126,7 +125,7 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUseLoader($name, $value)
     {
-        $locator = new Locator();
+
         $loader = $this->getMockBuilder(ContainerInterface::class)->getMock();
         $loader->expects($this->once())
             ->method('has')
@@ -137,19 +136,8 @@ class LocatorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($name))
             ->will($this->returnValue($value));
         /** @var LoaderInterface $loader */
-        $locator->setContainers([$loader]);
+        $locator = new Locator([$loader]);
         $this->assertSame($value, $locator->get($name));
-    }
-
-    public function testGetLoader()
-    {
-        $locator = new Locator();
-        $this->assertSame([], $locator->getContainers());
-
-        $result = [$this->getMockBuilder(ContainerInterface::class)->getMock()];
-        /** @var LoaderInterface[] $result */
-        $locator->setContainers($result);
-        $this->assertSame($result, $locator->getContainers());
     }
 
     public function providerValidParams()

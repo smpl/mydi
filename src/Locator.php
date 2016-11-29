@@ -21,6 +21,16 @@ class Locator implements LocatorInterface
         $this->setContainers($containers);
     }
 
+    private function setContainers(array $containers)
+    {
+        foreach ($containers as $loader) {
+            if (!$loader instanceof ContainerInterface) {
+                throw new \InvalidArgumentException('Containers array must instance of ContainerInterface');
+            }
+        }
+        $this->containers = $containers;
+    }
+
     public function get($name)
     {
         $this->updateDependencyMap($name);
@@ -103,19 +113,9 @@ class Locator implements LocatorInterface
         return $result;
     }
 
-    public function getContainers()
+    private function getContainers()
     {
         return $this->containers;
-    }
-
-    public function setContainers(array $containers)
-    {
-        foreach ($containers as $loader) {
-            if (!$loader instanceof ContainerInterface) {
-                throw new \InvalidArgumentException('Containers array must instance of ContainerInterface');
-            }
-        }
-        $this->containers = $containers;
     }
 
     public function set($name, $value)
