@@ -11,9 +11,24 @@ class AliasTest extends \PHPUnit_Framework_TestCase
         $alias = new Alias('test');
         $locator = $this->getMockBuilder(LocatorInterface::class)->getMock();
         $locator->method('get')
-            ->will($this->returnValue(123));
+            ->willReturn(123);
         /** @var LocatorInterface $locator */
         assertSame(123, $alias->get($locator));
         assertSame(123, $alias->get($locator));
+    }
+
+    public function testGetName()
+    {
+        $alias = new Alias('magic');
+        $this->assertSame('magic', $alias->getName());
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Name must be string
+     */
+    public function testNameNotString()
+    {
+        new Alias(123);
     }
 }

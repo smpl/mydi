@@ -16,7 +16,7 @@ class ObjectFactory implements LoaderInterface
     public function __construct(\ReflectionClass $class, array $constructArgumentNames = [])
     {
         $this->class = $class;
-        $this->constructArgumentNames = $constructArgumentNames;
+        $this->setConstructArgumentNames($constructArgumentNames);
     }
 
     /**
@@ -44,4 +44,34 @@ class ObjectFactory implements LoaderInterface
         }
         return $this->class->newInstanceArgs($arguments);
     }
+
+    /**
+     * @return \ReflectionClass
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getConstructArgumentNames()
+    {
+        return $this->constructArgumentNames;
+    }
+
+    /**
+     * @param string[] $constructArgumentNames
+     */
+    public function setConstructArgumentNames($constructArgumentNames)
+    {
+        foreach ($constructArgumentNames as $argumentName) {
+            if (!is_string($argumentName)) {
+                throw new \InvalidArgumentException('Constructor arguments must be array of string');
+            }
+        }
+        $this->constructArgumentNames = $constructArgumentNames;
+    }
+
 }
