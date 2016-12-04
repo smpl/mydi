@@ -4,8 +4,8 @@ namespace smpl\mydi\tests\unit\container;
 use smpl\mydi\container\ReflectionAlias;
 use smpl\mydi\loader\Alias;
 use smpl\mydi\test\example\ClassAliasAnnotation;
+use smpl\mydi\test\example\ClassAliasAnnotationWithoutTarget;
 use smpl\mydi\test\example\ClassEmpty;
-use smpl\mydi\test\example\ClassFactoryAnnotation;
 
 class ReflectionAliasTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,7 +39,7 @@ class ReflectionAliasTest extends \PHPUnit_Framework_TestCase
     public function testGetWithoutTarget()
     {
         $alias = new ReflectionAlias();
-        $alias->get(ClassFactoryAnnotation::class);
+        $alias->get(ClassAliasAnnotationWithoutTarget::class);
     }
 
     /**

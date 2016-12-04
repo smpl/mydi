@@ -5,7 +5,7 @@ use smpl\mydi\container\IoC;
 
 class IoCTest extends \PHPUnit_Framework_TestCase
 {
-    private $pathConfiguration = __DIR__ . DIRECTORY_SEPARATOR . 'IocTestExample';
+    private $pathConfiguration = __DIR__ . '/../../example/IocConfig';
 
     public function testHas()
     {
@@ -34,7 +34,6 @@ class IoCTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Interop\Container\Exception\NotFoundException
-     * @expectedExceptionMessage Container: `not declared Container`, is not defined
      */
     public function testNotDeclared()
     {

@@ -5,7 +5,7 @@ use smpl\mydi\container\KeyValuePhp;
 
 class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
 {
-    private $pathConfiguration = __DIR__ . DIRECTORY_SEPARATOR . 'KeyValuePhpExample' . DIRECTORY_SEPARATOR;
+    private $pathConfiguration = __DIR__ . '/../../example/KeyValuePhpConfig/';
     /**
      * @dataProvider providerDatae
      * @param $key
@@ -39,8 +39,7 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \smpl\mydi\NotFoundException
-     * @expectedExceptionMessage Container: `dsfdsfsdfds`, is not defined
+     * @expectedException \Interop\Container\Exception\NotFoundException
      */
     public function testeInvalidConfiguration()
     {
@@ -49,8 +48,7 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \smpl\mydi\NotFoundException
-     * @expectedExceptionMessage Container: `not declared Container`, is not defined
+     * @expectedException \Interop\Container\Exception\NotFoundException
      */
     public function testeGetNotDeclared()
     {

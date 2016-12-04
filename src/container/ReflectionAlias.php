@@ -16,7 +16,7 @@ class ReflectionAlias extends AbstractReflection
     {
         $target = null;
         $match = [];
-        if (is_null($class = static::getReflection($id))) {
+        if (is_null($class = self::getReflection($id)) || !$this->has($id)) {
             throw new NotFoundException();
         }
         preg_match('#@' . $this->annotation . ' ([\w\\\\]*)#', $class->getDocComment(), $match);

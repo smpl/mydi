@@ -19,7 +19,7 @@ class ReflectionService extends AbstractReflection
 
     public function get($id)
     {
-        if (!$this->has($id)) {
+        if (is_null($class = self::getReflection($id)) || !$this->has($id)) {
             throw new NotFoundException();
         }
         $class = static::getReflection($id);

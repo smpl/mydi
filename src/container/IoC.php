@@ -20,7 +20,7 @@ class IoC implements ContainerInterface
     public function get($containerName)
     {
         if (!$this->has($containerName)) {
-            throw new NotFoundException(sprintf('Container: `%s`, is not defined', $containerName));
+            throw new NotFoundException;
         }
         ob_start();
         /** @noinspection PhpIncludeInspection */
