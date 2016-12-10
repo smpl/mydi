@@ -14,14 +14,17 @@ trait KeyValueTrait
      * @var array
      */
     private $configuration = [];
-    private $fileName;
+    private $filePath;
 
-    public function __construct($fileName)
+    /**
+     * @param string $filePath Полный путь до файла конфигурации
+     */
+    public function __construct($filePath)
     {
-        if (!is_string($fileName)) {
-            throw new \InvalidArgumentException('FileName must be string');
+        if (!is_string($filePath)) {
+            throw new \InvalidArgumentException('FilePath must be string');
         }
-        $this->fileName = $fileName;
+        $this->filePath = $filePath;
     }
 
     public function get($containerName)
@@ -43,16 +46,16 @@ trait KeyValueTrait
     private function getConfiguration()
     {
         if ($this->isLoad === false) {
-            $this->configuration = $this->loadFile($this->fileName);
+            $this->configuration = $this->loadFile($this->filePath);
             $this->isLoad = true;
         }
         return is_array($this->configuration) ? $this->configuration : [];
     }
 
     /**
-     * @param $fileName
-     * @return array
-     * @throws ContainerException
+     * @param string $filePath полный путь до файла конфигурации
+     * @return array Результат в виде ассоциативного массива
+     * @throws ContainerException в случае если проблемы с загрузкой файла
      */
-    abstract protected function loadFile($fileName);
+    abstract protected function loadFile($filePath);
 }

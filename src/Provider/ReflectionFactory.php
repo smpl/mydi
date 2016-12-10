@@ -10,7 +10,7 @@ final class ReflectionFactory implements ProviderInterface
 
     /**
      * AbstractExecutor constructor.
-     * @param string $annotation Имя анотация в заголовке класс, для которого будет применяться данный Executor
+     * @param string $annotation Анотация в заголовке класс, если указать пустую строку то будет применятся ко всем
      * @param string $construct Имя анотации что может быть использованна в конструкторе для переопределения зависимостей
      */
     public function __construct($annotation = 'factory', $construct = 'inject')

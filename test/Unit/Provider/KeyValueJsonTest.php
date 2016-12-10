@@ -85,7 +85,7 @@ class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage FileName must be string
+     * @expectedExceptionMessage FilePath must be string
      */
     public function testFileNameNotString()
     {

@@ -7,9 +7,9 @@ final class KeyValuePhp implements ProviderInterface
 {
     use KeyValueTrait;
 
-    protected function loadFile($fileName)
+    protected function loadFile($filePath)
     {
         /** @noinspection PhpIncludeInspection */
-        return include $fileName;
+        return include $filePath;
     }
 }

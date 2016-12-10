@@ -1,7 +1,7 @@
 <?php
 namespace Smpl\Mydi\Test\Unit\Loader;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Smpl\Mydi\Loader\Service;
 
 class ServiceTest extends \PHPUnit_Framework_TestCase

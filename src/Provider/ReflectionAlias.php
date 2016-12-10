@@ -10,6 +10,10 @@ final class ReflectionAlias implements ProviderInterface
 {
     use ReflectionTrait;
 
+    /**
+     * ReflectionAlias constructor.
+     * @param string $annotation Имя анотации что должна быть у объекта.
+     */
     public function __construct($annotation = 'alias')
     {
         $this->setAnnotation($annotation);

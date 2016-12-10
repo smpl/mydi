@@ -11,6 +11,9 @@ final class DynamicFile implements ProviderInterface
      */
     private $basePath;
 
+    /**
+     * @param string $basePath директория где хранятся файлы конфигурации
+     */
     public function __construct($basePath)
     {
         $this->basePath = realpath($basePath);

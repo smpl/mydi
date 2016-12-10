@@ -1,7 +1,7 @@
 <?php
 namespace Smpl\Mydi\Loader;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 trait ObjectTrait
 {

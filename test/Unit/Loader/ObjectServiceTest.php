@@ -1,7 +1,7 @@
 <?php
 namespace Smpl\Mydi\tests\unit\loader;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Smpl\Mydi\Loader\ObjectService;
 use Smpl\Mydi\Test\Example\ClassArgument;
 use Smpl\Mydi\Test\Example\ClassEmpty;

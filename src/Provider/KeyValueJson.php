@@ -8,16 +8,16 @@ final class KeyValueJson implements ProviderInterface
 {
     use KeyValueTrait;
 
-    protected function loadFile($fileName)
+    protected function loadFile($filePath)
     {
-        if (!is_readable($fileName)) {
+        if (!is_readable($filePath)) {
             throw new ContainerException(
                 sprintf(
                     'FileName: `%s` must be readable',
-                    $fileName
+                    $filePath
                 )
             );
         }
-        return json_decode(file_get_contents($fileName), true);
+        return json_decode(file_get_contents($filePath), true);
     }
 }

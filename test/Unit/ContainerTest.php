@@ -1,7 +1,7 @@
 <?php
 namespace Smpl\Mydi\Test\Unit;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Smpl\Mydi\Container;
 use Smpl\Mydi\Loader\Service;
 use Smpl\Mydi\LoaderInterface;

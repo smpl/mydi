@@ -1,7 +1,7 @@
 <?php
 namespace Smpl\Mydi\Loader;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use Smpl\Mydi\LoaderInterface;
 
 final class Factory implements LoaderInterface

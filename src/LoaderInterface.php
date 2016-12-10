@@ -1,7 +1,7 @@
 <?php
 namespace Smpl\Mydi;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 
 interface LoaderInterface
 {

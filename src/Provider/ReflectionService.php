@@ -10,8 +10,8 @@ final class ReflectionService implements ProviderInterface
 
     /**
      * AbstractExecutor constructor.
-     * @param string $annotation Имя анотация в заголовке класс, для которого будет применяться данный Executor
-     * @param string $construct Имя анотации что может быть использованна в конструкторе для переопределения зависимостей
+     * @param string $annotation Анотация в заголовке класс, если указать пустую строку то будет применятся ко всем
+     * @param string $construct Аанотации что может быть использованна в конструкторе для переопределения зависимостей
      */
     public function __construct($annotation = 'service', $construct = 'inject')
     {
