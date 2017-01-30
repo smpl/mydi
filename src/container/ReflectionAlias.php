@@ -5,8 +5,10 @@ use smpl\mydi\ContainerException;
 use smpl\mydi\loader\Alias;
 use smpl\mydi\NotFoundException;
 
-class ReflectionAlias extends AbstractReflection
+class ReflectionAlias
 {
+    use ReflectionTrait;
+
     public function __construct($annotation = 'alias')
     {
         $this->setAnnotation($annotation);
@@ -14,29 +16,22 @@ class ReflectionAlias extends AbstractReflection
 
     public function get($id)
     {
-        $target = null;
-        $match = [];
-        if (is_null($class = self::getReflection($id)) || !$this->has($id)) {
+        $class = static::getReflection($id);
+        if (!$this->has($id)) {
             throw new NotFoundException();
         }
-        preg_match('#@' . $this->annotation . ' ([\w\\\\]*)#', $class->getDocComment(), $match);
-        if (array_key_exists(1, $match)) {
-            $target = $match[1];
-        }
-        if (is_null($target)) {
-            throw new ContainerException('Alias target is unknow');
-        }
-        return new Alias($target);
+        return new Alias($this->getTarget($class));
     }
 
-    public function has($id)
+    private function getTarget(\ReflectionClass $class)
     {
-        $result = false;
-        $class = static::getReflection($id);
-        if (!is_null($class) && strpos($class->getDocComment(), '@' . $this->annotation) !== false) {
-            $result = true;
+        $match = [];
+        preg_match('#@' . $this->annotation . ' ([\w\\\\]*)#', $class->getDocComment(), $match);
+        if (!array_key_exists(1, $match) || is_null($match[1])) {
+            throw new ContainerException('Alias target is unknow');
         }
-        return $result;
+        return $match[1];
     }
+
 
 }

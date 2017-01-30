@@ -17,9 +17,18 @@ class ReflectionServiceTest extends \PHPUnit_Framework_TestCase
     {
         $executor = new ReflectionService();
         $result = $executor->get(ClassServiceAnnotation::class);
-        $this->assertSame(ClassServiceAnnotation::class, $result->getClass()->getName());
-        $this->assertSame([], $result->getConstructArgumentNames());
+        $this->assertSame(ObjectService::class, get_class($result));
+        $this->assertSame(ClassServiceAnnotation::class, self::getPrivateProperty($result, 'class')->getName());
+        $this->assertSame([], self::getPrivateProperty($result, 'constructArgumentNames'));
 
+    }
+
+    private static function getPrivateProperty($obj, $propertyName)
+    {
+        $r = new \ReflectionClass($obj);
+        $p = $r->getProperty($propertyName);
+        $p->setAccessible(true);
+        return $p->getValue($obj);
     }
 
     public function testHas()
@@ -40,7 +49,7 @@ class ReflectionServiceTest extends \PHPUnit_Framework_TestCase
     {
         $executor = new ReflectionService('', 'magic');
         $result = $executor->get(ClassProxyInjectMagic::class);
-        $this->assertSame([ClassStd::class], $result->getConstructArgumentNames());
+        $this->assertSame([ClassStd::class], self::getPrivateProperty($result, 'constructArgumentNames'));
     }
 
     /**
@@ -52,7 +61,7 @@ class ReflectionServiceTest extends \PHPUnit_Framework_TestCase
     {
         $executor = new ReflectionService('');
         $result = $executor->get($name);
-        $this->assertSame($assert, $result->getConstructArgumentNames());
+        $this->assertSame($assert, self::getPrivateProperty($result, 'constructArgumentNames'));
     }
 
     public function dataProviderValid()

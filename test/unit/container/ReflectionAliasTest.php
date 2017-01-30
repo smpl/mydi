@@ -48,6 +48,6 @@ class ReflectionAliasTest extends \PHPUnit_Framework_TestCase
     public function testGetInvalidClass()
     {
         $alias = new ReflectionAlias();
-        $alias->get('invalid class name');
+        $alias->get(ClassEmpty::class);
     }
 }

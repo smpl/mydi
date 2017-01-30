@@ -36,21 +36,29 @@ class ObjectServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetClass()
     {
         $object = new ObjectService(new \ReflectionClass(ClassEmpty::class));
-        $this->assertSame(ClassEmpty::class, $object->getClass()->getName());
+        $this->assertSame(ClassEmpty::class, self::getPrivateProperty($object, 'class')->getName());
+    }
+
+    private static function getPrivateProperty($obj, $propertyName)
+    {
+        $r = new \ReflectionClass($obj);
+        $p = $r->getProperty($propertyName);
+        $p->setAccessible(true);
+        return $p->getValue($obj);
     }
 
     public function testGetConstructArgumentNames()
     {
         $object = new ObjectService(new \ReflectionClass(ClassEmpty::class), ['123']);
-        $this->assertSame(['123'], $object->getConstructArgumentNames());
+        $this->assertSame(['123'], self::getPrivateProperty($object, 'constructArgumentNames'));
     }
 
     public function testFactory()
     {
         $object = ObjectService::factory(ClassEmpty::class);
-        $this->assertSame(ClassEmpty::class, $object->getClass()->getName());
+        $this->assertSame(ClassEmpty::class, self::getPrivateProperty($object, 'class')->getName());
         $object = new ObjectService(new \ReflectionClass(ClassEmpty::class), ['123']);
-        $this->assertSame(['123'], $object->getConstructArgumentNames());
+        $this->assertSame(['123'], self::getPrivateProperty($object, 'constructArgumentNames'));
     }
 
     /**
@@ -61,7 +69,6 @@ class ObjectServiceTest extends \PHPUnit_Framework_TestCase
     {
         new ObjectService(new \ReflectionClass(ClassEmpty::class), [123]);
     }
-
 
     /**
      * @expectedException \InvalidArgumentException

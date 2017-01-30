@@ -1,60 +1,26 @@
 <?php
 namespace smpl\mydi\container;
 
-use Interop\Container\ContainerInterface;
+use smpl\mydi\NotFoundException;
 
-abstract class AbstractReflection implements ContainerInterface
+trait ReflectionObjectTrait
 {
-    private static $reflections = [];
-    /**
-     * @var string
-     */
-    protected $annotation = '';
+    use ReflectionTrait;
     /**
      * @var string
      */
     protected $construct = '';
 
-    /**
-     * @param string $id
-     * @return \ReflectionClass|null
-     */
-    protected static function getReflection($id)
+    protected function getLoader($id, $loaderName)
     {
-        $result = null;
-        if (array_key_exists($id, self::$reflections)) {
-            $result = self::$reflections[$id];
-        } else {
-            if (static::isReflection($id)) {
-                $result = new \ReflectionClass($id);
-                self::$reflections[$id] = $result;
-            }
+        if (!$this->has($id)) {
+            throw new NotFoundException();
         }
-        return $result;
+        $class = static::getReflection($id);
+        return new $loaderName($class, $this->getInstanceArgs($class));
     }
 
-    private static function isReflection($id)
-    {
-        return is_string($id) && (class_exists($id) || interface_exists($id));
-    }
-
-    protected function setAnnotation($annotation)
-    {
-        if (!is_string($annotation)) {
-            throw new \InvalidArgumentException('Annotation must be string');
-        }
-        $this->annotation = $annotation;
-    }
-
-    protected function setConstruct($construct)
-    {
-        if (!is_string($construct)) {
-            throw new \InvalidArgumentException('Annotation to constructor must be string');
-        }
-        $this->construct = $construct;
-    }
-
-    protected function getInstanceArgs(\ReflectionClass $class)
+    private function getInstanceArgs(\ReflectionClass $class)
     {
         $result = [];
         $annotations = self::getInstanceByAnnotation(self::getConstructorDoc($class), $this->construct);
@@ -109,4 +75,11 @@ abstract class AbstractReflection implements ContainerInterface
         return $result;
     }
 
+    protected function setConstruct($construct)
+    {
+        if (!is_string($construct)) {
+            throw new \InvalidArgumentException('Annotation to constructor must be string');
+        }
+        $this->construct = $construct;
+    }
 }
