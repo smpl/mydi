@@ -16,7 +16,6 @@ class KeyValueJson extends AbstractKeyValue
                 )
             );
         }
-        $result = json_decode(file_get_contents($fileName), true);
-        return $result;
+        return json_decode(file_get_contents($fileName), true);
     }
 }

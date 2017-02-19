@@ -46,8 +46,7 @@ trait ObjectTrait
         if (!is_string($className)) {
             throw new \InvalidArgumentException('ClassName must be string');
         }
-        $class = new \ReflectionClass($className);
-        return new static($class, $constructArgumentNames);
+        return new static(new \ReflectionClass($className), $constructArgumentNames);
     }
 
     public function get(LocatorInterface $locator)

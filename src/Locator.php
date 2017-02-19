@@ -44,7 +44,7 @@ class Locator implements LocatorInterface
                 )
             );
         }
-        array_push($this->calls, $name);
+        $this->calls[] = $name;
 
         $result = $this->load($name);
 
