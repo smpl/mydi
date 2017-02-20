@@ -10,12 +10,12 @@
   ],
   "autoload": {
     "psr-4": {
-      "smpl\\mydi\\": "src/"
+      "Smpl\\Mydi\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "smpl\\mydi\\test\\": "test/"
+      "Smpl\\Mydi\\Test\\": "test/"
     }
   },
   "require": {
@@ -23,7 +23,8 @@
     "container-interop/container-interop": "@stable"
   },
   "provide": {
-    "container-interop/container-interop-implementation": "@stable"
+    "container-interop/container-interop-implementation": "@stable",
+    "psr/container-implementation": "@stable"
   },
   "require-dev": {
       "phpunit/phpunit": "5.*"

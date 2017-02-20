@@ -1,0 +1,25 @@
+<?php
+namespace Smpl\Mydi\Test\Unit\Loader;
+
+use Interop\Container\ContainerInterface;
+use Smpl\Mydi\Loader\Service;
+
+class ServiceTest extends \PHPUnit_Framework_TestCase
+{
+    public function testGet()
+    {
+        $service = new Service(function () {
+            return new \stdClass();
+        });
+        /** @var ContainerInterface $locator */
+        $locator = $this->getMockBuilder(ContainerInterface::class)->getMock();
+        $result = $service->get($locator);
+        $this->assertSame($result, $service->get($locator));
+
+        $service = new Service(function (ContainerInterface $locator) {
+            return $locator;
+        });
+        $this->assertSame($locator, $service->get($locator));
+    }
+}
+ 
