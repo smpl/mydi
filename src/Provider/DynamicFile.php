@@ -46,7 +46,7 @@ final class DynamicFile implements ProviderInterface
      * @param string $containerName
      * @return string
      */
-    protected function containerNameToPath($containerName)
+    private function containerNameToPath($containerName)
     {
         $result = str_replace('_', DIRECTORY_SEPARATOR, $containerName);
         $result = str_replace('\\', DIRECTORY_SEPARATOR, $result);

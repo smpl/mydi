@@ -9,8 +9,8 @@ trait ObjectTrait
     /**
      * @var \ReflectionClass
      */
-    protected $class;
-    protected $constructArgumentNames;
+    private $class;
+    private $constructArgumentNames;
 
     /**
      * @param \ReflectionClass $class
@@ -25,7 +25,7 @@ trait ObjectTrait
     /**
      * @param string[] $constructArgumentNames
      */
-    protected function setConstructArgumentNames($constructArgumentNames)
+    private function setConstructArgumentNames($constructArgumentNames)
     {
         foreach ($constructArgumentNames as $argumentName) {
             if (!is_string($argumentName)) {

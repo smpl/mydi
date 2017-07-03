@@ -9,7 +9,7 @@ final class Factory implements LoaderInterface
     /**
      * @var callable
      */
-    protected $callback;
+    private $callback;
 
     /**
      * @param \Closure $callback Анонимная функция которая возвращает необходимый результат

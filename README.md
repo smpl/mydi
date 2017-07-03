@@ -47,7 +47,7 @@ composer require smpl/mydi @stable
         * [Loader Service](doc/loader/service.md)
         * [Loader Factory](doc/loader/factory.md)
         * [Loader Alias](doc/loader/alias.md)
-        * [Loader ObjectService](doc/loader/ObjectService.md)
+        * [Loader ObjectService](doc/loader/objectService.md)
         * [Loader ObjectFactory](doc/loader/objectFactory.md)
 * [Пример создания своего провайдера](doc/customProvider.md)
 * [Пример демонстрирующий приоритет провайдеров](doc/providerPrioritet.md)
