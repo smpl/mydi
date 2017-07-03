@@ -10,7 +10,7 @@ trait ReflectionTrait
     /**
      * @var string
      */
-    protected $annotation = '';
+    private $annotation = '';
 
     public function has($id)
     {

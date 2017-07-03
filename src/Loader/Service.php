@@ -9,7 +9,7 @@ final class Service implements LoaderInterface
     /**
      * @var callable
      */
-    protected $callback;
+    private $callback;
     private $result;
     private $isCalled = false;
 

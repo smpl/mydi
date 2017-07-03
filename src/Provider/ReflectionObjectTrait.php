@@ -10,7 +10,7 @@ trait ReflectionObjectTrait
     /**
      * @var string
      */
-    protected $construct = '';
+    private $construct = '';
 
     protected function getLoader($id, $loaderName)
     {

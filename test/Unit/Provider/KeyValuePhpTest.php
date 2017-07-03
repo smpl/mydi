@@ -62,6 +62,7 @@ class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetWithOutput()
     {
+        $this->setOutputCallback(function() {});
         $loader = new KeyValuePhp($this->pathConfiguration . 'withOutput');
         $loader->get('test');
     }
