@@ -3,25 +3,11 @@ namespace Smpl\Mydi\Test\Unit;
 
 use Psr\Container\ContainerInterface;
 use Smpl\Mydi\Container;
-use Smpl\Mydi\Loader\Service;
 use Smpl\Mydi\LoaderInterface;
+use Smpl\Mydi\ProviderInterface;
 
 class ContainerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @param string $name
-     * @param $value
-     * @dataProvider providerValidParams
-     */
-    public function testSetParams($name, $value)
-    {
-        $locator = new Container();
-        $locator->set($name, $value);
-        $this->assertSame($value, $locator->get($name));
-        $locator->delete($name);
-        $this->assertSame(false, $locator->has($name));
-    }
-
     public function testHasFromLoader()
     {
         $mockLoader = $this->getMockBuilder(ContainerInterface::class)->getMock();
@@ -34,30 +20,14 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($locator->has('magic'));
     }
 
-    public function testSetReplace()
-    {
-        $locator = new Container();
-        $locator->set('test', 1);
-        $locator->set('test', 2);
-        $this->assertSame(2, $locator->get('test'));
-    }
-
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Psr\Container\ContainerExceptionInterface
+     * @expectedExceptionMessage Container name must be string
      */
-    public function testSetNameNotString()
+    public function testGetNotString()
     {
         $locator = new Container();
-        $locator->set(1, 1);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testDeleteNotExist()
-    {
-        $locator = new Container();
-        $locator->delete('test');
+        $locator->get(123);
     }
 
     /**
@@ -73,40 +43,47 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     public function testSetLoader()
     {
         $result = 123;
-        $locator = new Container();
-        $mock = $this->getMockBuilder(LoaderInterface::class)->getMock();
-        $mock->expects($this->any())
+
+        $loader = $this->getMockBuilder(LoaderInterface::class)->getMock();
+        $loader->expects($this->any())
             ->method('get')
             ->will($this->returnValue($result));
-        $locator->set('test', $mock);
+        $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
+        $provider->method('has')->willReturn(true);
+        $provider->method('get')->willReturn($loader);
+        $locator = new Container([$provider]);
         $this->assertSame($result, $locator->get('test'));
-        $locator->delete('test');
-        $this->assertSame(false, $locator->has('test'));
-
-        $locator->set('test', function () {
-            return new \stdClass();
-        });
-        $result = $locator->get('test');
-        $this->assertSame($result, $locator->get('test'));
-        $this->assertTrue($result instanceof \Closure);
     }
 
     /**
      * @expectedException \Psr\Container\ContainerExceptionInterface
+     * @expectedExceptionMessage Infinite recursion in the configuration, name called again: a, call stack: a, b.
      */
     public function testNotCorrectConfiguration()
     {
-        $locator = new Container();
-        $locator->set('a', new Service(function () use ($locator) {
+        $loaderA = $this->getMockBuilder(LoaderInterface::class)->getMock();
+        $loaderA->method('get')->willReturnCallback(function (ContainerInterface $locator) {
             $obj = new \stdClass();
             $obj->test = $locator->get('b');
             return $obj;
-        }));
-        $locator->set('b', new Service(function () use ($locator) {
+        });
+
+        $loaderB = $this->getMockBuilder(LoaderInterface::class)->getMock();
+        $loaderB->method('get')->willReturnCallback(function (ContainerInterface $locator) {
             $obj = new \stdClass();
             $obj->test = $locator->get('a');
             return $obj;
-        }));
+        });
+        $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
+        $provider->method('has')->willReturn(true);
+        $provider->method('get')->willReturnCallback(function ($name) use ($loaderA, $loaderB) {
+            $result = $loaderA;
+            if ($name === 'b') {
+                $result = $loaderB;
+            }
+            return $result;
+        });
+        $locator = new Container([$provider]);
         $locator->get('a');
     }
 
@@ -154,10 +131,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDependencyMap()
     {
-        $locator = new Container();
+        $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
+        $provider->method('has')->willReturn(true);
+        $provider->method('get')->willReturn('123');
+        $locator = new Container([$provider]);
         $result = [];
-        assertSame($result, $locator->getDependencyMap());
-        $locator->set('test', 'magic');
         assertSame($result, $locator->getDependencyMap());
         $locator->get('test');
         $result += ['test' => []];

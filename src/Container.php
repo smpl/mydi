@@ -1,4 +1,5 @@
 <?php
+
 namespace Smpl\Mydi;
 
 use Psr\Container\ContainerInterface;
@@ -23,6 +24,27 @@ final class Container implements ContainerInterface
         $this->setProviders($providers);
     }
 
+    public function get($name)
+    {
+        $this->checkName($name);
+        $this->updateDependencyMap($name);
+        $this->checkInfiniteRecursion($name);
+        $result = $this->load($name);
+        $this->updateCalls();
+        return $result;
+    }
+
+    public function has($name)
+    {
+        return array_key_exists($name, $this->values)
+            || !is_null($this->getLoaderForContainer($name));
+    }
+
+    public function getDependencyMap()
+    {
+        return $this->dependencyMap;
+    }
+
     private function setProviders(array $providers)
     {
         foreach ($providers as $provider) {
@@ -31,27 +53,6 @@ final class Container implements ContainerInterface
             }
         }
         $this->providers = $providers;
-    }
-
-    public function get($name)
-    {
-        $this->updateDependencyMap($name);
-
-        if (array_search($name, $this->calls) !== false) {
-            throw new ContainerException(
-                sprintf(
-                    'Infinite recursion in the configuration, name called again: %s, call stack: %s. ',
-                    $name,
-                    implode(', ', $this->calls)
-                )
-            );
-        }
-        $this->calls[] = $name;
-
-        $result = $this->load($name);
-
-        array_pop($this->calls);
-        return $result;
     }
 
     private function updateDependencyMap($name)
@@ -88,11 +89,11 @@ final class Container implements ContainerInterface
     private function load($name)
     {
         if (!array_key_exists($name, $this->values)) {
-            $result = $this->getLoaderForContainer($name);
-            if (is_null($result)) {
+            $loader = $this->getLoaderForContainer($name);
+            if (is_null($loader)) {
                 throw new NotFoundException(sprintf('Container: `%s`, is not defined', $name));
             }
-            $this->set($name, $result->get($name));
+            $this->values[$name] = $loader->get($name);
         }
 
         $result = $this->values[$name];
@@ -106,7 +107,7 @@ final class Container implements ContainerInterface
     private function getLoaderForContainer($name)
     {
         $result = null;
-        foreach ($this->getContainers() as $loader) {
+        foreach ($this->getProiders() as $loader) {
             if ($loader->has($name)) {
                 $result = $loader;
                 break;
@@ -115,35 +116,40 @@ final class Container implements ContainerInterface
         return $result;
     }
 
-    private function getContainers()
+    private function getProiders()
     {
         return $this->providers;
     }
 
-    public function set($name, $value)
+    /**
+     * @param $name
+     */
+    private function checkName($name)
     {
         if (!is_string($name)) {
-            throw new \InvalidArgumentException('name must be string');
+            throw new ContainerException('Container name must be string');
         }
-        $this->values[$name] = $value;
     }
 
-    public function has($name)
+    /**
+     * @param $name
+     */
+    private function checkInfiniteRecursion($name)
     {
-        return array_key_exists($name, $this->values)
-            || !is_null($this->getLoaderForContainer($name));
-    }
-
-    public function delete($name)
-    {
-        if (!array_key_exists($name, $this->values)) {
-            throw new \InvalidArgumentException(sprintf('name is not exist, %s', $name));
+        if (array_search($name, $this->calls) !== false) {
+            throw new ContainerException(
+                sprintf(
+                    'Infinite recursion in the configuration, name called again: %s, call stack: %s.',
+                    $name,
+                    implode(', ', $this->calls)
+                )
+            );
         }
-        unset($this->values[$name]);
+        $this->calls[] = $name;
     }
 
-    public function getDependencyMap()
+    private function updateCalls()
     {
-        return $this->dependencyMap;
+        array_pop($this->calls);
     }
 }
