@@ -1,9 +1,10 @@
 <?php
 namespace Smpl\Mydi\Test\Unit\Extension;
 
+use PHPUnit\Framework\TestCase;
 use Smpl\Mydi\Provider\KeyValuePhp;
 
-class KeyValuePhpTest extends \PHPUnit_Framework_TestCase
+class KeyValuePhpTest extends TestCase
 {
     private $pathConfiguration = __DIR__ . '/../../Example/KeyValuePhpConfig/';
 

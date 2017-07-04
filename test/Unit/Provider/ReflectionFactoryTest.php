@@ -1,6 +1,7 @@
 <?php
 namespace Smpl\Mydi\Test\Unit\Extension;
 
+use PHPUnit\Framework\TestCase;
 use Smpl\Mydi\Loader\ObjectFactory;
 use Smpl\Mydi\Provider\ReflectionFactory;
 use Smpl\Mydi\Test\Example\ClassArgument;
@@ -11,7 +12,7 @@ use Smpl\Mydi\Test\Example\ClassProxyInjected;
 use Smpl\Mydi\Test\Example\ClassProxyInjectMagic;
 use Smpl\Mydi\Test\Example\ClassStd;
 
-class ReflectionFactoryTest extends \PHPUnit_Framework_TestCase
+class ReflectionFactoryTest extends TestCase
 {
     public function testGet()
     {

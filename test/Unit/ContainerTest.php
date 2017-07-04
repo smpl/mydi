@@ -1,12 +1,13 @@
 <?php
 namespace Smpl\Mydi\Test\Unit;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Smpl\Mydi\Container;
 use Smpl\Mydi\LoaderInterface;
 use Smpl\Mydi\ProviderInterface;
 
-class ContainerTest extends \PHPUnit_Framework_TestCase
+class ContainerTest extends TestCase
 {
     public function testHasFromLoader()
     {

@@ -1,9 +1,10 @@
 <?php
 namespace Smpl\Mydi\Test\Unit\Extension;
 
+use PHPUnit\Framework\TestCase;
 use Smpl\Mydi\Provider\DynamicFile;
 
-class DynamicFileTest extends \PHPUnit_Framework_TestCase
+class DynamicFileTest extends TestCase
 {
     private $pathConfiguration = __DIR__ . '/../../Example/DynamicFileConfig';
 

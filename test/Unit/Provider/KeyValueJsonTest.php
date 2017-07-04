@@ -1,9 +1,10 @@
 <?php
 namespace Smpl\Mydi\Test\Unit\Extension;
 
+use PHPUnit\Framework\TestCase;
 use Smpl\Mydi\Provider\KeyValueJson;
 
-class KeyValueJsonTest extends \PHPUnit_Framework_TestCase
+class KeyValueJsonTest extends TestCase
 {
     private $pathConfiguration = __DIR__ . '/../../Example/KeyValueJsonConfig/';
 

@@ -1,13 +1,14 @@
 <?php
 namespace Smpl\Mydi\tests\unit\container;
 
+use PHPUnit\Framework\TestCase;
 use Smpl\Mydi\Loader\Alias;
 use Smpl\Mydi\Provider\ReflectionAlias;
 use Smpl\Mydi\Test\Example\ClassAliasAnnotation;
 use Smpl\Mydi\Test\Example\ClassAliasAnnotationWithoutTarget;
 use Smpl\Mydi\Test\Example\ClassEmpty;
 
-class ReflectionAliasTest extends \PHPUnit_Framework_TestCase
+class ReflectionAliasTest extends TestCase
 {
     /**
      * @expectedException \InvalidArgumentException
@@ -21,7 +22,7 @@ class ReflectionAliasTest extends \PHPUnit_Framework_TestCase
     public function testHas()
     {
         $alias = new ReflectionAlias();
-        $alias->has(ClassAliasAnnotation::class);
+        $this->assertTrue($alias->has(ClassAliasAnnotation::class));
     }
 
     public function testGet()

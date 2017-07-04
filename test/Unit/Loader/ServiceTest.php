@@ -1,10 +1,11 @@
 <?php
 namespace Smpl\Mydi\Test\Unit\Loader;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Smpl\Mydi\Loader\Service;
 
-class ServiceTest extends \PHPUnit_Framework_TestCase
+class ServiceTest extends TestCase
 {
     public function testGet()
     {

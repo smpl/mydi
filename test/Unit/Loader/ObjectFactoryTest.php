@@ -1,12 +1,13 @@
 <?php
 namespace Smpl\Mydi\tests\unit\loader;
 
+use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Smpl\Mydi\Loader\ObjectFactory;
 use Smpl\Mydi\Test\Example\ClassArgument;
 use Smpl\Mydi\Test\Example\ClassEmpty;
 
-class ObjectFactoryTest extends \PHPUnit_Framework_TestCase
+class ObjectFactoryTest extends TestCase
 {
     public function testGetStd()
     {
