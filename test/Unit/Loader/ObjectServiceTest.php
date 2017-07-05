@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\tests\unit\loader;
 
 use PHPUnit\Framework\TestCase;
@@ -69,14 +71,5 @@ class ObjectServiceTest extends TestCase
     public function testConstructArgumentNamesNotArrayOfString()
     {
         new ObjectService(new \ReflectionClass(ClassEmpty::class), [123]);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage ClassName must be string
-     */
-    public function testFactoryNotString()
-    {
-        ObjectService::factory(123);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Smpl\Mydi;
 
@@ -34,13 +35,13 @@ final class Container implements ContainerInterface
         return $result;
     }
 
-    public function has($name)
+    public function has($name): bool
     {
         return array_key_exists($name, $this->values)
-            || !is_null($this->getLoaderForContainer($name));
+            || !is_null($this->getProviderForContainer($name));
     }
 
-    public function getDependencyMap()
+    public function getDependencyMap(): array
     {
         return $this->dependencyMap;
     }
@@ -48,8 +49,8 @@ final class Container implements ContainerInterface
     private function setProviders(array $providers)
     {
         foreach ($providers as $provider) {
-            if (!$provider instanceof ContainerInterface) {
-                throw new \InvalidArgumentException('Containers array must instance of ContainerInterface');
+            if (!$provider instanceof ProviderInterface) {
+                throw new \InvalidArgumentException('Providers array must instance of ContainerInterface');
             }
         }
         $this->providers = $providers;
@@ -89,7 +90,7 @@ final class Container implements ContainerInterface
     private function load($name)
     {
         if (!array_key_exists($name, $this->values)) {
-            $loader = $this->getLoaderForContainer($name);
+            $loader = $this->getProviderForContainer($name);
             if (is_null($loader)) {
                 throw new NotFoundException(sprintf('Container: `%s`, is not defined', $name));
             }
@@ -104,12 +105,12 @@ final class Container implements ContainerInterface
         return $result;
     }
 
-    private function getLoaderForContainer($name)
+    private function getProviderForContainer(string $name)
     {
         $result = null;
-        foreach ($this->getProiders() as $loader) {
-            if ($loader->has($name)) {
-                $result = $loader;
+        foreach ($this->getProiders() as $provider) {
+            if ($provider->has($name)) {
+                $result = $provider;
                 break;
             }
         }

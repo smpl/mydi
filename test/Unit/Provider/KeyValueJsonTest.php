@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Test\Unit\Extension;
 
 use PHPUnit\Framework\TestCase;

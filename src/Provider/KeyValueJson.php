@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Provider;
 
 use Smpl\Mydi\Exception\ContainerException;
@@ -8,7 +10,7 @@ final class KeyValueJson implements ProviderInterface
 {
     use KeyValueTrait;
 
-    protected function loadFile($filePath)
+    protected function loadFile(string $filePath)
     {
         if (!is_readable($filePath)) {
             throw new ContainerException(

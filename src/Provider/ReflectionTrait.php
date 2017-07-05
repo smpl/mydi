@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Provider;
 
 use Smpl\Mydi\Exception\NotFoundException;
@@ -12,12 +14,13 @@ trait ReflectionTrait
      */
     private $annotation = '';
 
-    public function has($id)
+    public function has(string $name): bool
     {
         $result = false;
         try {
-            $class = static::getReflection($id);
-            if (strpos($class->getDocComment(), '@' . $this->annotation) !== false
+            $class = static::getReflection($name);
+            $docComment = $class->getDocComment() !== false ? $class->getDocComment() : '';
+            if (strpos($docComment, '@' . $this->annotation) !== false
                 || empty($this->annotation)
             ) {
                 $result = true;
@@ -34,7 +37,7 @@ trait ReflectionTrait
      * @throws NotFoundException В случае если id не может быть объектом reflection
      * @return \ReflectionClass
      */
-    protected static function getReflection($id)
+    protected static function getReflection(string $id): \ReflectionClass
     {
         if (!self::isReflection($id)) {
             throw new NotFoundException();
@@ -45,16 +48,13 @@ trait ReflectionTrait
         return self::$reflections[$id];
     }
 
-    private static function isReflection($id)
+    private static function isReflection(string $id): bool
     {
-        return is_string($id) && (class_exists($id) || interface_exists($id));
+        return class_exists($id) || interface_exists($id);
     }
 
-    protected function setAnnotation($annotation)
+    protected function setAnnotation(string $annotation)
     {
-        if (!is_string($annotation)) {
-            throw new \InvalidArgumentException('Annotation must be string');
-        }
         $this->annotation = $annotation;
     }
 }

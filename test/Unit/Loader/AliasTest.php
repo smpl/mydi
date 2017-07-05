@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Test\Unit\Loader;
 
 use PHPUnit\Framework\TestCase;
@@ -22,14 +24,5 @@ class AliasTest extends TestCase
     {
         $alias = new Alias('magic');
         $this->assertSame('magic', $alias->getName());
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Name must be string
-     */
-    public function testNameNotString()
-    {
-        new Alias(123);
     }
 }

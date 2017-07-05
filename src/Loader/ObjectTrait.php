@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Loader;
 
 use Psr\Container\ContainerInterface;
@@ -25,7 +27,7 @@ trait ObjectTrait
     /**
      * @param string[] $constructArgumentNames
      */
-    private function setConstructArgumentNames($constructArgumentNames)
+    private function setConstructArgumentNames(array $constructArgumentNames)
     {
         foreach ($constructArgumentNames as $argumentName) {
             if (!is_string($argumentName)) {
@@ -39,13 +41,9 @@ trait ObjectTrait
      * @param string $className Полное имя класса с namespace
      * @param string[] $constructArgumentNames Массив имен зависимостей конструктора
      * @return static
-     * @throws \InvalidArgumentException Если className не строка
      */
-    public static function factory($className, array $constructArgumentNames = [])
+    public static function factory(string $className, array $constructArgumentNames = [])
     {
-        if (!is_string($className)) {
-            throw new \InvalidArgumentException('ClassName must be string');
-        }
         return new static(new \ReflectionClass($className), $constructArgumentNames);
     }
 

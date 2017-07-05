@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Provider;
 
 use Smpl\Mydi\Exception\NotFoundException;
@@ -12,7 +14,7 @@ trait ReflectionObjectTrait
      */
     private $construct = '';
 
-    protected function getLoader($id, $loaderName)
+    protected function getLoader(string $id, string $loaderName)
     {
         if (!$this->has($id)) {
             throw new NotFoundException();
@@ -21,7 +23,7 @@ trait ReflectionObjectTrait
         return new $loaderName($class, $this->getInstanceArgs($class));
     }
 
-    private function getInstanceArgs(\ReflectionClass $class)
+    private function getInstanceArgs(\ReflectionClass $class): array
     {
         $result = [];
         $annotations = self::getInstanceByAnnotation(self::getConstructorDoc($class), $this->construct);
@@ -31,7 +33,7 @@ trait ReflectionObjectTrait
         return $result;
     }
 
-    private static function getInstanceByAnnotation($constructorDoc, $annotation)
+    private static function getInstanceByAnnotation(string $constructorDoc, string $annotation): array
     {
         $result = [];
         preg_match_all("/@$annotation ([\\\\\\w]*) (\\$[\\w]*)/", $constructorDoc, $matches, PREG_SET_ORDER);
@@ -43,7 +45,7 @@ trait ReflectionObjectTrait
         return $result;
     }
 
-    private static function getConstructorDoc(\ReflectionClass $class)
+    private static function getConstructorDoc(\ReflectionClass $class): string
     {
         $result = '';
         if (!is_null($class->getConstructor()) && $class->getConstructor()->getDocComment() !== false) {
@@ -56,12 +58,12 @@ trait ReflectionObjectTrait
      * @param \ReflectionClass $class
      * @return \ReflectionParameter[]
      */
-    private static function getConstructorParameters(\ReflectionClass $class)
+    private static function getConstructorParameters(\ReflectionClass $class): array
     {
         return !is_null($class->getConstructor()) ? $class->getConstructor()->getParameters() : [];
     }
 
-    private static function getResult(array $annotations, \ReflectionParameter $parameter)
+    private static function getResult(array $annotations, \ReflectionParameter $parameter): string
     {
         $name = '$' . $parameter->name;
         if (array_key_exists($name, $annotations)) {
@@ -76,11 +78,8 @@ trait ReflectionObjectTrait
         return $result;
     }
 
-    protected function setConstruct($construct)
+    protected function setConstruct(string $construct)
     {
-        if (!is_string($construct)) {
-            throw new \InvalidArgumentException('Annotation to constructor must be string');
-        }
         $this->construct = $construct;
     }
 }

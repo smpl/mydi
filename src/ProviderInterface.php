@@ -1,11 +1,22 @@
 <?php
-namespace Smpl\Mydi;
+declare(strict_types=1);
 
-use Psr\Container\ContainerInterface;
+namespace Smpl\Mydi;
 
 /**
  * Этот интерфейс используется для расширенеия возможностей Smpl\Mydi\Container
  */
-interface ProviderInterface extends ContainerInterface
+interface ProviderInterface
 {
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function get(string $name);
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function has(string $name): bool;
 }

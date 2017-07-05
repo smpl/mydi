@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Provider;
 
 use Smpl\Mydi\Exception\NotFoundException;
@@ -19,7 +21,7 @@ final class DynamicFile implements ProviderInterface
         $this->basePath = realpath($basePath);
     }
 
-    public function get($containerName)
+    public function get(string $containerName)
     {
         if (!$this->has($containerName)) {
             throw new NotFoundException;
@@ -29,15 +31,14 @@ final class DynamicFile implements ProviderInterface
         return $result;
     }
 
-    public function has($containerName)
+    public function has(string $containerName): bool
     {
         $result = false;
-        if (is_string($containerName)) {
-            $path = $this->containerNameToPath($containerName);
-            if (substr($path, 0, strlen($this->basePath)) === $this->basePath) {
-                $result = is_readable($this->containerNameToPath($containerName));
-            }
+        $path = $this->containerNameToPath($containerName);
+        if (substr($path, 0, strlen($this->basePath)) === $this->basePath) {
+            $result = is_readable($this->containerNameToPath($containerName));
         }
+
         return $result;
     }
 
@@ -46,10 +47,12 @@ final class DynamicFile implements ProviderInterface
      * @param string $containerName
      * @return string
      */
-    private function containerNameToPath($containerName)
+    private function containerNameToPath(string $containerName): string
     {
         $result = str_replace('_', DIRECTORY_SEPARATOR, $containerName);
         $result = str_replace('\\', DIRECTORY_SEPARATOR, $result);
-        return realpath($this->basePath . DIRECTORY_SEPARATOR . $result . '.php');
+        $result = realpath($this->basePath . DIRECTORY_SEPARATOR . $result . '.php');
+        $result = is_string($result) ? $result : '';
+        return $result;
     }
 }

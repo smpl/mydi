@@ -1,14 +1,14 @@
 {
-    "int": 15,
-    "string": "some string",
-    "float": 0.5,
-    "null": null,
-    "arrayWithKeyInt": [
-        "test0",
-        "test1"
-    ],
-    "arrayWithKeyString": {
-        "key1": "value1",
-        "key2": 15
-    }
+  "int": 15,
+  "string": "some string",
+  "float": 0.5,
+  "null": null,
+  "arrayWithKeyInt": [
+    "test0",
+    "test1"
+  ],
+  "arrayWithKeyString": {
+    "key1": "value1",
+    "key2": 15
+  }
 }
