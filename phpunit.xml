@@ -1,6 +1,5 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
-         bootstrap="vendor/phpunit/phpunit/src/Framework/Assert/Functions.php"
          colors="true">
     <testsuites>
         <testsuite name="unit">
