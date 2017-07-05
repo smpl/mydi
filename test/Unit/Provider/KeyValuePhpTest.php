@@ -16,7 +16,7 @@ class KeyValuePhpTest extends TestCase
     public function testeGet($key, $value)
     {
         $loader = new KeyValuePhp($this->pathConfiguration . 't.php');
-        assertSame($value, $loader->get($key));
+        $this->assertSame($value, $loader->get($key));
     }
 
     public function providerDatae()

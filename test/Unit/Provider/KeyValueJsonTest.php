@@ -16,7 +16,7 @@ class KeyValueJsonTest extends TestCase
     public function testGet($key, $value)
     {
         $loader = new KeyValueJson($this->pathConfiguration . 'test.json');
-        assertSame($value, $loader->get($key));
+        $this->assertSame($value, $loader->get($key));
     }
 
     public function providerData()
@@ -44,8 +44,8 @@ class KeyValueJsonTest extends TestCase
     public function testHas()
     {
         $loader = new KeyValueJson($this->pathConfiguration . 'test.json');
-        assertTrue($loader->has("int"));
-        assertFalse($loader->has('invalid name'));
+        $this->assertTrue($loader->has("int"));
+        $this->assertFalse($loader->has('invalid name'));
     }
 
     /**

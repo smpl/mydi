@@ -14,8 +14,8 @@ class AliasTest extends TestCase
         $locator->method('get')
             ->willReturn(123);
         /** @var ContainerInterface $locator */
-        assertSame(123, $alias->get($locator));
-        assertSame(123, $alias->get($locator));
+        $this->assertSame(123, $alias->get($locator));
+        $this->assertSame(123, $alias->get($locator));
     }
 
     public function testGetName()

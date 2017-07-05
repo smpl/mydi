@@ -22,7 +22,7 @@ class DynamicFileTest extends TestCase
     public function testhasNotString()
     {
         $loader = new DynamicFile(__DIR__ . DIRECTORY_SEPARATOR);
-        assertFalse($loader->has(1));
+        $this->assertFalse($loader->has(1));
     }
 
     public function testGet()

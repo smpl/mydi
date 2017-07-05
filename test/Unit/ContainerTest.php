@@ -137,10 +137,10 @@ class ContainerTest extends TestCase
         $provider->method('get')->willReturn('123');
         $locator = new Container([$provider]);
         $result = [];
-        assertSame($result, $locator->getDependencyMap());
+        $this->assertSame($result, $locator->getDependencyMap());
         $locator->get('test');
         $result += ['test' => []];
-        assertSame($result, $locator->getDependencyMap());
+        $this->assertSame($result, $locator->getDependencyMap());
     }
 }
  
