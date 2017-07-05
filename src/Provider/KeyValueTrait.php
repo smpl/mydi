@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Provider;
 
 use Smpl\Mydi\Exception\ContainerException;
@@ -27,7 +29,7 @@ trait KeyValueTrait
         $this->filePath = $filePath;
     }
 
-    public function get($containerName)
+    public function get(string $containerName)
     {
         if (!$this->has($containerName)) {
             throw new NotFoundException;
@@ -35,7 +37,7 @@ trait KeyValueTrait
         return $this->getConfiguration()[$containerName];
     }
 
-    public function has($containerName)
+    public function has(string $containerName): bool
     {
         return array_key_exists($containerName, $this->getConfiguration());
     }
@@ -43,7 +45,7 @@ trait KeyValueTrait
     /**
      * @return array
      */
-    private function getConfiguration()
+    private function getConfiguration(): array
     {
         if ($this->isLoad === false) {
             $this->configuration = $this->loadFile($this->filePath);
@@ -57,5 +59,5 @@ trait KeyValueTrait
      * @return array Результат в виде ассоциативного массива
      * @throws ContainerException в случае если проблемы с загрузкой файла
      */
-    abstract protected function loadFile($filePath);
+    abstract protected function loadFile(string $filePath);
 }

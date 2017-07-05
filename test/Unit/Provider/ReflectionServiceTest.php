@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Test\Unit\Extension;
 
 use PHPUnit\Framework\TestCase;
@@ -82,23 +84,5 @@ class ReflectionServiceTest extends TestCase
         $factory = new ReflectionService();
         $this->assertFalse($factory->has(ClassEmpty::class));
         $factory->get(ClassEmpty::class);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Annotation must be string
-     */
-    public function testAnnotationNotString()
-    {
-        new ReflectionService([123]);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Annotation to constructor must be string
-     */
-    public function testNotValidConstructAnnotation()
-    {
-        new ReflectionService('test', 123);
     }
 }

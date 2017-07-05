@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\tests\unit\container;
 
 use PHPUnit\Framework\TestCase;
@@ -10,15 +12,6 @@ use Smpl\Mydi\Test\Example\ClassEmpty;
 
 class ReflectionAliasTest extends TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Annotation must be string
-     */
-    public function testAnnotationNotString()
-    {
-        new ReflectionAlias([123]);
-    }
-
     public function testHas()
     {
         $alias = new ReflectionAlias();

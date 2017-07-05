@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Provider;
 
 use Smpl\Mydi\Exception\ContainerException;
@@ -14,21 +16,21 @@ final class ReflectionAlias implements ProviderInterface
      * ReflectionAlias constructor.
      * @param string $annotation Имя анотации что должна быть у объекта.
      */
-    public function __construct($annotation = 'alias')
+    public function __construct(string $annotation = 'alias')
     {
         $this->setAnnotation($annotation);
     }
 
-    public function get($id)
+    public function get(string $name)
     {
-        $class = static::getReflection($id);
-        if (!$this->has($id)) {
+        $class = static::getReflection($name);
+        if (!$this->has($name)) {
             throw new NotFoundException();
         }
         return new Alias($this->getTarget($class));
     }
 
-    private function getTarget(\ReflectionClass $class)
+    private function getTarget(\ReflectionClass $class): string
     {
         $match = [];
         preg_match('#@' . $this->annotation . ' ([\w\\\\]*)#', $class->getDocComment(), $match);

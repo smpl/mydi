@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Loader;
 
 use Psr\Container\ContainerInterface;
@@ -12,16 +14,13 @@ final class Alias implements LoaderInterface
      * Alias constructor.
      * @param string $name
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->setName($name);
     }
 
-    private function setName($name)
+    private function setName(string $name)
     {
-        if (!is_string($name)) {
-            throw new \InvalidArgumentException('Name must be string');
-        }
         $this->name = $name;
     }
 
@@ -33,7 +32,7 @@ final class Alias implements LoaderInterface
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Provider;
 
 use Smpl\Mydi\Loader\ObjectFactory;
@@ -13,14 +15,14 @@ final class ReflectionFactory implements ProviderInterface
      * @param string $annotation Анотация в заголовке класс, если указать пустую строку то будет применятся ко всем
      * @param string $construct Имя анотации что может быть использованна в конструкторе для переопределения зависимостей
      */
-    public function __construct($annotation = 'factory', $construct = 'inject')
+    public function __construct(string $annotation = 'factory', string $construct = 'inject')
     {
         $this->setAnnotation($annotation);
         $this->setConstruct($construct);
     }
 
-    public function get($id)
+    public function get(string $name)
     {
-        return $this->getLoader($id, ObjectFactory::class);
+        return $this->getLoader($name, ObjectFactory::class);
     }
 }

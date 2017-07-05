@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Test\Unit\Extension;
 
 use PHPUnit\Framework\TestCase;
@@ -63,7 +65,8 @@ class KeyValuePhpTest extends TestCase
      */
     public function testGetWithOutput()
     {
-        $this->setOutputCallback(function() {});
+        $this->setOutputCallback(function () {
+        });
         $loader = new KeyValuePhp($this->pathConfiguration . 'withOutput');
         $loader->get('test');
     }

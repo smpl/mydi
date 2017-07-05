@@ -1,4 +1,5 @@
 <?php
+
 namespace Smpl\Mydi\Test\Unit;
 
 use PHPUnit\Framework\TestCase;
@@ -11,7 +12,7 @@ class ContainerTest extends TestCase
 {
     public function testHasFromLoader()
     {
-        $mockLoader = $this->getMockBuilder(ContainerInterface::class)->getMock();
+        $mockLoader = $this->getMockBuilder(ProviderInterface::class)->getMock();
         $mockLoader
             ->expects($this->once())
             ->method('has')
@@ -104,17 +105,17 @@ class ContainerTest extends TestCase
     public function testGetUseLoader($name, $value)
     {
 
-        $loader = $this->getMockBuilder(ContainerInterface::class)->getMock();
-        $loader->expects($this->once())
+        $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
+        $provider->expects($this->once())
             ->method('has')
             ->with($this->equalTo($name))
             ->will($this->returnValue(true));
-        $loader->expects($this->once())
+        $provider->expects($this->once())
             ->method('get')
             ->with($this->equalTo($name))
             ->will($this->returnValue($value));
-        /** @var LoaderInterface $loader */
-        $locator = new Container([$loader]);
+        /** @var LoaderInterface $provider */
+        $locator = new Container([$provider]);
         $this->assertSame($value, $locator->get($name));
     }
 

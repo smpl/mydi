@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Smpl\Mydi\Test\Unit\Extension;
 
 use PHPUnit\Framework\TestCase;
@@ -19,12 +21,6 @@ class DynamicFileTest extends TestCase
         $this->assertSame(false, $loader->has('../test'));
     }
 
-    public function testhasNotString()
-    {
-        $loader = new DynamicFile(__DIR__ . DIRECTORY_SEPARATOR);
-        $this->assertFalse($loader->has(1));
-    }
-
     public function testGet()
     {
         $loader = new DynamicFile($this->pathConfiguration, ['a' => 5]);
@@ -40,15 +36,5 @@ class DynamicFileTest extends TestCase
     {
         $loader = new DynamicFile($this->pathConfiguration);
         $loader->get('not declared Container');
-    }
-
-    /**
-     * @expectedException \Psr\Container\ContainerExceptionInterface
-     * @exceptedExceptionMessage Container name must be string
-     */
-    public function testLoadNotString()
-    {
-        $loader = new DynamicFile($this->pathConfiguration);
-        $loader->get(1);
     }
 }
