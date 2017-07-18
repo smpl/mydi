@@ -25,6 +25,16 @@ final class Container implements ContainerInterface
         $this->setProviders($providers);
     }
 
+    private function setProviders(array $providers)
+    {
+        foreach ($providers as $provider) {
+            if (!$provider instanceof ProviderInterface) {
+                throw new \InvalidArgumentException('Providers array must instance of ContainerInterface');
+            }
+        }
+        $this->providers = $providers;
+    }
+
     public function get($name)
     {
         $this->checkName($name);
@@ -35,25 +45,14 @@ final class Container implements ContainerInterface
         return $result;
     }
 
-    public function has($name): bool
+    /**
+     * @param $name
+     */
+    private function checkName($name)
     {
-        return array_key_exists($name, $this->values)
-            || !is_null($this->getProviderForContainer($name));
-    }
-
-    public function getDependencyMap(): array
-    {
-        return $this->dependencyMap;
-    }
-
-    private function setProviders(array $providers)
-    {
-        foreach ($providers as $provider) {
-            if (!$provider instanceof ProviderInterface) {
-                throw new \InvalidArgumentException('Providers array must instance of ContainerInterface');
-            }
+        if (!is_string($name)) {
+            throw new ContainerException('Container name must be string');
         }
-        $this->providers = $providers;
     }
 
     private function updateDependencyMap($name)
@@ -87,6 +86,23 @@ final class Container implements ContainerInterface
         }
     }
 
+    /**
+     * @param $name
+     */
+    private function checkInfiniteRecursion($name)
+    {
+        if (array_search($name, $this->calls) !== false) {
+            throw new ContainerException(
+                sprintf(
+                    'Infinite recursion in the configuration, name called again: %s, call stack: %s.',
+                    $name,
+                    implode(', ', $this->calls)
+                )
+            );
+        }
+        $this->calls[] = $name;
+    }
+
     private function load($name)
     {
         if (!array_key_exists($name, $this->values)) {
@@ -108,7 +124,7 @@ final class Container implements ContainerInterface
     private function getProviderForContainer(string $name)
     {
         $result = null;
-        foreach ($this->getProiders() as $provider) {
+        foreach ($this->getProviders() as $provider) {
             if ($provider->has($name)) {
                 $result = $provider;
                 break;
@@ -117,40 +133,24 @@ final class Container implements ContainerInterface
         return $result;
     }
 
-    private function getProiders()
+    private function getProviders()
     {
         return $this->providers;
-    }
-
-    /**
-     * @param $name
-     */
-    private function checkName($name)
-    {
-        if (!is_string($name)) {
-            throw new ContainerException('Container name must be string');
-        }
-    }
-
-    /**
-     * @param $name
-     */
-    private function checkInfiniteRecursion($name)
-    {
-        if (array_search($name, $this->calls) !== false) {
-            throw new ContainerException(
-                sprintf(
-                    'Infinite recursion in the configuration, name called again: %s, call stack: %s.',
-                    $name,
-                    implode(', ', $this->calls)
-                )
-            );
-        }
-        $this->calls[] = $name;
     }
 
     private function updateCalls()
     {
         array_pop($this->calls);
+    }
+
+    public function has($name): bool
+    {
+        return array_key_exists($name, $this->values)
+            || !is_null($this->getProviderForContainer($name));
+    }
+
+    public function getDependencyMap(): array
+    {
+        return $this->dependencyMap;
     }
 }
