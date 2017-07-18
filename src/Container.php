@@ -107,7 +107,7 @@ final class Container implements ContainerInterface
     private function getLoaderForContainer($name)
     {
         $result = null;
-        foreach ($this->getProiders() as $loader) {
+        foreach ($this->getProviders() as $loader) {
             if ($loader->has($name)) {
                 $result = $loader;
                 break;
@@ -116,7 +116,7 @@ final class Container implements ContainerInterface
         return $result;
     }
 
-    private function getProiders()
+    private function getProviders()
     {
         return $this->providers;
     }
