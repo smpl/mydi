@@ -13,7 +13,7 @@
 
 Основное примение загрузчиков этого типа в [reflectionService provider](../provider/reflectionService.md)
 
-Он очень поход на [service loader](service.md), но **service loader** более гибкий и более настраеваемый, а этот 
+Он очень похож на [service loader](service.md), но **service loader** более гибкий и более настраеваемый, а этот 
 загрузчик создает простые объекты на основе простых параметров.
 
 [Подробные примеры использования в тестах](../../test/Unit/Loader/ObjectServiceTest.php)
