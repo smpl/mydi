@@ -9,28 +9,27 @@ use Smpl\Mydi\Exception\NotFoundException;
 final class Container implements ContainerInterface
 {
     /**
-     * @var ContainerInterface[]
+     * @var ProviderInterface[]
      */
     private $providers;
     private $values = [];
     private $calls = [];
     private $dependencyMap = [];
 
-    /**
-     * @param ContainerInterface[] $providers
-     */
-    public function __construct(array $providers = [])
+    public function __construct(ProviderInterface ... $providers)
     {
-        $this->setProviders($providers);
+        $this->providers = $providers;
     }
 
     public function get($name)
     {
-        $this->checkName($name);
+        if (!is_string($name)) {
+            throw new ContainerException('Container name must be string');
+        }
         $this->updateDependencyMap($name);
         $this->checkInfiniteRecursion($name);
         $result = $this->load($name);
-        $this->updateCalls();
+        array_pop($this->calls);
         return $result;
     }
 
@@ -43,16 +42,6 @@ final class Container implements ContainerInterface
     public function getDependencyMap()
     {
         return $this->dependencyMap;
-    }
-
-    private function setProviders(array $providers)
-    {
-        foreach ($providers as $provider) {
-            if (!$provider instanceof ContainerInterface) {
-                throw new \InvalidArgumentException('Containers array must instance of ContainerInterface');
-            }
-        }
-        $this->providers = $providers;
     }
 
     private function updateDependencyMap($name)
@@ -99,7 +88,6 @@ final class Container implements ContainerInterface
         $result = $this->values[$name];
         if ($result instanceof LoaderInterface) {
             $result = $result->get($this);
-            return $result;
         }
         return $result;
     }
@@ -107,7 +95,7 @@ final class Container implements ContainerInterface
     private function getLoaderForContainer($name)
     {
         $result = null;
-        foreach ($this->getProviders() as $loader) {
+        foreach ($this->providers as $loader) {
             if ($loader->has($name)) {
                 $result = $loader;
                 break;
@@ -116,24 +104,6 @@ final class Container implements ContainerInterface
         return $result;
     }
 
-    private function getProviders()
-    {
-        return $this->providers;
-    }
-
-    /**
-     * @param $name
-     */
-    private function checkName($name)
-    {
-        if (!is_string($name)) {
-            throw new ContainerException('Container name must be string');
-        }
-    }
-
-    /**
-     * @param $name
-     */
     private function checkInfiniteRecursion($name)
     {
         if (array_search($name, $this->calls) !== false) {
@@ -146,10 +116,5 @@ final class Container implements ContainerInterface
             );
         }
         $this->calls[] = $name;
-    }
-
-    private function updateCalls()
-    {
-        array_pop($this->calls);
     }
 }

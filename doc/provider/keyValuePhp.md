@@ -4,6 +4,7 @@
 
 Пример конфигурации
 ```php
+<?php
 // example.php
 $result['int'] = 123;
 $result['string'] = '123';
@@ -12,9 +13,13 @@ return $result;
 ```
 
 ```php
+<?php
+use Smpl\Mydi\Provider\KeyValuePhp;
+use Smpl\Mydi\Container;
+
 // Использование MYDI
 $phpProvider = new KeyValuePhp('example.php');
-$container = new Container([$phpProvider]);
+$container = new Container($phpProvider);
 
 var_dump($container->get('int'));   // 123
 var_dump($container->get('string'));   // '123'

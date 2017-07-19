@@ -11,13 +11,13 @@ class ContainerTest extends TestCase
 {
     public function testHasFromLoader()
     {
-        $mockLoader = $this->getMockBuilder(ContainerInterface::class)->getMock();
+        $mockLoader = $this->getMockBuilder(ProviderInterface::class)->getMock();
         $mockLoader
             ->expects($this->once())
             ->method('has')
             ->with($this->equalTo('magic'))
             ->willReturn(true);
-        $locator = new Container([$mockLoader]);
+        $locator = new Container(... [$mockLoader]);
         $this->assertTrue($locator->has('magic'));
     }
 
@@ -52,7 +52,7 @@ class ContainerTest extends TestCase
         $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
         $provider->method('has')->willReturn(true);
         $provider->method('get')->willReturn($loader);
-        $locator = new Container([$provider]);
+        $locator = new Container(... [$provider]);
         $this->assertSame($result, $locator->get('test'));
     }
 
@@ -84,16 +84,8 @@ class ContainerTest extends TestCase
             }
             return $result;
         });
-        $locator = new Container([$provider]);
+        $locator = new Container(... [$provider]);
         $locator->get('a');
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testSetLoadersInvalid()
-    {
-        new Container([1]);
     }
 
     /**
@@ -104,17 +96,17 @@ class ContainerTest extends TestCase
     public function testGetUseLoader($name, $value)
     {
 
-        $loader = $this->getMockBuilder(ContainerInterface::class)->getMock();
-        $loader->expects($this->once())
+        $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
+        $provider->expects($this->once())
             ->method('has')
             ->with($this->equalTo($name))
             ->will($this->returnValue(true));
-        $loader->expects($this->once())
+        $provider->expects($this->once())
             ->method('get')
             ->with($this->equalTo($name))
             ->will($this->returnValue($value));
-        /** @var LoaderInterface $loader */
-        $locator = new Container([$loader]);
+        /** @var LoaderInterface $provider */
+        $locator = new Container(... [$provider]);
         $this->assertSame($value, $locator->get($name));
     }
 
@@ -135,7 +127,7 @@ class ContainerTest extends TestCase
         $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
         $provider->method('has')->willReturn(true);
         $provider->method('get')->willReturn('123');
-        $locator = new Container([$provider]);
+        $locator = new Container(...[$provider]);
         $result = [];
         assertSame($result, $locator->getDependencyMap());
         $locator->get('test');

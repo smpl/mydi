@@ -29,10 +29,14 @@ private.db.json
 mydi.php
 
 ```php
+<?php
+use Smpl\Mydi\Provider\KeyValueJson;
+use Smpl\Mydi\Container;
+
 $providers = [];
 $providers[] = new KeyValueJson('private.db.json');
 $providers[] = new KeyValueJson('public.db.json');
-$container = new Container($providers);
+$container = new Container(... $providers);
 
 var_dump($container->get('user'));  // 'root'
 var_dump($container->get('password'));  // 'secret'
@@ -46,12 +50,16 @@ var_dump($container->get('password'));  // 'secret'
 Чтобы репозиторий после клонирования продолжал работу, необходимо чтобы провайдер подключался если фаил существует:
 
 ```php
+<?php
+use Smpl\Mydi\Container;
+use Smpl\Mydi\Provider\KeyValueJson;
+
 $providers = [];
 if (file_exists('private.db.json')) {
     $providers[] = new KeyValueJson('private.db.json');
 }
 $providers[] = new KeyValueJson('public.db.json');
-$container = new Container($providers);
+$container = new Container(... $providers);
 
 var_dump($container->get('user'));  // 'root'
 var_dump($container->get('password'));

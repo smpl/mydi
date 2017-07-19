@@ -19,7 +19,7 @@ use \Smpl\Mydi\Container;
 $providers[] = new KeyValueJson('example.json');
 $providers[] = new DynamicFile(__DIR__ . '/di');
 $providers[] = new ReflectionService('');   // Чтобы загружал классы без аннотаций, он загрузит MagicRepository
-$container = new Container($providers);
+$container = new Container(... $providers);
 
 $magicRepository = $container->get('Vendor\Package\MagicRepository');  // Можно использовать MagicRepository::class
 

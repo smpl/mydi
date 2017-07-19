@@ -30,9 +30,12 @@ class Magic
 Ну и теперь пример как это использовать.
 
 ```php
+<?php
+use Smpl\Mydi\Provider\ReflectionService;
+use Smpl\Mydi\Container;
+
 $service = new ReflectionService('');   // Загружать все классы, даже без анотаций
-$providers[] = $service;
-$container = new Container($providers);
+$container = new Container($service);
 ```
 
 1. Специальная аннотация указана и для $e указывает на SomeContainer, для $magic аннотации нет
