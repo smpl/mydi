@@ -15,7 +15,7 @@ class KeyValuePhpTest extends TestCase
      * @param $key
      * @param $value
      */
-    public function testeGet($key, $value)
+    public function testGet($key, $value)
     {
         $loader = new KeyValuePhp($this->pathConfiguration . 't.php');
         $this->assertSame($value, $loader->get($key));
@@ -45,7 +45,7 @@ class KeyValuePhpTest extends TestCase
     /**
      * @expectedException \Psr\Container\NotFoundExceptionInterface
      */
-    public function testeInvalidConfiguration()
+    public function testInvalidConfiguration()
     {
         $loader = new KeyValuePhp($this->pathConfiguration . 't.php');
         $loader->get('dsfdsfsdfds');
@@ -54,7 +54,7 @@ class KeyValuePhpTest extends TestCase
     /**
      * @expectedException \Psr\Container\NotFoundExceptionInterface
      */
-    public function testeGetNotDeclared()
+    public function testGetNotDeclared()
     {
         $loader = new KeyValuePhp($this->pathConfiguration . 't.php');
         $loader->get('not declared Container');
