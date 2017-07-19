@@ -18,7 +18,7 @@ class ContainerTest extends TestCase
             ->method('has')
             ->with($this->equalTo('magic'))
             ->willReturn(true);
-        $locator = new Container([$mockLoader]);
+        $locator = new Container($mockLoader);
         $this->assertTrue($locator->has('magic'));
     }
 
@@ -53,7 +53,7 @@ class ContainerTest extends TestCase
         $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
         $provider->method('has')->willReturn(true);
         $provider->method('get')->willReturn($loader);
-        $locator = new Container([$provider]);
+        $locator = new Container($provider);
         $this->assertSame($result, $locator->get('test'));
     }
 
@@ -85,12 +85,12 @@ class ContainerTest extends TestCase
             }
             return $result;
         });
-        $locator = new Container([$provider]);
+        $locator = new Container($provider);
         $locator->get('a');
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \TypeError
      */
     public function testSetLoadersInvalid()
     {
@@ -115,7 +115,7 @@ class ContainerTest extends TestCase
             ->with($this->equalTo($name))
             ->will($this->returnValue($value));
         /** @var LoaderInterface $provider */
-        $locator = new Container([$provider]);
+        $locator = new Container($provider);
         $this->assertSame($value, $locator->get($name));
     }
 
@@ -136,7 +136,7 @@ class ContainerTest extends TestCase
         $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
         $provider->method('has')->willReturn(true);
         $provider->method('get')->willReturn('123');
-        $locator = new Container([$provider]);
+        $locator = new Container($provider);
         $result = [];
         $this->assertSame($result, $locator->getDependencyMap());
         $locator->get('test');

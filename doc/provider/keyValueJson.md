@@ -23,14 +23,17 @@
 
 Допустим пусть это будет example.json попробуем использовать его
 ```php
+<?php
+use \Smpl\Mydi\Provider\KeyValueJson;
+use Smpl\Mydi\Container;
 $json = new KeyValueJson('example.json');
 $providers = [$json];
-$container = new Container($providers);
+$container = new Container(... $providers);
 
 var_dump($container->get('example_string')); // some sting
 var_dump($container->get('example_null')); // null
 var_dump($container->get('example_int')); // 123
-var_dump({$container->get('example_array_assoc')}['key_1']); // value 1
+var_dump($container->get('example_array_assoc')['key_1']); // value 1
 ```
 
 Преимущество в том что если есть объект который зависит от **example_string** то этот параметр ему подставится из 

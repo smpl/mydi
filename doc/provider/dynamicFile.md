@@ -48,7 +48,7 @@ use Smpl\Mydi\Provider\KeyValueJson;
 
 $providers[] = new KeyValueJson('db.json');
 $providers[] = new DynamicFile(__DIR__ . '/dynamic');
-$container = new Container($providers);
+$container = new Container(... $providers);
 $std = $container->get('Magic');
 var_dump($std->username === 'root');    // true
 var_dump($std->password === '12345');   // true

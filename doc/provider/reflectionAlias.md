@@ -9,10 +9,21 @@
 Например:
 
 ```php
+<?php
+use Smpl\Mydi\Provider\ReflectionAlias;
+use Smpl\Mydi\Provider\KeyValueJson;
+use Smpl\Mydi\Container;
+
 /**
  * @alias SomeContainerName
  */
 interface Magic{}
+
+$providers[] = new ReflectionAlias();
+$providers[] = new KeyValueJson('example.json');
+$container = new Container(... $providers);
+
+var_dump($container->get(Magic::class));  // 12345
 ```
 
 Сделаем json который будет хранить нам значение SomeContainerName, например example.json
@@ -21,17 +32,6 @@ interface Magic{}
 {
     "SomeContainerName": 12345
 }
-```
-
-Пример использования контейнера
-
-```php
-$providers[] = new ReflectionAlias();
-$providers[] = new KeyValueJson('example.json')
-$container = new Container($providers);
-
-var_dump($container->get(Magic::class));  // 12345
-
 ```
 
 Можно заметить что результат **SomeContainerName НЕ реализует interface Magic** и никаких проверок не осуществляется, 
