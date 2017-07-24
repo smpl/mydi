@@ -15,34 +15,6 @@
 
 Service значит что объект будет создан в единственном экземпляре это очень удобно для объектов stateless.
 
-Рассмотрим пример конструктора:
+[Пример использования](../../test/Documentation/reflectionService.php)
 
-```php
-class Magic
-{
-    /**
-     * @inject SomeContainer $e
-     */
-    public function __construct(\stdClass $e, \stdClass $magic){}
-}
-```
-
-Ну и теперь пример как это использовать.
-
-```php
-<?php
-use Smpl\Mydi\Provider\ReflectionService;
-use Smpl\Mydi\Container;
-
-$service = new ReflectionService('');   // Загружать все классы, даже без анотаций
-$providers[] = $service;
-$container = new Container(... $providers);
-```
-
-1. Специальная аннотация указана и для $e указывает на SomeContainer, для $magic аннотации нет
-2. Тип аргумента указан это \stdClass для $e и $magic.
-3. Имя аргумента это e и magic.
-
-Значит в **$e** будет **SomeContainer**, а в **$magic** будет **\stdClass**. 
-
-[Примеры использования смотреть в юните тестах](../../test/Unit/Provider/ReflectionServiceTest.php)
+[Более детально смотреть в юнит тесте](../../test/Unit/Provider/ReflectionServiceTest.php)

@@ -70,12 +70,8 @@ final class Container implements ContainerInterface
 
     private function prepareDependencyMap(string $name, string $dependencyName)
     {
-        if (!array_key_exists($dependencyName, $this->dependencyMap)) {
-            $this->dependencyMap[$dependencyName] = [];
-        } else {
-            if (!array_key_exists($name, $this->dependencyMap)) {
-                $this->dependencyMap[$name] = [];
-            }
+        if (!array_key_exists($name, $this->dependencyMap)) {
+            $this->dependencyMap[$name] = [];
         }
     }
 
