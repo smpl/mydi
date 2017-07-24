@@ -67,7 +67,7 @@ class KeyValuePhpTest extends TestCase
     {
         $this->setOutputCallback(function () {
         });
-        $loader = new KeyValuePhp($this->pathConfiguration . 'withOutput');
+        $loader = new KeyValuePhp($this->pathConfiguration . '../KeyValueJsonConfig/test.json');
         $loader->get('test');
     }
 }
