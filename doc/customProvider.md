@@ -5,7 +5,7 @@
 
 Для примера мы хотим хранить конфигурацию в YAML вместо JSON файлов, давайте посмотрим как это можно сделать.
 
-Будем использоавть [Symfony Component Yaml](http://symfony.com/doc/current/components/yaml.html) для чтения файла YAML
+Будем использовать [Symfony Component Yaml](http://symfony.com/doc/current/components/yaml.html) для чтения файла YAML
 
 ```php
 namespace Vendor\Package;
