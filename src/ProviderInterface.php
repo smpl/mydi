@@ -11,6 +11,7 @@ interface ProviderInterface
     /**
      * @param string $name
      * @return mixed
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function get(string $name);
 

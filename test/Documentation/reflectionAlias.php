@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Smpl\Mydi\Container;
-use Smpl\Mydi\Provider\KeyValueJson;
+use Smpl\Mydi\Provider\KeyValue;
 use Smpl\Mydi\Provider\ReflectionAlias;
 
 /**
@@ -13,7 +13,7 @@ interface Magic
 }
 
 $providers[] = new ReflectionAlias();
-$providers[] = new KeyValueJson(__DIR__ . '/../Example/KeyValueJsonConfig/test.json');
+$providers[] = KeyValue::fromJsonFile(__DIR__ . '/../Example/KeyValue/test.json');
 $container = new Container(... $providers);
 
 assertSame([

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-use \Smpl\Mydi\Provider\KeyValueJson;
 use Smpl\Mydi\Container;
+use Smpl\Mydi\Provider\KeyValue;
 
-$json = new KeyValueJson(__DIR__ . '/../Example/KeyValueJsonConfig/test.json');
+$json = KeyValue::fromJsonFile(__DIR__ . '/../Example/KeyValue/test.json');
 $container = new Container($json);
 
 assertSame('some string', $container->get('string'));

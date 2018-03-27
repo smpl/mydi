@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-use Smpl\Mydi\Provider\KeyValuePhp;
 use Smpl\Mydi\Container;
+use Smpl\Mydi\Provider\KeyValue;
 
 // Использование MYDI
-$phpProvider = new KeyValuePhp(__DIR__ . '/../Example/KeyValuePhpConfig/t.php');
+$phpProvider = KeyValue::fromPhpFile(__DIR__ . '/../Example/KeyValue/test.php');
 $container = new Container($phpProvider);
 
 assertSame(15, $container->get('int'));
