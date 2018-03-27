@@ -130,18 +130,4 @@ class ContainerTest extends TestCase
             ['null', null]
         ];
     }
-
-    public function testGetDependencyMap()
-    {
-        $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
-        $provider->method('has')->willReturn(true);
-        $provider->method('get')->willReturn('123');
-        $locator = new Container($provider);
-        $result = [];
-        $this->assertSame($result, $locator->getDependencyMap());
-        $locator->get('test');
-        $result += ['test' => []];
-        $this->assertSame($result, $locator->getDependencyMap());
-    }
 }
- 
