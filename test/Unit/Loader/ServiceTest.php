@@ -25,4 +25,3 @@ class ServiceTest extends TestCase
         $this->assertSame($locator, $service->get($locator));
     }
 }
- 

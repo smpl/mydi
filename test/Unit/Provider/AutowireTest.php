@@ -6,13 +6,16 @@ namespace Smpl\Mydi\Test\Unit\Provider;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Smpl\Mydi\Loader\Service;
+use Smpl\Mydi\LoaderInterface;
 use Smpl\Mydi\Provider\Autowire;
+use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleAliasClass;
 use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentAnnotation;
 use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentBaseType;
 use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentDefaultValue;
 use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentName;
 use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentType;
 use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleCustomStd;
+use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleFactoryClass;
 
 class AutowireTest extends TestCase
 {
@@ -35,12 +38,18 @@ class AutowireTest extends TestCase
 
     public function testGetArgs()
     {
-        $this->assertInstanceOf(Service::class, $this->autowire->get(\stdClass::class));
+        /** @var LoaderInterface $loader */
+        $loader = $this->autowire->get(\stdClass::class);
+        $this->assertInstanceOf(Service::class, $loader);
+        $container = $this->createMock(ContainerInterface::class);
+        /** @var ContainerInterface $container */
+        $result = $loader->get($container);
+        $this->assertInstanceOf(\stdClass::class, $result);
     }
 
     public function testGetNameArgs()
     {
-        /** @var Service $loader */
+        /** @var LoaderInterface $loader */
         $loader = $this->autowire->get(ExampleArgumentName::class);
 
         $container = $this->createMock(ContainerInterface::class);
@@ -58,7 +67,7 @@ class AutowireTest extends TestCase
 
     public function testGetTypeArgs()
     {
-        /** @var Service $loader */
+        /** @var LoaderInterface $loader */
         $loader = $this->autowire->get(ExampleArgumentType::class);
 
         $container = $this->createMock(ContainerInterface::class);
@@ -75,9 +84,8 @@ class AutowireTest extends TestCase
 
     public function testGetAnnotationArgs()
     {
-        /** @var Service $loader */
+        /** @var LoaderInterface $loader */
         $loader = $this->autowire->get(ExampleArgumentAnnotation::class);
-
 
         $container = $this->createMock(ContainerInterface::class);
         $value = new ExampleCustomStd();
@@ -94,7 +102,7 @@ class AutowireTest extends TestCase
 
     public function testGetNameWithDefaultArgs()
     {
-        /** @var Service $loader */
+        /** @var LoaderInterface $loader */
         $loader = $this->autowire->get(ExampleArgumentDefaultValue::class);
 
         $container = $this->createMock(ContainerInterface::class);
@@ -112,7 +120,7 @@ class AutowireTest extends TestCase
 
     public function testGetBaseTypeArgs()
     {
-        /** @var Service $loader */
+        /** @var LoaderInterface $loader */
         $loader = $this->autowire->get(ExampleArgumentBaseType::class);
 
         $container = $this->createMock(ContainerInterface::class);
@@ -125,6 +133,33 @@ class AutowireTest extends TestCase
         /** @var ExampleArgumentBaseType $result */
         $result = $loader->get($container);
         $this->assertSame($value, $result->a);
+    }
+
+    public function testGetFactory()
+    {
+        /** @var LoaderInterface $loader */
+        $loader = $this->autowire->get(ExampleFactoryClass::class);
+
+        $container = $this->createMock(ContainerInterface::class);
+        /** @var ContainerInterface $container */
+
+        $this->assertEquals($loader->get($container), $loader->get($container));
+        $this->assertNotSame($loader->get($container), $loader->get($container));
+    }
+
+    public function testGetAlias()
+    {
+        /** @var LoaderInterface $loader */
+        $loader = $this->autowire->get(ExampleAliasClass::class);
+
+        $container = $this->createMock(ContainerInterface::class);
+        $value = new ExampleCustomStd();
+        $container->method('get')
+            ->willReturn($value);
+        /** @var ContainerInterface $container */
+
+        $this->assertInstanceOf(\stdClass::class, $loader->get($container));
+
     }
 
     protected function setUp()

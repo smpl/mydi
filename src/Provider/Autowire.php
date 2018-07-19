@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Smpl\Mydi\Provider;
 
 use Smpl\Mydi\Exception\NotFoundException;
+use Smpl\Mydi\Loader\Alias;
+use Smpl\Mydi\Loader\Factory;
 use Smpl\Mydi\Loader\Service;
 use Smpl\Mydi\ProviderInterface;
 
@@ -19,13 +21,11 @@ class Autowire implements ProviderInterface
         $args = [];
         $constructor = $class->getConstructor();
         if (!is_null($constructor)) {
-            $comment = $constructor->getDocComment() === false ? '' : $constructor->getDocComment();
-
             $args = $this->getArgs($constructor);
-            $args = array_merge($args, $this->readAnnotation($comment));
+            $args = array_merge($args, $this->readAnnotation((string)$constructor->getDocComment()));
         }
 
-        return Service::fromReflectionClass($class, $args);
+        return $this->createLoader((string)$class->getDocComment(), $class, $args);
     }
 
     private function getArgs(\ReflectionMethod $method)
@@ -53,6 +53,18 @@ class Autowire implements ProviderInterface
         $result = false;
         if (class_exists($name)) {
             $result = true;
+        }
+        return $result;
+    }
+
+    private function createLoader(string $comment, \ReflectionClass $class, array $args)
+    {
+        if (strstr($comment, '@factory')) {
+            $result = Factory::fromReflectionClass($class, $args);
+        } else if (preg_match("/@alias ([\\\\\\w]*)/", $comment, $matches) && is_array($matches)) {
+            $result = new Alias($matches[1]);
+        } else {
+            $result = Service::fromReflectionClass($class, $args);
         }
         return $result;
     }
