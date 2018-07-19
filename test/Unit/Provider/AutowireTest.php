@@ -8,6 +8,7 @@ use Psr\Container\ContainerInterface;
 use Smpl\Mydi\Loader\Service;
 use Smpl\Mydi\Provider\Autowire;
 use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentAnnotation;
+use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentBaseType;
 use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentDefaultValue;
 use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentName;
 use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentType;
@@ -42,15 +43,15 @@ class AutowireTest extends TestCase
         /** @var Service $loader */
         $loader = $this->autowire->get(ExampleArgumentName::class);
 
-        $locator = $this->createMock(ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
         $value = 'magic';
-        $locator->method('get')
+        $container->method('get')
             ->with($this->equalTo('a'))
             ->willReturn($value);
-        /** @var ContainerInterface $locator */
+        /** @var ContainerInterface $container */
 
         /** @var ExampleArgumentName $result */
-        $result = $loader->get($locator);
+        $result = $loader->get($container);
         $this->assertInstanceOf(ExampleArgumentName::class, $result);
         $this->assertSame($value, $result->a);
     }
@@ -60,15 +61,15 @@ class AutowireTest extends TestCase
         /** @var Service $loader */
         $loader = $this->autowire->get(ExampleArgumentType::class);
 
-        $locator = $this->createMock(ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
         $value = new \stdClass();
-        $locator->method('get')
+        $container->method('get')
             ->with($this->equalTo(\stdClass::class))
             ->willReturn($value);
-        /** @var ContainerInterface $locator */
+        /** @var ContainerInterface $container */
 
         /** @var ExampleArgumentType $result */
-        $result = $loader->get($locator);
+        $result = $loader->get($container);
         $this->assertInstanceOf(\stdClass::class, $result->name);
     }
 
@@ -78,15 +79,15 @@ class AutowireTest extends TestCase
         $loader = $this->autowire->get(ExampleArgumentAnnotation::class);
 
 
-        $locator = $this->createMock(ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
         $value = new ExampleCustomStd();
-        $locator->method('get')
+        $container->method('get')
             ->with($this->equalTo(ExampleCustomStd::class))
             ->willReturn($value);
-        /** @var ContainerInterface $locator */
+        /** @var ContainerInterface $container */
 
         /** @var ExampleArgumentAnnotation $result */
-        $result = $loader->get($locator);
+        $result = $loader->get($container);
         $this->assertInstanceOf(ExampleCustomStd::class, $result->class);
 
     }
@@ -96,16 +97,33 @@ class AutowireTest extends TestCase
         /** @var Service $loader */
         $loader = $this->autowire->get(ExampleArgumentDefaultValue::class);
 
-        $locator = $this->createMock(ContainerInterface::class);
+        $container = $this->createMock(ContainerInterface::class);
         $value = 'magic';
-        $locator->method('get')
+        $container->method('get')
             ->with($this->equalTo('a'))
             ->willReturn($value);
-        /** @var ContainerInterface $locator */
+        /** @var ContainerInterface $container */
 
         /** @var ExampleArgumentName $result */
-        $result = $loader->get($locator);
+        $result = $loader->get($container);
         $this->assertInstanceOf(ExampleArgumentDefaultValue::class, $result);
+        $this->assertSame($value, $result->a);
+    }
+
+    public function testGetBaseTypeArgs()
+    {
+        /** @var Service $loader */
+        $loader = $this->autowire->get(ExampleArgumentBaseType::class);
+
+        $container = $this->createMock(ContainerInterface::class);
+        $value = 'magic';
+        $container->method('get')
+            ->with($this->equalTo('a'))
+            ->willReturn($value);
+        /** @var ContainerInterface $container */
+
+        /** @var ExampleArgumentBaseType $result */
+        $result = $loader->get($container);
         $this->assertSame($value, $result->a);
     }
 

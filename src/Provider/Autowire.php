@@ -32,7 +32,7 @@ class Autowire implements ProviderInterface
     {
         $result = [];
         foreach ($method->getParameters() as $parameter) {
-            $result[$parameter->getName()] = !is_null($parameter->getClass()) ? $parameter->getClass()->name : $parameter->getName();
+            $result[$parameter->getName()] = !is_null($parameter->getClass()) ? $parameter->getClass()->getName() : $parameter->getName();
         }
         return $result;
     }
@@ -42,7 +42,7 @@ class Autowire implements ProviderInterface
         $result = [];
         $matches = [];
         preg_match_all("/@inject ([\\\\\\w]*) \\$([\\w]*)/", $comment, $matches, PREG_SET_ORDER);
-        foreach ($matches as $match) {
+        foreach ((array)$matches as $match) {
             $result[$match[2]] = $match[1];
         }
         return $result;

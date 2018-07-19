@@ -15,17 +15,13 @@ class KeyValue implements ProviderInterface
         $this->configuration = $configuration;
     }
 
-    /**
-     * @param $fileName
-     * @return KeyValue
-     */
     public static function fromJsonFile(string $fileName)
     {
         if (!is_readable($fileName)) {
             $message = sprintf('fileName: `%s` is not readable', $fileName);
             throw new \RuntimeException($message);
         }
-        $configuration = json_decode(file_get_contents($fileName), true);
+        $configuration = json_decode((string)file_get_contents($fileName), true);
         if (!is_array($configuration)) {
             $message = sprintf('fileName: `%s` return invalid result', $fileName);
             throw new \RuntimeException($message);
