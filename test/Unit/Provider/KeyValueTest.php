@@ -130,10 +130,10 @@ class KeyValueTest extends TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessageRegExp  /fileName: `[\w\/]*KeyValueTest\/invalid\.json` return invalid result/
+     * @expectedExceptionMessageRegExp  /fileName: `[\w\/]*KeyValueTest\/invalid\.php` return invalid result/
      */
     public function testFromJsonInvalidContent()
     {
-        KeyValue::fromJsonFile(__DIR__ . '/KeyValueTest/invalid.json');
+        KeyValue::fromJsonFile(__DIR__ . '/KeyValueTest/invalid.php');
     }
 }

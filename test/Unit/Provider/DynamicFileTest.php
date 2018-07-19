@@ -17,14 +17,12 @@ class DynamicFileTest extends TestCase
         $this->assertSame(false, $loader->has('invalidName'));
         $this->assertSame(true, $loader->has('subDir_test'));
 
-        // Попытаемся загрузить что то за пределами указанного каталога (не должно грузить)
         $this->assertSame(false, $loader->has('../test'));
     }
 
     public function testGet()
     {
         $loader = new DynamicFile($this->pathConfiguration);
-        // Загрузка простого компонента
         $this->assertSame(15, $loader->get('test'));
         $this->assertSame(15, $loader->get('subDir_test'));
     }
