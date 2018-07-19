@@ -8,7 +8,7 @@ use Smpl\Mydi\Provider\DynamicFile;
 
 class DynamicFileTest extends TestCase
 {
-    private $pathConfiguration = __DIR__ . '/../../Example/DynamicFileConfig';
+    private $pathConfiguration = __DIR__ . '/DynamicFileConfigTest';
 
     public function testHas()
     {
@@ -23,7 +23,7 @@ class DynamicFileTest extends TestCase
 
     public function testGet()
     {
-        $loader = new DynamicFile($this->pathConfiguration, ['a' => 5]);
+        $loader = new DynamicFile($this->pathConfiguration);
         // Загрузка простого компонента
         $this->assertSame(15, $loader->get('test'));
         $this->assertSame(15, $loader->get('subDir_test'));

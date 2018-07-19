@@ -16,9 +16,6 @@ final class Container implements ContainerInterface
     private $values = [];
     private $calls = [];
 
-    /**
-     * @param ProviderInterface[] ...$providers
-     */
     public function __construct(ProviderInterface ... $providers)
     {
         $this->providers = $providers;

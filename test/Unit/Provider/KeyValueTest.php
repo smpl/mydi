@@ -38,7 +38,7 @@ class KeyValueTest extends TestCase
 
     public function testFromJsonFile()
     {
-        $provider = KeyValue::fromJsonFile(__DIR__ . '/../../Example/KeyValue/test.json');
+        $provider = KeyValue::fromJsonFile(__DIR__ . '/KeyValueTest/test.json');
         $this->assertTrue($provider->has('int'));
         $this->assertTrue($provider->has('null'));
         $this->assertTrue($provider->has('string'));
@@ -74,12 +74,12 @@ class KeyValueTest extends TestCase
      */
     public function testFromJsonEmpty()
     {
-        KeyValue::fromJsonFile(__DIR__ . '/../../Example/KeyValue/empty.txt');
+        KeyValue::fromJsonFile(__DIR__ . '/KeyValueTest/empty.txt');
     }
 
     public function testFromPhp()
     {
-        $provider = KeyValue::fromPhpFile(__DIR__ . '/../../Example/KeyValue/test.php');
+        $provider = KeyValue::fromPhpFile(__DIR__ . '/KeyValueTest/test.php');
 
         $this->assertTrue($provider->has('int'));
         $this->assertTrue($provider->has('null'));
@@ -106,7 +106,7 @@ class KeyValueTest extends TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage fileName: `ad8a8sda0s` is not readable
      */
-    public function testFromPhpInvalidFile()
+    public function testFromPhpInvalidFileName()
     {
         KeyValue::fromPhpFile('ad8a8sda0s');
     }
@@ -116,6 +116,24 @@ class KeyValueTest extends TestCase
      */
     public function testFromPhpEmpty()
     {
-        KeyValue::fromPhpFile(__DIR__ . '/../../Example/KeyValue/empty.php');
+        KeyValue::fromPhpFile(__DIR__ . '/KeyValueTest/empty.php');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessageRegExp  /fileName: `[\w\/]*KeyValueTest\/invalid\.php` return invalid result/
+     */
+    public function testFromPhpInvalidContent()
+    {
+        KeyValue::fromPhpFile(__DIR__ . '/KeyValueTest/invalid.php');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessageRegExp  /fileName: `[\w\/]*KeyValueTest\/invalid\.json` return invalid result/
+     */
+    public function testFromJsonInvalidContent()
+    {
+        KeyValue::fromJsonFile(__DIR__ . '/KeyValueTest/invalid.json');
     }
 }
