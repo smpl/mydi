@@ -32,7 +32,7 @@ class Autowire implements ProviderInterface
     {
         $result = [];
         foreach ($method->getParameters() as $parameter) {
-            $result[$parameter->getName()] = !is_null($parameter->getClass()) ? $parameter->getClass()->getName() : $parameter->getName();
+            $result[$parameter->name] = !is_null($parameter->getClass()) ? $parameter->getClass()->name : $parameter->name;
         }
         return $result;
     }
