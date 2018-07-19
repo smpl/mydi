@@ -6,19 +6,27 @@ namespace Smpl\Mydi\Loader;
 use Psr\Container\ContainerInterface;
 use Smpl\Mydi\LoaderInterface;
 
-final class Factory implements LoaderInterface
+class Factory implements LoaderInterface
 {
     /**
      * @var callable
      */
     private $callback;
 
-    /**
-     * @param \Closure $callback Анонимная функция которая возвращает необходимый результат
-     */
-    public function __construct(\Closure $callback)
+    public function __construct(callable $callback)
     {
         $this->callback = $callback;
+    }
+
+    public static function fromReflectionClass(\ReflectionClass $class, array $dependencies = [])
+    {
+        return new static(function (ContainerInterface $container) use ($class, $dependencies) {
+            $args = [];
+            foreach ($dependencies as $dependency) {
+                $args[] = $container->get($dependency);
+            }
+            return $class->newInstanceArgs($args);
+        });
     }
 
     public function get(ContainerInterface $locator)

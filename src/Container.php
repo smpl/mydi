@@ -54,11 +54,11 @@ final class Container implements ContainerInterface
     private function load(string $name)
     {
         if (!array_key_exists($name, $this->values)) {
-            $loader = $this->getProviderForContainer($name);
-            if (is_null($loader)) {
+            $provider = $this->getProviderForContainer($name);
+            if (is_null($provider)) {
                 throw new NotFoundException(sprintf('Container: `%s`, is not defined', $name));
             }
-            $this->values[$name] = $loader->get($name);
+            $this->values[$name] = $provider->get($name);
         }
 
         $result = $this->values[$name];
