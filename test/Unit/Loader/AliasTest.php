@@ -19,10 +19,4 @@ class AliasTest extends TestCase
         $this->assertSame(123, $alias->get($locator));
         $this->assertSame(123, $alias->get($locator));
     }
-
-    public function testGetName()
-    {
-        $alias = new Alias('magic');
-        $this->assertSame('magic', $alias->getName());
-    }
 }

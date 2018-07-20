@@ -4,10 +4,8 @@ declare(strict_types=1);
 namespace Smpl\Mydi;
 
 use Psr\Container\ContainerInterface;
-use Smpl\Mydi\Exception\ContainerException;
-use Smpl\Mydi\Exception\NotFoundException;
 
-final class Container implements ContainerInterface
+class Container implements ContainerInterface
 {
     /**
      * @var ProviderInterface[]
@@ -24,7 +22,7 @@ final class Container implements ContainerInterface
     public function has($name): bool
     {
         return array_key_exists($name, $this->values)
-            || !is_null($this->getProviderForContainer($name));
+            || null !== $this->getProviderForContainer($name);
     }
 
     public function get($name)
@@ -55,7 +53,7 @@ final class Container implements ContainerInterface
     {
         if (!array_key_exists($name, $this->values)) {
             $provider = $this->getProviderForContainer($name);
-            if (is_null($provider)) {
+            if (null === $provider) {
                 throw new NotFoundException(sprintf('Container: `%s`, is not defined', $name));
             }
             $this->values[$name] = $provider->get($name);

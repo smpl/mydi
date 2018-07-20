@@ -4,28 +4,24 @@ declare(strict_types=1);
 namespace Smpl\Mydi\Test\Unit\Provider;
 
 use PHPUnit\Framework\TestCase;
-use Psr\Container\ContainerInterface;
+use Smpl\Mydi\Loader\Alias;
+use Smpl\Mydi\Loader\Factory;
 use Smpl\Mydi\Loader\Service;
 use Smpl\Mydi\LoaderInterface;
 use Smpl\Mydi\Provider\Autowire;
-use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleAliasClass;
-use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentAnnotation;
-use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentBaseType;
-use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentDefaultValue;
-use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentName;
-use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleArgumentType;
-use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleCustomStd;
-use Smpl\Mydi\Test\Unit\Provider\AutowireTest\ExampleFactoryClass;
+use Smpl\Mydi\Provider\Autowire\Reader;
 
 class AutowireTest extends TestCase
 {
-    /** @var Autowire */
-    private $autowire;
 
     public function testHas()
     {
-        $this->assertTrue($this->autowire->has(\stdClass::class));
-        $this->assertFalse($this->autowire->has('some invalid class name'));
+        $reader = $this->createMock(Autowire\Reader::class);
+        /** @var Reader $reader */
+        $autowire = new Autowire($reader);
+
+        $this->assertTrue($autowire->has(\stdClass::class));
+        $this->assertFalse($autowire->has('some invalid class name'));
     }
 
     /**
@@ -33,139 +29,71 @@ class AutowireTest extends TestCase
      */
     public function testGetInvalid()
     {
-        $this->autowire->get('some invalid class name');
+        $reader = $this->createMock(Autowire\Reader::class);
+        /** @var Reader $reader */
+        $autowire = new Autowire($reader);
+        $autowire->get('some invalid class name');
+    }
+
+    public function testCreateWithoutArguments()
+    {
+        $autowire = new Autowire();
+        $this->assertInstanceOf(Autowire::class, $autowire);
     }
 
     public function testGetWithoutContructor()
     {
+        $reader = $this->createMock(Autowire\Reader::class);
+        $reader->expects($this->once())
+            ->method('getAliasName')
+            ->willReturn(false);
+        /** @var Reader $reader */
+        $autowire = new Autowire($reader);
+
         /** @var LoaderInterface $loader */
-        $loader = $this->autowire->get(\stdClass::class);
-        $this->assertInstanceOf(Service::class, $loader);
-        $container = $this->createMock(ContainerInterface::class);
-        /** @var ContainerInterface $container */
-        $result = $loader->get($container);
-        $this->assertInstanceOf(\stdClass::class, $result);
-    }
-
-    public function testGetNameArgs()
-    {
-        /** @var LoaderInterface $loader */
-        $loader = $this->autowire->get(ExampleArgumentName::class);
-
-        $container = $this->createMock(ContainerInterface::class);
-        $value = 'magic';
-        $container->method('get')
-            ->with('a')
-            ->willReturn($value);
-        /** @var ContainerInterface $container */
-
-        /** @var ExampleArgumentName $result */
-        $result = $loader->get($container);
-        $this->assertInstanceOf(ExampleArgumentName::class, $result);
-        $this->assertSame($value, $result->a);
-    }
-
-    public function testGetTypeArgs()
-    {
-        /** @var LoaderInterface $loader */
-        $loader = $this->autowire->get(ExampleArgumentType::class);
-
-        $container = $this->createMock(ContainerInterface::class);
-        $value = new \stdClass();
-        $container->method('get')
-            ->with(\stdClass::class)
-            ->willReturn($value);
-        /** @var ContainerInterface $container */
-
-        /** @var ExampleArgumentType $result */
-        $result = $loader->get($container);
-        $this->assertInstanceOf(\stdClass::class, $result->name);
-    }
-
-    public function testGetAnnotationArgs()
-    {
-        /** @var LoaderInterface $loader */
-        $loader = $this->autowire->get(ExampleArgumentAnnotation::class);
-
-        $container = $this->createMock(ContainerInterface::class);
-        $value = new ExampleCustomStd();
-        $container->method('get')
-            ->with(ExampleCustomStd::class)
-            ->willReturn($value);
-        /** @var ContainerInterface $container */
-
-        /** @var ExampleArgumentAnnotation $result */
-        $result = $loader->get($container);
-        $this->assertInstanceOf(ExampleCustomStd::class, $result->class);
-
-    }
-
-    public function testGetNameWithDefaultArgs()
-    {
-        /** @var LoaderInterface $loader */
-        $loader = $this->autowire->get(ExampleArgumentDefaultValue::class);
-
-        $container = $this->createMock(ContainerInterface::class);
-        $value = 'magic';
-        $container->method('get')
-            ->with('a')
-            ->willReturn($value);
-        /** @var ContainerInterface $container */
-
-        /** @var ExampleArgumentName $result */
-        $result = $loader->get($container);
-        $this->assertInstanceOf(ExampleArgumentDefaultValue::class, $result);
-        $this->assertSame($value, $result->a);
-    }
-
-    public function testGetBaseTypeArgs()
-    {
-        /** @var LoaderInterface $loader */
-        $loader = $this->autowire->get(ExampleArgumentBaseType::class);
-
-        $container = $this->createMock(ContainerInterface::class);
-        $value = 'magic';
-        $container->method('get')
-            ->with('a')
-            ->willReturn($value);
-        /** @var ContainerInterface $container */
-
-        /** @var ExampleArgumentBaseType $result */
-        $result = $loader->get($container);
-        $this->assertSame($value, $result->a);
-    }
-
-    public function testGetFactory()
-    {
-        /** @var LoaderInterface $loader */
-        $loader = $this->autowire->get(ExampleFactoryClass::class);
-
-        $container = $this->createMock(ContainerInterface::class);
-        /** @var ContainerInterface $container */
-
-        $this->assertEquals($loader->get($container), $loader->get($container));
-        $this->assertNotSame($loader->get($container), $loader->get($container));
+        $loader = $autowire->get(\stdClass::class);
+        $this->assertEquals(Service::class, get_class($loader));
     }
 
     public function testGetAlias()
     {
-        /** @var LoaderInterface $loader */
-        $loader = $this->autowire->get(ExampleAliasClass::class);
+        $reader = $this->createMock(Autowire\Reader::class);
+        $reader->expects($this->once())
+            ->method('getAliasName')
+            ->willReturn('magic');
+        /** @var Reader $reader */
+        $autowire = new Autowire($reader);
 
-        $container = $this->createMock(ContainerInterface::class);
-        $value = new ExampleCustomStd();
-        $container->method('get')
-            ->with(ExampleCustomStd::class)
-            ->willReturn($value);
-        /** @var ContainerInterface $container */
-
-        $this->assertInstanceOf(\stdClass::class, $loader->get($container));
-
+        $loader = $autowire->get(\stdClass::class);
+        $this->assertEquals(Alias::class, get_class($loader));
     }
 
-    protected function setUp()
+    public function testGetFactory()
     {
-        $this->autowire = new Autowire();
+        $reader = $this->createMock(Autowire\Reader::class);
+        $reader->expects($this->once())
+            ->method('getAliasName')
+            ->willReturn(false);
+        $reader->expects($this->once())
+            ->method('isFactory')
+            ->willReturn(true);
+        /** @var Reader $reader */
+        $autowire = new Autowire($reader);
+
+        $loader = $autowire->get(\stdClass::class);
+        $this->assertEquals(Factory::class, get_class($loader));
+    }
+
+    public function testGetWithLoadDependency()
+    {
+        $reader = $this->createMock(Autowire\Reader::class);
+        $reader->expects($this->once())
+            ->method('getAliasName')
+            ->willReturn(false);
+        /** @var Reader $reader */
+        $autowire = new Autowire($reader);
+
+        $this->assertSame(Service::class, get_class($autowire->get(\Exception::class)));
     }
 
 }

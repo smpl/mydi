@@ -10,30 +10,13 @@ final class Alias implements LoaderInterface
 {
     private $name;
 
-    /**
-     * Alias constructor.
-     * @param string $name
-     */
     public function __construct(string $name)
-    {
-        $this->setName($name);
-    }
-
-    private function setName(string $name)
     {
         $this->name = $name;
     }
 
-    public function get(ContainerInterface $locator)
+    public function get(ContainerInterface $container)
     {
-        return $locator->get($this->name);
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
+        return $container->get($this->name);
     }
 }

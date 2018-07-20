@@ -10,10 +10,10 @@ class Service extends Factory
     private $result;
     private $isCalled = false;
 
-    public function get(ContainerInterface $locator)
+    public function get(ContainerInterface $container)
     {
         if (!$this->isCalled) {
-            $this->result = parent::get($locator);
+            $this->result = parent::get($container);
             $this->isCalled = true;
         }
         return $this->result;

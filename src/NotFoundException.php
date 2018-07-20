@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Smpl\Mydi\Exception;
+namespace Smpl\Mydi;
 
 use Psr\Container\NotFoundExceptionInterface;
 

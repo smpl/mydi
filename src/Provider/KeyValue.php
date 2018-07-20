@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Provider;
 
-use Smpl\Mydi\Exception\NotFoundException;
+use Smpl\Mydi\NotFoundException;
 use Smpl\Mydi\ProviderInterface;
 
 class KeyValue implements ProviderInterface
@@ -15,7 +15,7 @@ class KeyValue implements ProviderInterface
         $this->configuration = $configuration;
     }
 
-    public static function fromJsonFile(string $fileName)
+    public static function fromJsonFile(string $fileName): self
     {
         if (!is_readable($fileName)) {
             $message = sprintf('fileName: `%s` is not readable', $fileName);
@@ -29,7 +29,7 @@ class KeyValue implements ProviderInterface
         return new self($configuration);
     }
 
-    public static function fromPhpFile(string $fileName)
+    public static function fromPhpFile(string $fileName): self
     {
         if (!is_readable($fileName)) {
             $message = sprintf('fileName: `%s` is not readable', $fileName);
@@ -43,10 +43,6 @@ class KeyValue implements ProviderInterface
         return new self($configuration);
     }
 
-    /**
-     * @param string $name
-     * @return mixed
-     */
     public function get(string $name)
     {
         if (!$this->has($name)) {
@@ -55,10 +51,6 @@ class KeyValue implements ProviderInterface
         return $this->configuration[$name];
     }
 
-    /**
-     * @param string $name
-     * @return bool
-     */
     public function has(string $name): bool
     {
         return array_key_exists($name, $this->configuration);

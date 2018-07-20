@@ -3,14 +3,11 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Provider;
 
-use Smpl\Mydi\Exception\NotFoundException;
+use Smpl\Mydi\NotFoundException;
 use Smpl\Mydi\ProviderInterface;
 
 final class DynamicFile implements ProviderInterface
 {
-    /**
-     * @var string
-     */
     private $basePath;
 
     /**
@@ -42,11 +39,6 @@ final class DynamicFile implements ProviderInterface
         return $result;
     }
 
-    /**
-     * Можно переопредилить для того чтобы использовать свою структуру поиска файлов в зависимости от имени контейнера
-     * @param string $containerName
-     * @return string
-     */
     private function containerNameToPath(string $containerName): string
     {
         $result = str_replace('_', DIRECTORY_SEPARATOR, $containerName);

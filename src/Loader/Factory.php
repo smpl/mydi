@@ -8,9 +8,6 @@ use Smpl\Mydi\LoaderInterface;
 
 class Factory implements LoaderInterface
 {
-    /**
-     * @var callable
-     */
     private $callback;
 
     public function __construct(callable $callback)
@@ -29,8 +26,8 @@ class Factory implements LoaderInterface
         });
     }
 
-    public function get(ContainerInterface $locator)
+    public function get(ContainerInterface $container)
     {
-        return call_user_func_array($this->callback, [$locator]);
+        return call_user_func_array($this->callback, [$container]);
     }
 }
