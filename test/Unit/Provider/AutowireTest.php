@@ -36,7 +36,7 @@ class AutowireTest extends TestCase
         $this->autowire->get('some invalid class name');
     }
 
-    public function testGetArgs()
+    public function testGetWithoutContructor()
     {
         /** @var LoaderInterface $loader */
         $loader = $this->autowire->get(\stdClass::class);
@@ -55,7 +55,7 @@ class AutowireTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $value = 'magic';
         $container->method('get')
-            ->with($this->equalTo('a'))
+            ->with('a')
             ->willReturn($value);
         /** @var ContainerInterface $container */
 
@@ -73,7 +73,7 @@ class AutowireTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $value = new \stdClass();
         $container->method('get')
-            ->with($this->equalTo(\stdClass::class))
+            ->with(\stdClass::class)
             ->willReturn($value);
         /** @var ContainerInterface $container */
 
@@ -90,7 +90,7 @@ class AutowireTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $value = new ExampleCustomStd();
         $container->method('get')
-            ->with($this->equalTo(ExampleCustomStd::class))
+            ->with(ExampleCustomStd::class)
             ->willReturn($value);
         /** @var ContainerInterface $container */
 
@@ -108,7 +108,7 @@ class AutowireTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $value = 'magic';
         $container->method('get')
-            ->with($this->equalTo('a'))
+            ->with('a')
             ->willReturn($value);
         /** @var ContainerInterface $container */
 
@@ -126,7 +126,7 @@ class AutowireTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $value = 'magic';
         $container->method('get')
-            ->with($this->equalTo('a'))
+            ->with('a')
             ->willReturn($value);
         /** @var ContainerInterface $container */
 
@@ -155,6 +155,7 @@ class AutowireTest extends TestCase
         $container = $this->createMock(ContainerInterface::class);
         $value = new ExampleCustomStd();
         $container->method('get')
+            ->with(ExampleCustomStd::class)
             ->willReturn($value);
         /** @var ContainerInterface $container */
 
