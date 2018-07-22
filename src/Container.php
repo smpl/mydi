@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi;
 
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
 
 class Container implements ContainerInterface
 {
-    /**
-     * @var ProviderInterface[]
-     */
     private $providers;
     private $values = [];
     private $calls = [];
@@ -21,8 +20,7 @@ class Container implements ContainerInterface
 
     public function has($name): bool
     {
-        return array_key_exists($name, $this->values)
-            || null !== $this->getProviderForContainer($name);
+        return array_key_exists($name, $this->values) || null !== $this->getProviderOrNull($name);
     }
 
     public function get($name)
@@ -31,11 +29,14 @@ class Container implements ContainerInterface
             throw new ContainerException('Container name must be string');
         }
         $this->checkInfiniteRecursion($name);
-        $result = $this->load($name);
-        array_pop($this->calls);
+        $result = $this->getValue($name);
         return $result;
     }
 
+    /**
+     * @param string $name
+     * @throws ContainerExceptionInterface
+     */
     private function checkInfiniteRecursion(string $name)
     {
         if (array_search($name, $this->calls) !== false) {
@@ -46,27 +47,22 @@ class Container implements ContainerInterface
                 )
             );
         }
-        $this->calls[] = $name;
     }
 
-    private function load(string $name)
+    private function getValue(string $name)
     {
+        $this->calls[] = $name;
         if (!array_key_exists($name, $this->values)) {
-            $provider = $this->getProviderForContainer($name);
-            if (null === $provider) {
-                throw new NotFoundException(sprintf('Container: `%s`, is not defined', $name));
-            }
+            $provider = $this->getProvider($name);
             $this->values[$name] = $provider->get($name);
         }
 
-        $result = $this->values[$name];
-        if ($result instanceof LoaderInterface) {
-            $result = $result->get($this);
-        }
+        $result = $this->load($name);
+        array_pop($this->calls);
         return $result;
     }
 
-    private function getProviderForContainer(string $name)
+    private function getProviderOrNull(string $name)
     {
         $result = null;
         foreach ($this->providers as $provider) {
@@ -76,5 +72,28 @@ class Container implements ContainerInterface
             }
         }
         return $result;
+    }
+
+    private function load(string $name)
+    {
+        $result = $this->values[$name];
+        if ($result instanceof LoaderInterface) {
+            $result = $result->get($this);
+        }
+        return $result;
+    }
+
+    /**
+     * @param string $name
+     * @return ProviderInterface
+     * @throws NotFoundExceptionInterface
+     */
+    private function getProvider(string $name): ProviderInterface
+    {
+        $provider = $this->getProviderOrNull($name);
+        if (null === $provider) {
+            throw new NotFoundException(sprintf('Container: `%s`, is not defined', $name));
+        }
+        return $provider;
     }
 }
