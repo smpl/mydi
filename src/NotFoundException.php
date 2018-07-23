@@ -5,7 +5,7 @@ namespace Smpl\Mydi;
 
 use Psr\Container\NotFoundExceptionInterface;
 
-final class NotFoundException extends \LogicException implements NotFoundExceptionInterface
+class NotFoundException extends \LogicException implements NotFoundExceptionInterface
 {
 
 }

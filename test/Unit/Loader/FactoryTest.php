@@ -25,18 +25,4 @@ class FactoryTest extends TestCase
         });
         $this->assertSame($locator, $factory->get($locator));
     }
-
-    public function testFromReflectionClass()
-    {
-        $class = $this->createMock(\ReflectionClass::class);
-        /** @var \ReflectionClass $class */
-        $container = $this->createMock(ContainerInterface::class);
-        $container->expects($this->once())
-            ->method('get')
-            ->with('test');
-        /** @var ContainerInterface $container */
-
-        $factory = Factory::fromReflectionClass($class, ['test']);
-        $factory->get($container);
-    }
 }

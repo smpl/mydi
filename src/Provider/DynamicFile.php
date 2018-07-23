@@ -6,13 +6,10 @@ namespace Smpl\Mydi\Provider;
 use Smpl\Mydi\NotFoundException;
 use Smpl\Mydi\ProviderInterface;
 
-final class DynamicFile implements ProviderInterface
+class DynamicFile implements ProviderInterface
 {
     private $basePath;
 
-    /**
-     * @param string $basePath директория где хранятся файлы конфигурации
-     */
     public function __construct(string $basePath)
     {
         $this->basePath = (string)realpath($basePath);

@@ -5,7 +5,7 @@ namespace Smpl\Mydi;
 
 use Psr\Container\ContainerExceptionInterface;
 
-final class ContainerException extends \RuntimeException implements ContainerExceptionInterface
+class ContainerException extends \RuntimeException implements ContainerExceptionInterface
 {
 
 }

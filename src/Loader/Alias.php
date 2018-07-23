@@ -6,7 +6,7 @@ namespace Smpl\Mydi\Loader;
 use Psr\Container\ContainerInterface;
 use Smpl\Mydi\LoaderInterface;
 
-final class Alias implements LoaderInterface
+class Alias implements LoaderInterface
 {
     private $name;
 
