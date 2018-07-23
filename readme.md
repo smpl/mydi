@@ -9,24 +9,14 @@
     <a href="https://packagist.org/packages/smpl/mydi"><img src="https://poser.pugx.org/smpl/mydi/license.svg"></a>
 </p>
 
-## Особенности и преимущества
-
-* Реализация [psr/container](https://github.com/container-interop/fig-standards/blob/master/proposed/container.md).
-* Максимально строгая типизация для **PHP** и поддержка всех стабильных и актуальных релизов.
-* Динамическая загрузка конфигурации (подгружается только то что надо), [подробней](doc/dynamicConfiguration.md).
-* Гибкость и простота расширения, [пример создания своего провайдера](doc/customProvider.md).
-* Полное покрытие тестами [phpunit](https://phpunit.de/).
-* В проекте используется [семантическое версионирование](http://bfy.tw/AJ0C).
-* Генерирует настройки на лету, при хорошем качестве вашего кода.
-
 ## Установка
 
 1. Установить [composer](https://getcomposer.org/doc/00-intro.md) если ещё не установлен!
 2. Выполнить:
+
 ``` 
 composer require smpl/mydi @stable
-``` 
-3. [Ознакомиться с документацией](/doc/readme.md) или изучать на практике.
+```
 
 В случае обнаружению багов создавайте [issue](https://github.com/smpl/mydi/issues/new).
 
