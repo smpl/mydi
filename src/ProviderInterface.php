@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi;
 
-/**
- * Этот интерфейс используется для расширенеия возможностей Smpl\Mydi\Container
- */
 interface ProviderInterface
 {
     /**

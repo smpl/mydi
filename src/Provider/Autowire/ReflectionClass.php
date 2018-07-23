@@ -12,7 +12,7 @@ class ReflectionClass extends \ReflectionClass
     public function createClosure(): callable
     {
         if (!$this->isInstantiable()) {
-            throw new ContainerException("{$this->getName()} is not instantiable");
+            throw new ContainerException("{$this->name} is not instantiable");
         }
         $dependencies = $this->getDependencies();
         $class = $this;
@@ -30,7 +30,7 @@ class ReflectionClass extends \ReflectionClass
         $result = [];
         if (null !== $this->getConstructor()) {
             foreach ($this->getConstructor()->getParameters() as $parameter) {
-                $result[$parameter->getName()] = null !== $parameter->getClass() ? $parameter->getClass()->getName() : $parameter->getName();
+                $result[$parameter->name] = null !== $parameter->getClass() ? $parameter->getClass()->name : $parameter->name;
             }
         }
         return $result;
