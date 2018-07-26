@@ -20,8 +20,7 @@ class Autowire implements ProviderInterface, ContainerAwareInterface
             if (!$class->isInstantiable()) {
                 throw new ContainerException("{$class->name} is not instantiable");
             }
-            $args = $this->getInitArgs($class);
-            return $class->newInstanceArgs($args);
+            return $this->createInstance($class);
         } catch (\ReflectionException $e) {
             throw new NotFoundException();
         }
@@ -47,13 +46,18 @@ class Autowire implements ProviderInterface, ContainerAwareInterface
         return $result;
     }
 
-    private function getInitArgs(\ReflectionClass $class): array
+    private function createInstance(\ReflectionClass $class)
     {
         $dependencies = $this->getDependencies($class);
         $args = [];
         foreach ($dependencies as $dependency) {
             $args[] = $this->container->get($dependency);
         }
-        return $args;
+        $result = $class->newInstanceArgs($args);
+
+        if ($result instanceof ContainerAwareInterface) {
+            $result->setContainer($this->container);
+        }
+        return $result;
     }
 }

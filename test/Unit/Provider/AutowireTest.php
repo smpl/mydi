@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Smpl\Mydi\ContainerAwareInterface;
 use Smpl\Mydi\Provider\Autowire;
 
 class AutowireTest extends TestCase
@@ -100,5 +101,36 @@ class AutowireTest extends TestCase
         $class = ContainerInterface::class;
         $this->expectExceptionMessage("$class is not instantiable");
         $autowire->provide($class);
+    }
+
+    /**
+     * @depends testIsProvide
+     */
+    public function testProvideContainerAwareInterface(Autowire $autowire)
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects($this->exactly(2))
+            ->method('get')
+            ->withConsecutive(['a'], [\stdClass::class])
+            ->willReturnOnConsecutiveCalls(5, new \stdClass());
+        $autowire->setContainer($container);
+
+        $result = $autowire->provide(get_class(new class(123) implements ContainerAwareInterface
+        {
+            public $a;
+            public $magic;
+
+            public function __construct(int $a)
+            {
+                $this->a = $a;
+            }
+
+            public function setContainer(ContainerInterface $container)
+            {
+                $this->magic = $container->get(\stdClass::class);
+            }
+        }));
+        $this->assertSame(5, $result->a);
+        $this->assertInstanceOf(\stdClass::class, $result->magic);
     }
 }
