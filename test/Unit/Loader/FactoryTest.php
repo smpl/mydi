@@ -9,20 +9,20 @@ use Smpl\Mydi\Loader\Factory;
 
 class FactoryTest extends TestCase
 {
-    public function testGet()
+    public function testLoad()
     {
         $factory = new Factory(function () {
             return new \stdClass();
         });
         /** @var ContainerInterface $locator */
         $locator = $this->getMockBuilder(ContainerInterface::class)->getMock();
-        $result = $factory->get($locator);
-        $this->assertEquals($result, $factory->get($locator));
-        $this->assertNotSame($result, $factory->get($locator));
+        $result = $factory->load($locator);
+        $this->assertEquals($result, $factory->load($locator));
+        $this->assertNotSame($result, $factory->load($locator));
 
         $factory = new Factory(function (ContainerInterface $locator) {
             return $locator;
         });
-        $this->assertSame($locator, $factory->get($locator));
+        $this->assertSame($locator, $factory->load($locator));
     }
 }

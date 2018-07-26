@@ -15,7 +15,7 @@ class Factory implements LoaderInterface
         $this->closure = $closure;
     }
 
-    public function get(ContainerInterface $container)
+    public function load(ContainerInterface $container)
     {
         return call_user_func_array($this->closure, [$container]);
     }

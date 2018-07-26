@@ -9,19 +9,19 @@ use Smpl\Mydi\Loader\Service;
 
 class ServiceTest extends TestCase
 {
-    public function testGet()
+    public function testLoad()
     {
         $service = new Service(function () {
             return new \stdClass();
         });
         /** @var ContainerInterface $locator */
         $locator = $this->getMockBuilder(ContainerInterface::class)->getMock();
-        $result = $service->get($locator);
-        $this->assertSame($result, $service->get($locator));
+        $result = $service->load($locator);
+        $this->assertSame($result, $service->load($locator));
 
         $service = new Service(function (ContainerInterface $locator) {
             return $locator;
         });
-        $this->assertSame($locator, $service->get($locator));
+        $this->assertSame($locator, $service->load($locator));
     }
 }

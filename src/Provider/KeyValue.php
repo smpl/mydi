@@ -43,15 +43,15 @@ class KeyValue implements ProviderInterface
         return new self($configuration);
     }
 
-    public function get(string $name)
+    public function provide(string $name)
     {
-        if (!$this->has($name)) {
+        if (!$this->hasProvide($name)) {
             throw new NotFoundException();
         }
         return $this->configuration[$name];
     }
 
-    public function has(string $name): bool
+    public function hasProvide(string $name): bool
     {
         return array_key_exists($name, $this->configuration);
     }

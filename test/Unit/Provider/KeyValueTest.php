@@ -9,55 +9,55 @@ use Smpl\Mydi\Provider\KeyValue;
 class KeyValueTest extends TestCase
 {
 
-    public function testGet()
+    public function testProvide()
     {
         $key = 'magic';
         $value = 'magicValue';
         $provider = new KeyValue([$key => $value]);
-        $this->assertSame($value, $provider->get($key));
+        $this->assertSame($value, $provider->provide($key));
     }
 
-    public function testHas()
+    public function testIsProvide()
     {
         $key = 'magic';
         $value = 'magicValue';
         $provider = new KeyValue([$key => $value, 'fail' => null]);
-        $this->assertTrue($provider->has($key));
-        $this->assertFalse($provider->has('adasdhuasdh'));
-        $this->assertTrue($provider->has('fail'));
+        $this->assertTrue($provider->hasProvide($key));
+        $this->assertFalse($provider->hasProvide('adasdhuasdh'));
+        $this->assertTrue($provider->hasProvide('fail'));
     }
 
     /**
      * @expectedException \Psr\Container\NotFoundExceptionInterface
      */
-    public function testGetInvalidName()
+    public function testProvideInvalidName()
     {
         $provider = new KeyValue([]);
-        $provider->get('asdasd');
+        $provider->provide('asdasd');
     }
 
     public function testFromJsonFile()
     {
         $provider = KeyValue::fromJsonFile(__DIR__ . '/KeyValueTest/test.json');
-        $this->assertTrue($provider->has('int'));
-        $this->assertTrue($provider->has('null'));
-        $this->assertTrue($provider->has('string'));
-        $this->assertTrue($provider->has('float'));
-        $this->assertTrue($provider->has('arrayWithKeyInt'));
-        $this->assertTrue($provider->has('arrayWithKeyString'));
+        $this->assertTrue($provider->hasProvide('int'));
+        $this->assertTrue($provider->hasProvide('null'));
+        $this->assertTrue($provider->hasProvide('string'));
+        $this->assertTrue($provider->hasProvide('float'));
+        $this->assertTrue($provider->hasProvide('arrayWithKeyInt'));
+        $this->assertTrue($provider->hasProvide('arrayWithKeyString'));
 
-        $this->assertSame(15, $provider->get('int'));
-        $this->assertSame(null, $provider->get('null'));
-        $this->assertSame('some string', $provider->get('string'));
-        $this->assertSame(0.5, $provider->get('float'));
+        $this->assertSame(15, $provider->provide('int'));
+        $this->assertSame(null, $provider->provide('null'));
+        $this->assertSame('some string', $provider->provide('string'));
+        $this->assertSame(0.5, $provider->provide('float'));
         $this->assertSame([
             "test0",
             "test1"
-        ], $provider->get('arrayWithKeyInt'));
+        ], $provider->provide('arrayWithKeyInt'));
         $this->assertSame([
             "key1" => "value1",
             "key2" => 15
-        ], $provider->get('arrayWithKeyString'));
+        ], $provider->provide('arrayWithKeyString'));
     }
 
     /**
@@ -81,25 +81,25 @@ class KeyValueTest extends TestCase
     {
         $provider = KeyValue::fromPhpFile(__DIR__ . '/KeyValueTest/test.php');
 
-        $this->assertTrue($provider->has('int'));
-        $this->assertTrue($provider->has('null'));
-        $this->assertTrue($provider->has('string'));
-        $this->assertTrue($provider->has('float'));
-        $this->assertTrue($provider->has('arrayWithKeyInt'));
-        $this->assertTrue($provider->has('arrayWithKeyString'));
+        $this->assertTrue($provider->hasProvide('int'));
+        $this->assertTrue($provider->hasProvide('null'));
+        $this->assertTrue($provider->hasProvide('string'));
+        $this->assertTrue($provider->hasProvide('float'));
+        $this->assertTrue($provider->hasProvide('arrayWithKeyInt'));
+        $this->assertTrue($provider->hasProvide('arrayWithKeyString'));
 
-        $this->assertSame(15, $provider->get('int'));
-        $this->assertSame(null, $provider->get('null'));
-        $this->assertSame('some string', $provider->get('string'));
-        $this->assertSame(0.5, $provider->get('float'));
+        $this->assertSame(15, $provider->provide('int'));
+        $this->assertSame(null, $provider->provide('null'));
+        $this->assertSame('some string', $provider->provide('string'));
+        $this->assertSame(0.5, $provider->provide('float'));
         $this->assertSame([
             "test0",
             "test1"
-        ], $provider->get('arrayWithKeyInt'));
+        ], $provider->provide('arrayWithKeyInt'));
         $this->assertSame([
             "key1" => "value1",
             "key2" => 15
-        ], $provider->get('arrayWithKeyString'));
+        ], $provider->provide('arrayWithKeyString'));
     }
 
     /**

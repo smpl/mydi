@@ -15,7 +15,7 @@ class ContainerTest extends TestCase
         $mockLoader = $this->getMockBuilder(ProviderInterface::class)->getMock();
         $mockLoader
             ->expects($this->once())
-            ->method('has')
+            ->method('hasProvide')
             ->with($this->equalTo('magic'))
             ->willReturn(true);
         $locator = new Container($mockLoader);
@@ -48,11 +48,11 @@ class ContainerTest extends TestCase
 
         $loader = $this->getMockBuilder(LoaderInterface::class)->getMock();
         $loader->expects($this->any())
-            ->method('get')
+            ->method('load')
             ->will($this->returnValue($result));
         $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
-        $provider->method('has')->willReturn(true);
-        $provider->method('get')->willReturn($loader);
+        $provider->method('hasProvide')->willReturn(true);
+        $provider->method('provide')->willReturn($loader);
         $locator = new Container($provider);
         $this->assertSame($result, $locator->get('test'));
     }
@@ -64,21 +64,21 @@ class ContainerTest extends TestCase
     public function testNotCorrectConfiguration()
     {
         $loaderA = $this->getMockBuilder(LoaderInterface::class)->getMock();
-        $loaderA->method('get')->willReturnCallback(function (ContainerInterface $locator) {
+        $loaderA->method('load')->willReturnCallback(function (ContainerInterface $locator) {
             $obj = new \stdClass();
             $obj->test = $locator->get('b');
             return $obj;
         });
 
         $loaderB = $this->getMockBuilder(LoaderInterface::class)->getMock();
-        $loaderB->method('get')->willReturnCallback(function (ContainerInterface $locator) {
+        $loaderB->method('load')->willReturnCallback(function (ContainerInterface $locator) {
             $obj = new \stdClass();
             $obj->test = $locator->get('a');
             return $obj;
         });
         $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
-        $provider->method('has')->willReturn(true);
-        $provider->method('get')->willReturnCallback(function ($name) use ($loaderA, $loaderB) {
+        $provider->method('hasProvide')->willReturn(true);
+        $provider->method('provide')->willReturnCallback(function ($name) use ($loaderA, $loaderB) {
             $result = $loaderA;
             if ($name === 'b') {
                 $result = $loaderB;
@@ -107,11 +107,11 @@ class ContainerTest extends TestCase
 
         $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
         $provider->expects($this->once())
-            ->method('has')
+            ->method('hasProvide')
             ->with($this->equalTo($name))
             ->will($this->returnValue(true));
         $provider->expects($this->once())
-            ->method('get')
+            ->method('provide')
             ->with($this->equalTo($name))
             ->will($this->returnValue($value));
         /** @var LoaderInterface $provider */

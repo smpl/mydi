@@ -15,6 +15,11 @@ class Container implements ContainerInterface
 
     public function __construct(ProviderInterface ... $providers)
     {
+        foreach ($providers as $provider) {
+            if ($provider instanceof ContainerAwareInterface) {
+                $provider->setContainer($this);
+            }
+        }
         $this->providers = $providers;
     }
 
@@ -54,7 +59,7 @@ class Container implements ContainerInterface
         $this->calls[] = $name;
         if (!array_key_exists($name, $this->values)) {
             $provider = $this->getProvider($name);
-            $this->values[$name] = $provider->get($name);
+            $this->values[$name] = $provider->provide($name);
         }
 
         $result = $this->load($name);
@@ -66,7 +71,7 @@ class Container implements ContainerInterface
     {
         $result = null;
         foreach ($this->providers as $provider) {
-            if ($provider->has($name)) {
+            if ($provider->hasProvide($name)) {
                 $result = $provider;
                 break;
             }
@@ -78,7 +83,7 @@ class Container implements ContainerInterface
     {
         $result = $this->values[$name];
         if ($result instanceof LoaderInterface) {
-            $result = $result->get($this);
+            $result = $result->load($this);
         }
         return $result;
     }

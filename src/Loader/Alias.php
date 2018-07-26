@@ -15,7 +15,7 @@ class Alias implements LoaderInterface
         $this->name = $name;
     }
 
-    public function get(ContainerInterface $container)
+    public function load(ContainerInterface $container)
     {
         return $container->get($this->name);
     }

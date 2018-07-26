@@ -15,9 +15,9 @@ class DynamicFile implements ProviderInterface
         $this->basePath = (string)realpath($basePath);
     }
 
-    public function get(string $containerName)
+    public function provide(string $containerName)
     {
-        if (!$this->has($containerName)) {
+        if (!$this->hasProvide($containerName)) {
             throw new NotFoundException;
         }
         /** @noinspection PhpIncludeInspection */
@@ -25,7 +25,7 @@ class DynamicFile implements ProviderInterface
         return $result;
     }
 
-    public function has(string $containerName): bool
+    public function hasProvide(string $containerName): bool
     {
         $result = false;
         $path = $this->containerNameToPath($containerName);

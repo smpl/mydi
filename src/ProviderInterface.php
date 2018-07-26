@@ -10,11 +10,11 @@ interface ProviderInterface
      * @return mixed
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function get(string $name);
+    public function provide(string $name);
 
     /**
      * @param string $name
      * @return bool
      */
-    public function has(string $name): bool;
+    public function hasProvide(string $name): bool;
 }

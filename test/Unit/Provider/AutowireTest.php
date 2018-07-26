@@ -4,38 +4,101 @@ declare(strict_types=1);
 namespace Smpl\Mydi\Test\Unit\Provider;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
-use Smpl\Mydi\Loader\Service;
 use Smpl\Mydi\Provider\Autowire;
 
 class AutowireTest extends TestCase
 {
-    public function testHas()
+    public function testIsProvide()
     {
         $autowire = new Autowire();
-        $this->assertTrue($autowire->has(\stdClass::class));
-        $this->assertFalse($autowire->has('invalid name'));
+        $this->assertTrue($autowire->hasProvide(\stdClass::class));
+        $this->assertFalse($autowire->hasProvide('invalid name'));
         return $autowire;
     }
 
     /**
-     * @depends testHas
+     * @depends testIsProvide
      * @param Autowire $autowire
      */
-    public function testGet(Autowire $autowire)
+    public function testProvide(Autowire $autowire)
     {
-        $result = $autowire->get(\stdClass::class);
-        $this->assertInstanceOf(Service::class, $result);
-        $this->assertNotSame($result, $autowire->get(\stdClass::class));
+        $result = $autowire->provide(\stdClass::class);
+        $this->assertInstanceOf(\stdClass::class, $result);
+        $this->assertNotSame($result, $autowire->provide(\stdClass::class));
     }
 
     /**
-     * @depends testHas
+     * @depends testIsProvide
      * @param Autowire $autowire
      */
-    public function testGetInvalid(Autowire $autowire)
+    public function testProvideInvalid(Autowire $autowire)
     {
         $this->expectException(NotFoundExceptionInterface::class);
-        $autowire->get('invalid name');
+        $autowire->provide('invalid name');
+    }
+
+    /**
+     * @depends testIsProvide
+     */
+    public function testProvideWithParamName(Autowire $autowire)
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->expects($this->once())
+            ->method('get')
+            ->with('name')
+            ->willReturn('magic');
+        $autowire->setContainer($container);
+        $result = $autowire->provide(get_class(new class('asd')
+        {
+            public $name;
+
+            public function __construct(string $name)
+            {
+                $this->name = $name;
+            }
+        }));
+
+        $this->assertTrue(is_object($result));
+        $this->assertSame('magic', $result->name);
+    }
+
+    /**
+     * @depends testIsProvide
+     */
+    public function testProvideWithParamType(Autowire $autowire)
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container
+            ->expects($this->once())
+            ->method('get')
+            ->with(\stdClass::class)
+            ->willReturn(new \stdClass());
+        $autowire->setContainer($container);
+        $result = $autowire->provide(get_class(new class(new \stdClass())
+        {
+            public $name;
+
+            public function __construct(\stdClass $name)
+            {
+                $this->name = $name;
+            }
+        }));
+        $this->assertTrue(is_object($result));
+        $this->assertInstanceOf(\stdClass::class, $result->name);
+    }
+
+    /**
+     * @depends testIsProvide
+     */
+    public function testProvideNotInstanceble(Autowire $autowire)
+    {
+        $this->expectException(ContainerExceptionInterface::class);
+        $class = ContainerInterface::class;
+        $this->expectExceptionMessage("$class is not instantiable");
+        $autowire->provide($class);
     }
 }

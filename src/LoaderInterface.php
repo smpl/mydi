@@ -7,5 +7,5 @@ use Psr\Container\ContainerInterface;
 
 interface LoaderInterface
 {
-    public function get(ContainerInterface $container);
+    public function load(ContainerInterface $container);
 }

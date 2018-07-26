@@ -9,14 +9,14 @@ use Smpl\Mydi\Loader\Alias;
 
 class AliasTest extends TestCase
 {
-    public function testGet()
+    public function testLoad()
     {
         $alias = new Alias('test');
-        $locator = $this->getMockBuilder(ContainerInterface::class)->getMock();
-        $locator->method('get')
+        $container = $this->getMockBuilder(ContainerInterface::class)->getMock();
+        $container->method('get')
             ->willReturn(123);
-        /** @var ContainerInterface $locator */
-        $this->assertSame(123, $alias->get($locator));
-        $this->assertSame(123, $alias->get($locator));
+        /** @var ContainerInterface $container */
+        $this->assertSame(123, $alias->load($container));
+        $this->assertSame(123, $alias->load($container));
     }
 }
