@@ -17,7 +17,6 @@ class Service
         $this->closure = $closure;
     }
 
-
     public function load(ContainerInterface $container)
     {
         if (!$this->isCalled) {
