@@ -10,7 +10,7 @@ trait ContainerAwareTrait
     /** @var ContainerInterface $container */
     protected $container;
 
-    public function setContainer(ContainerInterface $container = null)
+    public function setContainer(ContainerInterface $container)
     {
         $this->container = $container;
     }
