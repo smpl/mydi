@@ -28,11 +28,7 @@ class Autowire implements ProviderInterface, ContainerAwareInterface
 
     public function hasProvide(string $name): bool
     {
-        $result = false;
-        if (class_exists($name)) {
-            $result = true;
-        }
-        return $result;
+        return class_exists($name);
     }
 
     private function getDependencies(\ReflectionClass $class): array
