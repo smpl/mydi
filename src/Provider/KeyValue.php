@@ -15,7 +15,7 @@ class KeyValue implements ProviderInterface
         $this->configuration = $configuration;
     }
 
-    public static function fromJsonFile(string $fileName): self
+    public static function fromJson(string $fileName): self
     {
         if (!is_readable($fileName)) {
             $message = sprintf('fileName: `%s` is not readable', $fileName);
@@ -29,7 +29,7 @@ class KeyValue implements ProviderInterface
         return new self($configuration);
     }
 
-    public static function fromPhpFile(string $fileName): self
+    public static function fromPhp(string $fileName): self
     {
         if (!is_readable($fileName)) {
             $message = sprintf('fileName: `%s` is not readable', $fileName);

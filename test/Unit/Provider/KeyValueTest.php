@@ -38,7 +38,7 @@ class KeyValueTest extends TestCase
 
     public function testFromJsonFile()
     {
-        $provider = KeyValue::fromJsonFile(__DIR__ . '/KeyValueTest/test.json');
+        $provider = KeyValue::fromJson(__DIR__ . '/KeyValueTest/test.json');
         $this->assertTrue($provider->hasProvide('int'));
         $this->assertTrue($provider->hasProvide('null'));
         $this->assertTrue($provider->hasProvide('string'));
@@ -66,7 +66,7 @@ class KeyValueTest extends TestCase
      */
     public function testFromJsonInvalidFile()
     {
-        KeyValue::fromJsonFile('ad8a8sda0s');
+        KeyValue::fromJson('ad8a8sda0s');
     }
 
     /**
@@ -74,12 +74,12 @@ class KeyValueTest extends TestCase
      */
     public function testFromJsonEmpty()
     {
-        KeyValue::fromJsonFile(__DIR__ . '/KeyValueTest/empty.txt');
+        KeyValue::fromJson(__DIR__ . '/KeyValueTest/empty.txt');
     }
 
     public function testFromPhp()
     {
-        $provider = KeyValue::fromPhpFile(__DIR__ . '/KeyValueTest/test.php');
+        $provider = KeyValue::fromPhp(__DIR__ . '/KeyValueTest/test.php');
 
         $this->assertTrue($provider->hasProvide('int'));
         $this->assertTrue($provider->hasProvide('null'));
@@ -108,7 +108,7 @@ class KeyValueTest extends TestCase
      */
     public function testFromPhpInvalidFileName()
     {
-        KeyValue::fromPhpFile('ad8a8sda0s');
+        KeyValue::fromPhp('ad8a8sda0s');
     }
 
     /**
@@ -116,7 +116,7 @@ class KeyValueTest extends TestCase
      */
     public function testFromPhpEmpty()
     {
-        KeyValue::fromPhpFile(__DIR__ . '/KeyValueTest/empty.php');
+        KeyValue::fromPhp(__DIR__ . '/KeyValueTest/empty.php');
     }
 
     /**
@@ -125,7 +125,7 @@ class KeyValueTest extends TestCase
      */
     public function testFromPhpInvalidContent()
     {
-        KeyValue::fromPhpFile(__DIR__ . '/KeyValueTest/invalid.php');
+        KeyValue::fromPhp(__DIR__ . '/KeyValueTest/invalid.php');
     }
 
     /**
@@ -134,6 +134,6 @@ class KeyValueTest extends TestCase
      */
     public function testFromJsonInvalidContent()
     {
-        KeyValue::fromJsonFile(__DIR__ . '/KeyValueTest/invalid.php');
+        KeyValue::fromJson(__DIR__ . '/KeyValueTest/invalid.php');
     }
 }
