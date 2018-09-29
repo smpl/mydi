@@ -6,9 +6,18 @@ namespace Smpl\Mydi\Test\Unit\Loader;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Smpl\Mydi\Loader\Factory;
+use Smpl\Mydi\LoaderInterface;
 
 class FactoryTest extends TestCase
 {
+    public function testMustBeLoaderInterface()
+    {
+        $service = new Factory(function () {
+            return 123;
+        });
+        $this->assertInstanceOf(LoaderInterface::class, $service);
+    }
+
     public function testLoad()
     {
         $factory = new Factory(function () {
