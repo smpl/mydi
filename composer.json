@@ -27,8 +27,9 @@
   },
   "require": {
     "php": ">=7",
+    "ext-json": "*",
     "psr/container": "@stable",
-    "ext-json": "*"
+    "psr/simple-cache": "@stable"
   },
   "provide": {
     "psr/container-implementation": "@stable"
