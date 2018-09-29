@@ -47,7 +47,8 @@ class Container implements ContainerInterface
         if (array_search($name, $this->calls) !== false) {
             throw new ContainerException(
                 sprintf(
-                    'Infinite recursion in the configuration, name called again: %s, call stack: %s.', $name,
+                    'Infinite recursion in the configuration, name called again: %s, call stack: %s.',
+                    $name,
                     implode(', ', $this->calls)
                 )
             );
