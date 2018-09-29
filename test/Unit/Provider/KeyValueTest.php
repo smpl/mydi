@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Test\Unit\Provider;
 
+use Closure;
 use PHPUnit\Framework\TestCase;
+use Smpl\Mydi\Loader\Service;
 use Smpl\Mydi\Provider\KeyValue;
 
 class KeyValueTest extends TestCase
@@ -135,5 +137,18 @@ class KeyValueTest extends TestCase
     public function testFromJsonInvalidContent()
     {
         KeyValue::fromJson(__DIR__ . '/KeyValueTest/invalid.php');
+    }
+
+    public function testTransformToService()
+    {
+        $keyValue = new KeyValue([
+            'magic' => function () {
+                return 123;
+            }
+        ]);
+
+        $this->assertInstanceOf(Closure::class, $keyValue->provide('magic'));
+        $keyValue->transformClosureToService();
+        $this->assertInstanceOf(Service::class, $keyValue->provide('magic'));
     }
 }

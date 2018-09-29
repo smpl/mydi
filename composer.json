@@ -1,43 +1,44 @@
 {
-    "name": "smpl/mydi",
-    "description": "psr/container implementation for humans",
-    "keywords": [
-        "psr-11",
-        "psr container",
-        "di",
-        "dependency injection",
-        "container"
-    ],
-    "license": "GPL-3.0",
-    "authors": [
-        {
-            "name": "Evgeniy Kuvshinov",
-            "email": "smpl@itmywork.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Smpl\\Mydi\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Smpl\\Mydi\\Test\\": "test/"
-        }
-    },
-    "require": {
-        "php": ">=7",
-        "psr/container": "@stable"
-    },
-    "provide": {
-        "psr/container-implementation": "@stable"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "@stable",
-        "squizlabs/php_codesniffer": "@stable"
-    },
-    "scripts": {
-        "test": "vendor/bin/phpunit",
-        "phpcs": "vendor/bin/phpcs"
+  "name": "smpl/mydi",
+  "description": "psr/container implementation for humans",
+  "keywords": [
+    "psr-11",
+    "psr container",
+    "di",
+    "dependency injection",
+    "container"
+  ],
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Evgeniy Kuvshinov",
+      "email": "smpl@itmywork.com"
     }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Smpl\\Mydi\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Smpl\\Mydi\\Test\\": "test/"
+    }
+  },
+  "require": {
+    "php": ">=7",
+    "psr/container": "@stable",
+    "ext-json": "*"
+  },
+  "provide": {
+    "psr/container-implementation": "@stable"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "@stable",
+    "squizlabs/php_codesniffer": "@stable"
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "phpcs": "vendor/bin/phpcs"
+  }
 }
