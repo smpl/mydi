@@ -5,8 +5,9 @@ namespace Smpl\Mydi\Loader;
 
 use Closure;
 use Psr\Container\ContainerInterface;
+use Smpl\Mydi\LoaderInterface;
 
-class Service
+class Service implements LoaderInterface
 {
     private $result;
     private $isCalled = false;

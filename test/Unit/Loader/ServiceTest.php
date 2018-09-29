@@ -6,9 +6,17 @@ namespace Smpl\Mydi\Test\Unit\Loader;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Smpl\Mydi\Loader\Service;
+use Smpl\Mydi\LoaderInterface;
 
 class ServiceTest extends TestCase
 {
+    public function testMustBeLoaderInterface()
+    {
+        $service = new Service(function () {
+            return 123;
+        });
+        $this->assertInstanceOf(LoaderInterface::class, $service);
+    }
     public function testLoad()
     {
         $service = new Service(function () {
