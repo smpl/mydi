@@ -57,7 +57,8 @@ class KeyValue implements ProviderInterface
         if (!$this->hasProvide($name)) {
             throw new NotFoundException();
         }
-        return $this->getValue($name);
+        $result = $this->configuration[$name];
+        return $this->transform($result);
     }
 
 
@@ -66,9 +67,8 @@ class KeyValue implements ProviderInterface
         return array_key_exists($name, $this->configuration);
     }
 
-    private function getValue(string $name)
+    private function transform(string $result)
     {
-        $result = $this->configuration[$name];
         if ($this->transform === true && $result instanceof Closure) {
             $result = new Service($result);
         }

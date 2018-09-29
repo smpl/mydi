@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Test\Unit\Extension;
 
+use Closure;
 use PHPUnit\Framework\TestCase;
+use Smpl\Mydi\Loader\Service;
 use Smpl\Mydi\Provider\DynamicFile;
 
 class DynamicFileTest extends TestCase
@@ -34,5 +36,13 @@ class DynamicFileTest extends TestCase
     {
         $loader = new DynamicFile($this->pathConfiguration);
         $loader->provide('not declared Container');
+    }
+
+    public function testTransformClosureToService()
+    {
+        $loader = new DynamicFile($this->pathConfiguration);
+        $this->assertInstanceOf(Closure::class, $loader->provide('closure'));
+        $loader->transformClosureToService();
+        $this->assertInstanceOf(Service::class, $loader->provide('closure'));
     }
 }
