@@ -36,7 +36,10 @@ class Autowire implements ProviderInterface, ContainerAwareInterface
         $result = [];
         if (null !== $class->getConstructor()) {
             foreach ($class->getConstructor()->getParameters() as $parameter) {
-                $result[$parameter->name] = null !== $parameter->getClass() ? $parameter->getClass()->name : $parameter->name;
+                $result[$parameter->name] = $parameter->name;
+                if (null !== $parameter->getClass()) {
+                    $result[$parameter->name] = $parameter->getClass()->name;
+                }
             }
         }
         return $result;
