@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi;
 
-use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
 
@@ -28,39 +27,26 @@ class Container implements ContainerInterface
         if (!is_string($name)) {
             throw new ContainerException('Container name must be string');
         }
-        $this->checkInfiniteRecursion($name);
-        $result = $this->getValue($name);
-        return $result;
-    }
-
-    /**
-     * @param string $name
-     * @throws ContainerExceptionInterface
-     */
-    private function checkInfiniteRecursion(string $name)
-    {
         if (array_search($name, $this->calls) !== false) {
+            $calls = implode(', ', $this->calls);
             throw new ContainerException(
-                sprintf(
-                    'Infinite recursion in the configuration, name called again: %s, call stack: %s.',
-                    $name,
-                    implode(', ', $this->calls)
-                )
+                "Infinite recursion in the configuration, name called again: $name, call stack: $calls."
             );
         }
+        $this->calls[] = $name;
+        $result = $this->getValue($name);
+        array_pop($this->calls);
+        return $result;
     }
 
     private function getValue(string $name)
     {
-        $this->calls[] = $name;
         if (!array_key_exists($name, $this->values)) {
             $provider = $this->getProvider($name);
             $this->values[$name] = $provider->provide($name);
         }
 
-        $result = $this->load($name);
-        array_pop($this->calls);
-        return $result;
+        return $this->load($this->values[$name]);
     }
 
     private function getProviderOrNull(string $name)
@@ -75,9 +61,8 @@ class Container implements ContainerInterface
         return $result;
     }
 
-    private function load(string $name)
+    private function load($result)
     {
-        $result = $this->values[$name];
         if ($result instanceof LoaderInterface) {
             $result = $result->load($this);
         }

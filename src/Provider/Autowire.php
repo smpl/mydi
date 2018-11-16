@@ -18,5 +18,4 @@ class Autowire implements ProviderInterface
     {
         return class_exists($name);
     }
-
 }
