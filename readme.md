@@ -26,7 +26,7 @@ composer require smpl/mydi
 ## Контакты для связи
 
 Если у вас возникли вопросы, нужна помощь, есть идеи, вы можете создать 
-[issue](https://github.com/smpl/mydi/issues/new) или связаться со мной.
+[issues](https://github.com/smpl/mydi/issues/new) или связаться со мной.
 
 <p align="center">
     <a href="https://t.me/KuvshinovEE"><img src="https://cdn.portableapps.com/TelegramDesktopPortable_128.png"></a>

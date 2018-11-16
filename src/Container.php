@@ -15,11 +15,6 @@ class Container implements ContainerInterface
 
     public function __construct(ProviderInterface ... $providers)
     {
-        foreach ($providers as $provider) {
-            if ($provider instanceof ContainerAwareInterface) {
-                $provider->setContainer($this);
-            }
-        }
         $this->providers = $providers;
     }
 
