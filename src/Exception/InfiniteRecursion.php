@@ -13,5 +13,4 @@ class InfiniteRecursion extends \RuntimeException implements ContainerExceptionI
         $message = "Infinite recursion in the configuration, name called again: $name, call stack: $calls.";
         parent::__construct($message);
     }
-
 }
