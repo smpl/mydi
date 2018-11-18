@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Smpl\Mydi\Provider;
 
 use Closure;
+use Smpl\Mydi\Exception\NotFound;
 use Smpl\Mydi\Loader\Service;
-use Smpl\Mydi\NotFoundException;
 use Smpl\Mydi\ProviderInterface;
 
 class DynamicFile implements ProviderInterface
@@ -27,7 +27,7 @@ class DynamicFile implements ProviderInterface
     public function provide(string $containerName)
     {
         if (!$this->hasProvide($containerName)) {
-            throw new NotFoundException;
+            throw new NotFound($containerName);
         }
         /** @noinspection PhpIncludeInspection */
         $result = include $this->containerNameToPath($containerName);

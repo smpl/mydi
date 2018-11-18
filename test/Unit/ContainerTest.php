@@ -12,12 +12,12 @@ class ContainerTest extends TestCase
 {
     public function testHasFromLoader()
     {
-        $mockLoader = $this->getMockBuilder(ProviderInterface::class)->getMock();
-        $mockLoader
-            ->expects($this->once())
+        $mockLoader = $this->createMock(ProviderInterface::class);
+        $mockLoader->expects($this->once())
             ->method('hasProvide')
             ->with($this->equalTo('magic'))
             ->willReturn(true);
+        /** @var ProviderInterface $mockLoader */
         $locator = new Container($mockLoader);
         $this->assertTrue($locator->has('magic'));
     }
@@ -46,13 +46,16 @@ class ContainerTest extends TestCase
     {
         $result = 123;
 
-        $loader = $this->getMockBuilder(LoaderInterface::class)->getMock();
+        $loader = $this->createMock(LoaderInterface::class);
         $loader->expects($this->any())
             ->method('load')
             ->will($this->returnValue($result));
-        $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
-        $provider->method('hasProvide')->willReturn(true);
-        $provider->method('provide')->willReturn($loader);
+        $provider = $this->createMock(ProviderInterface::class);
+        $provider->method('hasProvide')
+            ->willReturn(true);
+        $provider->method('provide')
+            ->willReturn($loader);
+        /** @var ProviderInterface $provider */
         $locator = new Container($provider);
         $this->assertSame($result, $locator->get('test'));
     }
@@ -61,30 +64,35 @@ class ContainerTest extends TestCase
      * @expectedException \Psr\Container\ContainerExceptionInterface
      * @expectedExceptionMessage Infinite recursion in the configuration, name called again: a, call stack: a, b.
      */
-    public function testNotCorrectConfiguration()
+    public function testInfiniteRecursionConfiguration()
     {
-        $loaderA = $this->getMockBuilder(LoaderInterface::class)->getMock();
-        $loaderA->method('load')->willReturnCallback(function (ContainerInterface $locator) {
-            $obj = new \stdClass();
-            $obj->test = $locator->get('b');
-            return $obj;
-        });
+        $loaderA = $this->createMock(LoaderInterface::class);
+        $loaderA->method('load')
+            ->willReturnCallback(function (ContainerInterface $locator) {
+                $obj = new \stdClass();
+                $obj->test = $locator->get('b');
+                return $obj;
+            });
 
-        $loaderB = $this->getMockBuilder(LoaderInterface::class)->getMock();
-        $loaderB->method('load')->willReturnCallback(function (ContainerInterface $locator) {
-            $obj = new \stdClass();
-            $obj->test = $locator->get('a');
-            return $obj;
-        });
-        $provider = $this->getMockBuilder(ProviderInterface::class)->getMock();
-        $provider->method('hasProvide')->willReturn(true);
-        $provider->method('provide')->willReturnCallback(function ($name) use ($loaderA, $loaderB) {
-            $result = $loaderA;
-            if ($name === 'b') {
-                $result = $loaderB;
-            }
-            return $result;
-        });
+        $loaderB = $this->createMock(LoaderInterface::class);
+        $loaderB->method('load')
+            ->willReturnCallback(function (ContainerInterface $locator) {
+                $obj = new \stdClass();
+                $obj->test = $locator->get('a');
+                return $obj;
+            });
+        $provider = $this->createMock(ProviderInterface::class);
+        $provider->method('hasProvide')
+            ->willReturn(true);
+        $provider->method('provide')
+            ->willReturnCallback(function ($name) use ($loaderA, $loaderB) {
+                $result = $loaderA;
+                if ($name === 'b') {
+                    $result = $loaderB;
+                }
+                return $result;
+            });
+        /** @var ProviderInterface $provider */
         $locator = new Container($provider);
         $locator->get('a');
     }
@@ -114,7 +122,7 @@ class ContainerTest extends TestCase
             ->method('provide')
             ->with($this->equalTo($name))
             ->will($this->returnValue($value));
-        /** @var LoaderInterface $provider */
+        /** @var ProviderInterface $provider */
         $locator = new Container($provider);
         $this->assertSame($value, $locator->get($name));
     }

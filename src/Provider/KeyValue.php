@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Smpl\Mydi\Provider;
 
 use Closure;
+use Smpl\Mydi\Exception\NotFound;
 use Smpl\Mydi\Loader\Service;
-use Smpl\Mydi\NotFoundException;
 use Smpl\Mydi\ProviderInterface;
 
 class KeyValue implements ProviderInterface
@@ -55,7 +55,7 @@ class KeyValue implements ProviderInterface
     public function provide(string $name)
     {
         if (!$this->hasProvide($name)) {
-            throw new NotFoundException();
+            throw new NotFound($name);
         }
         $result = $this->configuration[$name];
         return $this->transform($result);

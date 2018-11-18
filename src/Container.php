@@ -5,6 +5,9 @@ namespace Smpl\Mydi;
 
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Smpl\Mydi\Exception\InfiniteRecursion;
+use Smpl\Mydi\Exception\NameNotString;
+use Smpl\Mydi\Exception\NotFound;
 
 class Container implements ContainerInterface
 {
@@ -25,13 +28,10 @@ class Container implements ContainerInterface
     public function get($name)
     {
         if (!is_string($name)) {
-            throw new ContainerException('Container name must be string');
+            throw new NameNotString;
         }
         if (array_search($name, $this->calls) !== false) {
-            $calls = implode(', ', $this->calls);
-            throw new ContainerException(
-                "Infinite recursion in the configuration, name called again: $name, call stack: $calls."
-            );
+            throw new InfiniteRecursion($name, $this->calls);
         }
         $this->calls[] = $name;
         $result = $this->getValue($name);
@@ -78,7 +78,7 @@ class Container implements ContainerInterface
     {
         $provider = $this->getProviderOrNull($name);
         if (null === $provider) {
-            throw new NotFoundException(sprintf('Container: `%s`, is not defined', $name));
+            throw new NotFound($name);
         }
         return $provider;
     }

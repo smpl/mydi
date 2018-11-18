@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Smpl\Mydi\Loader;
 
 use Psr\Container\ContainerInterface;
+use Smpl\Mydi\Exception\NotFound;
 use Smpl\Mydi\LoaderInterface;
-use Smpl\Mydi\NotFoundException;
 
 class Reflection implements LoaderInterface
 {
@@ -37,7 +37,7 @@ class Reflection implements LoaderInterface
             }
             return $class->newInstanceArgs($arguments);
         } catch (\ReflectionException $e) {
-            throw new NotFoundException();
+            throw new NotFound($this->className);
         }
     }
 
