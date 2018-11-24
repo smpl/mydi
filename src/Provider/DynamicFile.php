@@ -47,8 +47,7 @@ class DynamicFile implements ProviderInterface
 
     private function containerNameToPath(string $containerName): string
     {
-        $result = str_replace('_', DIRECTORY_SEPARATOR, $containerName);
-        $result = str_replace('\\', DIRECTORY_SEPARATOR, $result);
+        $result = str_replace('\\', DIRECTORY_SEPARATOR, $containerName);
         $result = realpath($this->basePath . DIRECTORY_SEPARATOR . $result . '.php');
         $result = is_string($result) ? $result : '';
         return $result;

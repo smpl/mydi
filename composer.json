@@ -28,8 +28,7 @@
   "require": {
     "php": ">=7",
     "ext-json": "*",
-    "psr/container": "@stable",
-    "psr/simple-cache": "@stable"
+    "psr/container": "@stable"
   },
   "provide": {
     "psr/container-implementation": "@stable"
