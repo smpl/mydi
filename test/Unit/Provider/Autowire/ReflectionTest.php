@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Test\Unit\Provider\Autowire;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 use Smpl\Mydi\Provider\Autowire\Reflection;
 use stdClass;
 
-class ReflectionTest extends PHPUnit_Framework_TestCase
+class ReflectionTest extends TestCase
 {
     /**
      * @throws \ReflectionException
