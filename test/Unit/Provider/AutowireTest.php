@@ -69,4 +69,17 @@ class AutowireTest extends TestCase
         $autowire->provide('invalid class name');
     }
 
+    public function testSetReader()
+    {
+        $reader = $this->getMockBuilder(Autowire\ReaderInterface::class)->getMock();
+        $reader->expects($this->once())
+            ->method('getDependecies')
+            ->with(stdClass::class)
+            ->willReturn([]);
+        /** @var Autowire\ReaderInterface $reader */
+        $autowire = new Autowire();
+        $autowire->setReader($reader);
+        $this->assertInstanceOf(LoaderInterface::class, $autowire->provide(stdClass::class));
+    }
+
 }
