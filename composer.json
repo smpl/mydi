@@ -28,10 +28,12 @@
   "require": {
     "php": ">=7",
     "ext-json": "*",
-    "psr/container": "@stable"
+    "psr/cache": "^1.0",
+    "psr/simple-cache": "^1.0",
+    "psr/container": "^1.0"
   },
   "provide": {
-    "psr/container-implementation": "@stable"
+    "psr/container-implementation": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "@stable",
