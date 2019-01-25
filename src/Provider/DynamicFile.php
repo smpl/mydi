@@ -52,7 +52,7 @@ class DynamicFile implements ProviderInterface
         return $result;
     }
 
-    private function transform($result)
+    private function transform($result): self
     {
         if ($this->transform === true && $result instanceof Closure) {
             $result = new Service($result);

@@ -5,6 +5,7 @@ namespace Smpl\Mydi\Provider\Autowire;
 
 use ReflectionClass;
 use ReflectionException;
+use ReflectionMethod;
 
 abstract class AbstractReflection
 {
@@ -18,11 +19,20 @@ abstract class AbstractReflection
         $class = new ReflectionClass($name);
         $result = [];
         if (null !== $class->getConstructor()) {
-            foreach ($class->getConstructor()->getParameters() as $parameter) {
-                $result[$parameter->name] = $parameter->name;
-                if (null !== $parameter->getClass()) {
-                    $result[$parameter->name] = $parameter->getClass()->name;
-                }
+            /** @psalm-suppress PossiblyNullArgument */
+            $result = self::readFromConstructor($class->getConstructor());
+        }
+        return $result;
+    }
+
+    private static function readFromConstructor(ReflectionMethod $constructor): array
+    {
+        $result = [];
+        foreach ($constructor->getParameters() as $parameter) {
+            $result[$parameter->name] = $parameter->name;
+            if (null !== $parameter->getClass()) {
+                /** @psalm-suppress PossiblyNullPropertyFetch */
+                $result[$parameter->name] = $parameter->getClass()->name;
             }
         }
         return $result;

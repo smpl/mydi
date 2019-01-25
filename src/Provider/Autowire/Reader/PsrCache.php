@@ -21,6 +21,7 @@ class PsrCache implements ReaderInterface
 
     public function getDependecies(string $name): array
     {
+        /** @psalm-suppress InvalidCatch */
         try {
             $item = $this->pool->getItem($name);
             if (!$item->isHit()) {

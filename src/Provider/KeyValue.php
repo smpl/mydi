@@ -67,7 +67,7 @@ class KeyValue implements ProviderInterface
         return array_key_exists($name, $this->configuration);
     }
 
-    private function transform($result)
+    private function transform($result): self
     {
         if ($this->transform === true && $result instanceof Closure) {
             $result = new Service($result);

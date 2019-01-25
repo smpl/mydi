@@ -21,6 +21,7 @@ class PsrSimpleCache implements ReaderInterface
 
     public function getDependecies(string $name): array
     {
+        /** @psalm-suppress InvalidCatch */
         try {
             if (!$this->cache->has($name)) {
                 $this->cache->set($name, AbstractReflection::readDependencies($name));
