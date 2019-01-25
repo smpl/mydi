@@ -37,10 +37,7 @@
   },
   "require-dev": {
     "phpunit/phpunit": "@stable",
-    "squizlabs/php_codesniffer": "@stable"
-  },
-  "scripts": {
-    "test": "vendor/bin/phpunit",
-    "phpcs": "vendor/bin/phpcs"
+    "squizlabs/php_codesniffer": "@stable",
+    "phpstan/phpstan": "@stable"
   }
 }

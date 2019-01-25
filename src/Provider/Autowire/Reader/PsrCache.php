@@ -5,6 +5,7 @@ namespace Smpl\Mydi\Provider\Autowire\Reader;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
+use ReflectionException;
 use Smpl\Mydi\Exception\NotFound;
 use Smpl\Mydi\Provider\Autowire\AbstractReflection;
 use Smpl\Mydi\Provider\Autowire\ReaderInterface;
@@ -28,6 +29,8 @@ class PsrCache implements ReaderInterface
             }
             return $item->get();
         } catch (InvalidArgumentException $e) {
+            throw new NotFound($name);
+        } catch (ReflectionException $e) {
             throw new NotFound($name);
         }
     }

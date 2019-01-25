@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi;
 
+use Smpl\Mydi\Exception\NotFoundInterface;
+
 interface ProviderInterface
 {
     /**
      * @param string $name
      * @return mixed
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws NotFoundInterface
      */
     public function provide(string $name);
 

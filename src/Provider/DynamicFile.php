@@ -18,7 +18,7 @@ class DynamicFile implements ProviderInterface
         $this->basePath = (string)realpath($basePath);
     }
 
-    public function transformClosureToService()
+    public function transformClosureToService(): self
     {
         $this->transform = true;
         return $this;
@@ -29,8 +29,7 @@ class DynamicFile implements ProviderInterface
         if (!$this->hasProvide($containerName)) {
             throw new NotFound($containerName);
         }
-        /** @noinspection PhpIncludeInspection */
-        $result = include $this->containerNameToPath($containerName);
+        $result = require $this->containerNameToPath($containerName);
         return $this->transform($result);
     }
 
