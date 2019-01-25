@@ -5,7 +5,7 @@ namespace Smpl\Mydi\Provider;
 
 use Psr\Container\ContainerInterface;
 use Smpl\Mydi\Loader\Service;
-use Smpl\Mydi\Provider\Autowire\Reader\Reflection;
+use Smpl\Mydi\Provider\Autowire\Reader\WithoutCache;
 use Smpl\Mydi\Provider\Autowire\ReaderInterface;
 use Smpl\Mydi\ProviderInterface;
 
@@ -13,9 +13,14 @@ class Autowire implements ProviderInterface
 {
     private $reader;
 
-    public function __construct()
+    public function __construct(ReaderInterface $reader)
     {
-        $this->reader = new Reflection();
+        $this->reader = $reader;
+    }
+
+    public static function withoutCache(): self
+    {
+        return new Autowire(new WithoutCache());
     }
 
     public function provide(string $name)
@@ -34,11 +39,5 @@ class Autowire implements ProviderInterface
     public function hasProvide(string $name): bool
     {
         return class_exists($name);
-    }
-
-    public function setReader(ReaderInterface $reader): self
-    {
-        $this->reader = $reader;
-        return $this;
     }
 }

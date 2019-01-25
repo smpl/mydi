@@ -14,7 +14,7 @@ class AutowireTest extends TestCase
 {
     public function testIsProvide()
     {
-        $autowire = new Autowire();
+        $autowire = Autowire::withoutCache();
         $this->assertTrue($autowire->hasProvide(\stdClass::class));
         $this->assertFalse($autowire->hasProvide('invalid name'));
         return $autowire;
@@ -22,7 +22,7 @@ class AutowireTest extends TestCase
 
     public function testProvide()
     {
-        $autowire = new Autowire();
+        $autowire = Autowire::withoutCache();
         $loader = $autowire->provide(\stdClass::class);
         $this->assertInstanceOf(LoaderInterface::class, $loader);
         /** @var ContainerInterface $container */
@@ -32,7 +32,7 @@ class AutowireTest extends TestCase
 
     public function testProvideWithArgument()
     {
-        $autowire = new Autowire();
+        $autowire = Autowire::withoutCache();
         $class = get_class(new class (123, new stdClass())
         {
             public $value;
@@ -64,7 +64,7 @@ class AutowireTest extends TestCase
 
     public function testProvideInvalidName()
     {
-        $autowire = new Autowire();
+        $autowire = Autowire::withoutCache();
         $this->expectException(NotFound::class);
         $autowire->provide('invalid class name');
     }
@@ -77,8 +77,7 @@ class AutowireTest extends TestCase
             ->with(stdClass::class)
             ->willReturn([]);
         /** @var Autowire\ReaderInterface $reader */
-        $autowire = new Autowire();
-        $autowire->setReader($reader);
+        $autowire = new Autowire($reader);
         $this->assertInstanceOf(LoaderInterface::class, $autowire->provide(stdClass::class));
     }
 

@@ -8,7 +8,7 @@ use Smpl\Mydi\Exception\NotFound;
 use Smpl\Mydi\Provider\Autowire\AbstractReflection;
 use Smpl\Mydi\Provider\Autowire\ReaderInterface;
 
-class Reflection implements ReaderInterface
+class WithoutCache implements ReaderInterface
 {
     public function getDependecies(string $name): array
     {
