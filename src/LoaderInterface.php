@@ -7,5 +7,9 @@ use Psr\Container\ContainerInterface;
 
 interface LoaderInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @return mixed
+     */
     public function load(ContainerInterface $container);
 }
