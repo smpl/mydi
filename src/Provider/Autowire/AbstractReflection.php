@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Provider\Autowire;
 
-use Psr\Container\NotFoundExceptionInterface;
 use ReflectionClass;
 use ReflectionException;
 use Smpl\Mydi\Exception\NotFound;
@@ -13,7 +12,7 @@ abstract class AbstractReflection
     /**
      * @param string $name
      * @return array
-     * @throws NotFoundExceptionInterface
+     * @throws NotFound
      */
     public static function readDependencies(string $name): array
     {

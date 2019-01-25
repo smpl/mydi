@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Provider\Autowire;
 
-use Psr\Container\NotFoundExceptionInterface;
+use Smpl\Mydi\Exception\NotFoundInterface;
 
 interface ReaderInterface
 {
     /**
      * @param string $name
      * @return array
-     * @throws NotFoundExceptionInterface
+     * @throws NotFoundInterface
      */
     public function getDependecies(string $name): array;
 }

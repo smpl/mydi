@@ -21,13 +21,14 @@ class Autowire implements ProviderInterface
     public function provide(string $name)
     {
         $dependencies = $this->reader->getDependecies($name);
-        return new Service(function (ContainerInterface $container) use ($dependencies, $name) {
+        $closure = function (ContainerInterface $container) use ($dependencies, $name) {
             $arguments = [];
             foreach ($dependencies as $dependency) {
                 $arguments[] = $container->get($dependency);
             }
             return new $name(... $arguments);
-        });
+        };
+        return new Service($closure);
     }
 
     public function hasProvide(string $name): bool

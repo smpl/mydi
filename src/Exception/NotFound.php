@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Exception;
 
-use Psr\Container\NotFoundExceptionInterface;
-
-class NotFound extends \RuntimeException implements NotFoundExceptionInterface
+class NotFound extends \RuntimeException implements NotFoundInterface
 {
     public function __construct(string $name)
     {

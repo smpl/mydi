@@ -37,7 +37,8 @@
   },
   "require-dev": {
     "phpunit/phpunit": "@stable",
-    "squizlabs/php_codesniffer": "@stable"
+    "squizlabs/php_codesniffer": "@stable",
+    "phpstan/phpstan": "^0.11.1"
   },
   "scripts": {
     "test": "vendor/bin/phpunit",

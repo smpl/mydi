@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Smpl\Mydi;
 
 use Psr\Container\ContainerInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Smpl\Mydi\Exception\InfiniteRecursion;
 use Smpl\Mydi\Exception\NameNotString;
 use Smpl\Mydi\Exception\NotFound;
@@ -39,6 +38,11 @@ class Container implements ContainerInterface
         return $result;
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws Exception\NotFoundInterface
+     */
     private function getValue(string $name)
     {
         if (!array_key_exists($name, $this->values)) {
@@ -72,7 +76,7 @@ class Container implements ContainerInterface
     /**
      * @param string $name
      * @return ProviderInterface
-     * @throws NotFoundExceptionInterface
+     * @throws NotFound
      */
     private function getProvider(string $name): ProviderInterface
     {

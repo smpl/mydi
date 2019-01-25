@@ -3,13 +3,15 @@ language: php
 php:
   - 7.0
   - 7.1
+  - 7.2
 
 install:
   - composer install
 
 script:
-- composer run phpcs
-- composer test --ansi -- --coverage-clover=coverage.clover
+  - ./vendor/bin/phpcs
+  - ./vendor/bin/phpstan analyse -c phpstan.neon.dist
+  - ./vendor/bin/phpunit --coverage-clover=coverage.clover
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar

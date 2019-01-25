@@ -18,7 +18,7 @@ class KeyValue implements ProviderInterface
         $this->configuration = $configuration;
     }
 
-    public function transformClosureToService()
+    public function transformClosureToService(): self
     {
         $this->transform = true;
         return $this;
