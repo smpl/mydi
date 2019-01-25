@@ -11,6 +11,7 @@ install:
 script:
   - ./vendor/bin/phpcs
   - ./vendor/bin/phpstan analyse src --level 7
+  - ./vendor/bin/psalm
   - ./vendor/bin/phpunit --coverage-clover=coverage.clover
 
 after_script:

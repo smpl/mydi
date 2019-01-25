@@ -47,12 +47,11 @@ class DynamicFile implements ProviderInterface
     private function containerNameToPath(string $containerName): string
     {
         $result = str_replace('\\', DIRECTORY_SEPARATOR, $containerName);
-        $result = realpath($this->basePath . DIRECTORY_SEPARATOR . $result . '.php');
-        $result = is_string($result) ? $result : '';
+        $result = (string)realpath($this->basePath . DIRECTORY_SEPARATOR . $result . '.php');
         return $result;
     }
 
-    private function transform($result): self
+    private function transform($result)
     {
         if ($this->transform === true && $result instanceof Closure) {
             $result = new Service($result);
