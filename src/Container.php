@@ -26,6 +26,7 @@ class Container implements ContainerInterface
 
     public function get($name)
     {
+        /** @psalm-suppress RedundantConditionGivenDocblockType Не я такой, а PSR */
         if (!is_string($name)) {
             throw new NameNotString;
         }
