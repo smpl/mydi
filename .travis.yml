@@ -1,16 +1,15 @@
 language: php
 
 php:
-  - 7.0
-  - 7.1
   - 7.2
+  - 7.3
 
 install:
   - composer install
 
 script:
   - ./vendor/bin/phpcs
-  - ./vendor/bin/phpstan analyse src --level 7
+  - ./vendor/bin/phpstan analyse
   - ./vendor/bin/psalm
   - ./vendor/bin/phpunit --coverage-clover=coverage.clover
 
