@@ -10,7 +10,13 @@ use Smpl\Mydi\ProviderInterface;
 
 class KeyValue implements ProviderInterface
 {
+    /**
+     * @var array
+     */
     private $configuration;
+    /**
+     * @var bool
+     */
     private $transform = false;
 
     public function __construct(array $configuration)
@@ -44,6 +50,7 @@ class KeyValue implements ProviderInterface
             $message = sprintf('fileName: `%s` is not readable', $fileName);
             throw new \RuntimeException($message);
         }
+        /** @psalm-suppress UnresolvableInclude */
         $configuration = require $fileName;
         if (!is_array($configuration)) {
             $message = sprintf('fileName: `%s` return invalid result', $fileName);
@@ -67,6 +74,10 @@ class KeyValue implements ProviderInterface
         return array_key_exists($name, $this->configuration);
     }
 
+    /**
+     * @param mixed $result
+     * @return mixed
+     */
     private function transform($result)
     {
         if ($this->transform === true && $result instanceof Closure) {

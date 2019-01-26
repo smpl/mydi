@@ -12,6 +12,9 @@ use Smpl\Mydi\Provider\Autowire\ReaderInterface;
 
 class PsrCache implements ReaderInterface
 {
+    /**
+     * @var CacheItemPoolInterface
+     */
     private $pool;
 
     public function __construct(CacheItemPoolInterface $pool)

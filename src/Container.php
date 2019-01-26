@@ -10,8 +10,17 @@ use Smpl\Mydi\Exception\NotFound;
 
 class Container implements ContainerInterface
 {
+    /**
+     * @var ProviderInterface[]
+     */
     private $providers;
+    /**
+     * @var array
+     */
     private $values = [];
+    /**
+     * @var array
+     */
     private $calls = [];
 
     public function __construct(ProviderInterface ... $providers)
@@ -54,6 +63,10 @@ class Container implements ContainerInterface
         return $this->load($this->values[$name]);
     }
 
+    /**
+     * @param string $name
+     * @return ProviderInterface|null
+     */
     private function getProviderOrNull(string $name)
     {
         $result = null;
@@ -66,6 +79,10 @@ class Container implements ContainerInterface
         return $result;
     }
 
+    /**
+     * @param mixed $result
+     * @return mixed
+     */
     private function load($result)
     {
         if ($result instanceof LoaderInterface) {

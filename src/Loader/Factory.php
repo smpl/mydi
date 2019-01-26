@@ -8,6 +8,9 @@ use Smpl\Mydi\LoaderInterface;
 
 class Factory implements LoaderInterface
 {
+    /**
+     * @var \Closure
+     */
     private $closure;
 
     public function __construct(\Closure $closure)
