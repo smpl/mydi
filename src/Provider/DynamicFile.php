@@ -10,7 +10,13 @@ use Smpl\Mydi\ProviderInterface;
 
 class DynamicFile implements ProviderInterface
 {
+    /**
+     * @var string
+     */
     private $basePath;
+    /**
+     * @var bool
+     */
     private $transform = false;
 
     public function __construct(string $basePath)
@@ -29,6 +35,7 @@ class DynamicFile implements ProviderInterface
         if (!$this->hasProvide($containerName)) {
             throw new NotFound($containerName);
         }
+        /** @psalm-suppress UnresolvableInclude */
         $result = require $this->containerNameToPath($containerName);
         return $this->transform($result);
     }
@@ -47,11 +54,14 @@ class DynamicFile implements ProviderInterface
     private function containerNameToPath(string $containerName): string
     {
         $result = str_replace('\\', DIRECTORY_SEPARATOR, $containerName);
-        $result = realpath($this->basePath . DIRECTORY_SEPARATOR . $result . '.php');
-        $result = is_string($result) ? $result : '';
+        $result = (string)realpath($this->basePath . DIRECTORY_SEPARATOR . $result . '.php');
         return $result;
     }
 
+    /**
+     * @param mixed $result
+     * @return mixed
+     */
     private function transform($result)
     {
         if ($this->transform === true && $result instanceof Closure) {

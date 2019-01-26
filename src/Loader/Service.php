@@ -9,8 +9,17 @@ use Smpl\Mydi\LoaderInterface;
 
 class Service implements LoaderInterface
 {
+    /**
+     * @var mixed
+     */
     private $result;
+    /**
+     * @var bool
+     */
     private $isCalled = false;
+    /**
+     * @var Closure
+     */
     private $closure;
 
     public function __construct(Closure $closure)

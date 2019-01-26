@@ -8,6 +8,9 @@ use Smpl\Mydi\LoaderInterface;
 
 class Alias implements LoaderInterface
 {
+    /**
+     * @var string
+     */
     private $name;
 
     public function __construct(string $name)

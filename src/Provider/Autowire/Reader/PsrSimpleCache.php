@@ -12,6 +12,9 @@ use Smpl\Mydi\Provider\Autowire\ReaderInterface;
 
 class PsrSimpleCache implements ReaderInterface
 {
+    /**
+     * @var CacheInterface
+     */
     private $cache;
 
     public function __construct(CacheInterface $cache)
@@ -21,6 +24,7 @@ class PsrSimpleCache implements ReaderInterface
 
     public function getDependecies(string $name): array
     {
+        /** @psalm-suppress InvalidCatch */
         try {
             if (!$this->cache->has($name)) {
                 $this->cache->set($name, AbstractReflection::readDependencies($name));
