@@ -17,5 +17,4 @@ class KeyValueTransform extends KeyValue
         }
         parent::__construct($configuration);
     }
-
 }

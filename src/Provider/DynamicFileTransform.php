@@ -35,5 +35,4 @@ class DynamicFileTransform extends DynamicFile
         }
         return $result;
     }
-
 }
