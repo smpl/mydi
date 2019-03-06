@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Provider;
 
-use Closure;
 use Smpl\Mydi\Exception\NotFound;
-use Smpl\Mydi\Loader\Service;
 use Smpl\Mydi\ProviderInterface;
 
 class DynamicFile implements ProviderInterface
@@ -14,20 +12,10 @@ class DynamicFile implements ProviderInterface
      * @var string
      */
     private $basePath;
-    /**
-     * @var bool
-     */
-    private $transform = false;
 
     public function __construct(string $basePath)
     {
         $this->basePath = (string)realpath($basePath);
-    }
-
-    public function transformClosureToService(): self
-    {
-        $this->transform = true;
-        return $this;
     }
 
     public function provide(string $containerName)
@@ -37,7 +25,7 @@ class DynamicFile implements ProviderInterface
         }
         /** @psalm-suppress UnresolvableInclude */
         $result = require $this->containerNameToPath($containerName);
-        return $this->transform($result);
+        return $result;
     }
 
     public function hasProvide(string $containerName): bool
@@ -55,18 +43,6 @@ class DynamicFile implements ProviderInterface
     {
         $result = str_replace('\\', DIRECTORY_SEPARATOR, $containerName);
         $result = (string)realpath($this->basePath . DIRECTORY_SEPARATOR . $result . '.php');
-        return $result;
-    }
-
-    /**
-     * @param mixed $result
-     * @return mixed
-     */
-    private function transform($result)
-    {
-        if ($this->transform === true && $result instanceof Closure) {
-            $result = new Service($result);
-        }
         return $result;
     }
 }

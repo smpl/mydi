@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Provider;
 
-use Closure;
 use Smpl\Mydi\Exception\NotFound;
-use Smpl\Mydi\Loader\Service;
 use Smpl\Mydi\ProviderInterface;
 
 class KeyValue implements ProviderInterface
@@ -14,20 +12,10 @@ class KeyValue implements ProviderInterface
      * @var array
      */
     private $configuration;
-    /**
-     * @var bool
-     */
-    private $transform = false;
 
     public function __construct(array $configuration)
     {
         $this->configuration = $configuration;
-    }
-
-    public function transformClosureToService(): self
-    {
-        $this->transform = true;
-        return $this;
     }
 
     public static function fromJson(string $fileName): self
@@ -65,24 +53,12 @@ class KeyValue implements ProviderInterface
             throw new NotFound($name);
         }
         $result = $this->configuration[$name];
-        return $this->transform($result);
+        return $result;
     }
 
 
     public function hasProvide(string $name): bool
     {
         return array_key_exists($name, $this->configuration);
-    }
-
-    /**
-     * @param mixed $result
-     * @return mixed
-     */
-    private function transform($result)
-    {
-        if ($this->transform === true && $result instanceof Closure) {
-            $result = new Service($result);
-        }
-        return $result;
     }
 }
