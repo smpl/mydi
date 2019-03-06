@@ -22,22 +22,18 @@ class ContainerTest extends TestCase
         $this->assertTrue($locator->has('magic'));
     }
 
-    /**
-     * @expectedException \Psr\Container\ContainerExceptionInterface
-     * @expectedExceptionMessage Container name must be string
-     */
     public function testGetNotString()
     {
+        $this->expectException(\Psr\Container\ContainerExceptionInterface::class);
+        $this->expectExceptionMessage('Container name must be string');
         $locator = new Container();
         $locator->get(123);
     }
 
-    /**
-     * @expectedException \Psr\Container\NotFoundExceptionInterface
-     * @expectedExceptionMessage Container: `test`, is not defined
-     */
     public function testGetNameNotExist()
     {
+        $this->expectException(\Psr\Container\NotFoundExceptionInterface::class);
+        $this->expectExceptionMessage('Container: `test`, is not defined');
         $locator = new Container();
         $locator->get('test');
     }
@@ -60,12 +56,10 @@ class ContainerTest extends TestCase
         $this->assertSame($result, $locator->get('test'));
     }
 
-    /**
-     * @expectedException \Psr\Container\ContainerExceptionInterface
-     * @expectedExceptionMessage Infinite recursion in the configuration, name called again: a, call stack: a, b.
-     */
     public function testInfiniteRecursionConfiguration()
     {
+        $this->expectException(\Psr\Container\ContainerExceptionInterface::class);
+        $this->expectExceptionMessage('Infinite recursion in the configuration, name called again: a, call stack: a, b.');
         $loaderA = $this->createMock(LoaderInterface::class);
         $loaderA->method('load')
             ->willReturnCallback(function (ContainerInterface $locator) {
@@ -97,11 +91,9 @@ class ContainerTest extends TestCase
         $locator->get('a');
     }
 
-    /**
-     * @expectedException \TypeError
-     */
     public function testSetLoadersInvalid()
     {
+        $this->expectException(\TypeError::class);
         new Container([1]);
     }
 

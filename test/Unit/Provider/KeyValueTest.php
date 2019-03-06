@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Smpl\Mydi\Test\Unit\Provider;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Container\NotFoundExceptionInterface;
 use Smpl\Mydi\Provider\KeyValue;
 
 class KeyValueTest extends TestCase
@@ -31,10 +32,11 @@ class KeyValueTest extends TestCase
     }
 
     /**
-     * @expectedException \Psr\Container\NotFoundExceptionInterface
+     * @throws \Smpl\Mydi\Exception\NotFoundInterface
      */
     public function testProvideInvalidName()
     {
+        $this->expectException(NotFoundExceptionInterface::class);
         $provider = new KeyValue([]);
         $provider->provide('asdasd');
     }
@@ -66,20 +68,16 @@ class KeyValueTest extends TestCase
         ], $provider->provide('arrayWithKeyString'));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage fileName: `ad8a8sda0s` is not readable
-     */
     public function testFromJsonInvalidFile()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('fileName: `ad8a8sda0s` is not readable');
         KeyValue::fromJson('ad8a8sda0s');
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testFromJsonEmpty()
     {
+        $this->expectException(\RuntimeException::class);
         KeyValue::fromJson(__DIR__ . '/KeyValueTest/empty.txt');
     }
 
@@ -111,38 +109,30 @@ class KeyValueTest extends TestCase
         ], $provider->provide('arrayWithKeyString'));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage fileName: `ad8a8sda0s` is not readable
-     */
     public function testFromPhpInvalidFileName()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('fileName: `ad8a8sda0s` is not readable');
         KeyValue::fromPhp('ad8a8sda0s');
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testFromPhpEmpty()
     {
+        $this->expectException(\RuntimeException::class);
         KeyValue::fromPhp(__DIR__ . '/KeyValueTest/empty.php');
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessageRegExp  /fileName: `[\w\/]*KeyValueTest\/invalid\.php` return invalid result/
-     */
     public function testFromPhpInvalidContent()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessageRegExp('/fileName: `[\w\/]*KeyValueTest\/invalid\.php` return invalid result/');
         KeyValue::fromPhp(__DIR__ . '/KeyValueTest/invalid.php');
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessageRegExp  /fileName: `[\w\/]*KeyValueTest\/invalid\.php` return invalid result/
-     */
     public function testFromJsonInvalidContent()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessageRegExp('/fileName: `[\w\/]*KeyValueTest\/invalid\.php` return invalid result/');
         KeyValue::fromJson(__DIR__ . '/KeyValueTest/invalid.php');
     }
 }

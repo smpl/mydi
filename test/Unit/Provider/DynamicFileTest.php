@@ -31,10 +31,11 @@ class DynamicFileTest extends TestCase
     }
 
     /**
-     * @expectedException \Psr\Container\NotFoundExceptionInterface
+     * @throws \Smpl\Mydi\Exception\NotFoundInterface
      */
     public function testProvideNotDeclared()
     {
+        $this->expectException(\Psr\Container\NotFoundExceptionInterface::class);
         $loader = new DynamicFile($this->pathConfiguration);
         $loader->provide('not declared Container');
     }
