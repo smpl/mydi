@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Provider\Autowire;
 
-use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 
@@ -16,7 +15,8 @@ abstract class AbstractReflection
      */
     public static function readDependencies(string $name): array
     {
-        $class = new ReflectionClass($name);
+        /** @psalm-suppress TypeCoercion */
+        $class = new \ReflectionClass($name);
         $result = [];
         if (null !== $class->getConstructor()) {
             /** @psalm-suppress PossiblyNullArgument */
