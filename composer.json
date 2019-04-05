@@ -38,7 +38,6 @@
   "require-dev": {
     "phpunit/phpunit": "@stable",
     "squizlabs/php_codesniffer": "@stable",
-    "phpstan/phpstan": "@stable",
-    "vimeo/psalm": "@stable"
+    "phpstan/phpstan": "@stable"
   }
 }

@@ -3,14 +3,12 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Provider;
 
+use Closure;
 use Smpl\Mydi\Exception\NotFoundInterface;
 use Smpl\Mydi\Loader\Service;
 
 class DynamicFileTransform extends DynamicFile
 {
-    /**
-     * @var array
-     */
     private $transormed = [];
 
     public function provide(string $containerName)
@@ -29,7 +27,7 @@ class DynamicFileTransform extends DynamicFile
     private function load(string $containerName)
     {
         $result = parent::provide($containerName);
-        if ($result instanceof \Closure) {
+        if ($result instanceof Closure) {
             $result = new Service($result);
             $this->transormed[$containerName] = $result;
         }

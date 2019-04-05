@@ -1,16 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace Smpl\Mydi\Provider\Autowire\Reader;
+namespace Smpl\Mydi\Provider;
 
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 use ReflectionException;
 use Smpl\Mydi\Exception\NotFound;
-use Smpl\Mydi\Provider\Autowire\AbstractReflection;
-use Smpl\Mydi\Provider\Autowire\ReaderInterface;
+use Smpl\Mydi\Loader\Service;
+use Smpl\Mydi\Provider\Autowire\ReflectionClass;
+use Smpl\Mydi\ProviderInterface;
 
-class PsrCache implements ReaderInterface
+class AutowirePsrCache implements ProviderInterface
 {
     /**
      * @var CacheItemPoolInterface
@@ -22,20 +23,25 @@ class PsrCache implements ReaderInterface
         $this->pool = $pool;
     }
 
-    public function getDependecies(string $name): array
+    public function provide(string $name)
     {
-        /** @psalm-suppress InvalidCatch */
         try {
             $item = $this->pool->getItem($name);
             if (!$item->isHit()) {
-                $item->set(AbstractReflection::readDependencies($name));
+                $class = new ReflectionClass($name);
+                $item->set($class->getConstructDependencies());
                 $this->pool->save($item);
             }
-            return $item->get();
+            return Service::fromClassName($name, $item->get());
         } catch (InvalidArgumentException $e) {
             throw new NotFound($name);
         } catch (ReflectionException $e) {
             throw new NotFound($name);
         }
+    }
+
+    public function hasProvide(string $name): bool
+    {
+        return class_exists($name);
     }
 }

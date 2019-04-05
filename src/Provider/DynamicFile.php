@@ -23,7 +23,6 @@ class DynamicFile implements ProviderInterface
         if (!$this->hasProvide($containerName)) {
             throw new NotFound($containerName);
         }
-        /** @psalm-suppress UnresolvableInclude */
         $result = require $this->containerNameToPath($containerName);
         return $result;
     }

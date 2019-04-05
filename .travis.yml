@@ -1,8 +1,8 @@
 language: php
 
 php:
-  - 7.2
-  - 7.3
+  - "7.2"
+  - "7.3"
 
 install:
   - composer install
@@ -10,7 +10,6 @@ install:
 script:
   - ./vendor/bin/phpcs
   - ./vendor/bin/phpstan analyse
-  - ./vendor/bin/psalm
   - ./vendor/bin/phpunit --coverage-clover=coverage.clover
 
 after_script:

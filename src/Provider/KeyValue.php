@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Smpl\Mydi\Provider;
 
+use RuntimeException;
 use Smpl\Mydi\Exception\NotFound;
 use Smpl\Mydi\ProviderInterface;
 
@@ -22,12 +23,12 @@ class KeyValue implements ProviderInterface
     {
         if (!is_readable($fileName)) {
             $message = sprintf('fileName: `%s` is not readable', $fileName);
-            throw new \RuntimeException($message);
+            throw new RuntimeException($message);
         }
         $configuration = json_decode((string)file_get_contents($fileName), true);
         if (!is_array($configuration)) {
             $message = sprintf('fileName: `%s` return invalid result', $fileName);
-            throw new \RuntimeException($message);
+            throw new RuntimeException($message);
         }
         return new self($configuration);
     }
@@ -36,13 +37,12 @@ class KeyValue implements ProviderInterface
     {
         if (!is_readable($fileName)) {
             $message = sprintf('fileName: `%s` is not readable', $fileName);
-            throw new \RuntimeException($message);
+            throw new RuntimeException($message);
         }
-        /** @psalm-suppress UnresolvableInclude */
         $configuration = require $fileName;
         if (!is_array($configuration)) {
             $message = sprintf('fileName: `%s` return invalid result', $fileName);
-            throw new \RuntimeException($message);
+            throw new RuntimeException($message);
         }
         return new self($configuration);
     }
