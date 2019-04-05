@@ -25,6 +25,14 @@ class AutowirePsrCacheTest extends TestCase
      */
     private $cache;
 
+    protected function setUp(): void
+    {
+        $this->cache = $this->createMock(CacheItemPoolInterface::class);
+        /** @var CacheItemPoolInterface $cache */
+        $cache = $this->cache;
+        $this->autowire = new AutowirePsrCache($cache);
+    }
+
     public function testHasProvide()
     {
         $this->assertTrue($this->autowire->hasProvide(stdClass::class));
@@ -82,14 +90,6 @@ class AutowirePsrCacheTest extends TestCase
         };
         $this->cache->method('getItem')->willThrowException($exception);
         $this->autowire->provide('invalid name');
-    }
-
-    protected function setUp()
-    {
-        $this->cache = $this->createMock(CacheItemPoolInterface::class);
-        /** @var CacheItemPoolInterface $cache */
-        $cache = $this->cache;
-        $this->autowire = new AutowirePsrCache($cache);
     }
 
 }

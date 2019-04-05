@@ -24,6 +24,14 @@ class AutowirePsrSimpleCacheTest extends TestCase
      */
     private $autowire;
 
+    protected function setUp(): void
+    {
+        $this->cache = $this->createMock(CacheInterface::class);
+        /** @var CacheInterface $cache */
+        $cache = $this->cache;
+        $this->autowire = new AutowirePsrSimpleCache($cache);
+    }
+
     public function testHasProvide()
     {
         $this->assertTrue($this->autowire->hasProvide(stdClass::class));
@@ -71,13 +79,5 @@ class AutowirePsrSimpleCacheTest extends TestCase
         $this->cache->method('has')->willThrowException($exception);
         $this->expectException(NotFoundInterface::class);
         $this->autowire->provide(stdClass::class);
-    }
-
-    protected function setUp()
-    {
-        $this->cache = $this->createMock(CacheInterface::class);
-        /** @var CacheInterface $cache */
-        $cache = $this->cache;
-        $this->autowire = new AutowirePsrSimpleCache($cache);
     }
 }

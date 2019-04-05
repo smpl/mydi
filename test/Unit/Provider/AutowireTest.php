@@ -17,7 +17,7 @@ class AutowireTest extends TestCase
      */
     private $autowire;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->autowire = new Autowire();
     }
