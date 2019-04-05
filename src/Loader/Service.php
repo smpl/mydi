@@ -27,6 +27,17 @@ class Service implements LoaderInterface
         $this->closure = $closure;
     }
 
+    public static function fromClassName(string $name, array $dependencies)
+    {
+        return new static(function (ContainerInterface $container) use ($dependencies, $name): object {
+            $arguments = [];
+            foreach ($dependencies as $dependency) {
+                $arguments[] = $container->get($dependency);
+            }
+            return new $name(...$arguments);
+        });
+    }
+
     public function load(ContainerInterface $container)
     {
         if (!$this->isCalled) {
