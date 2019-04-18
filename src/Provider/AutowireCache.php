@@ -11,7 +11,7 @@ use Smpl\Mydi\Loader\Service;
 use Smpl\Mydi\Provider\Autowire\ReflectionClass;
 use Smpl\Mydi\ProviderInterface;
 
-class AutowirePsrCache implements ProviderInterface
+class AutowireCache implements ProviderInterface
 {
     /**
      * @var CacheItemPoolInterface

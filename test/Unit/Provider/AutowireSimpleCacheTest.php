@@ -10,17 +10,17 @@ use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;
 use Smpl\Mydi\Exception\NotFoundInterface;
 use Smpl\Mydi\Loader\Service;
-use Smpl\Mydi\Provider\AutowirePsrSimpleCache;
+use Smpl\Mydi\Provider\AutowireSimpleCache;
 use stdClass;
 
-class AutowirePsrSimpleCacheTest extends TestCase
+class AutowireSimpleCacheTest extends TestCase
 {
     /**
      * @var PHPUnit_Framework_MockObject_MockObject
      */
     private $cache;
     /**
-     * @var AutowirePsrSimpleCache
+     * @var AutowireSimpleCache
      */
     private $autowire;
 
@@ -29,7 +29,7 @@ class AutowirePsrSimpleCacheTest extends TestCase
         $this->cache = $this->createMock(CacheInterface::class);
         /** @var CacheInterface $cache */
         $cache = $this->cache;
-        $this->autowire = new AutowirePsrSimpleCache($cache);
+        $this->autowire = new AutowireSimpleCache($cache);
     }
 
     public function testHasProvide()

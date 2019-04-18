@@ -11,13 +11,13 @@ use Psr\Cache\CacheItemPoolInterface;
 use Psr\Cache\InvalidArgumentException;
 use Smpl\Mydi\Exception\NotFoundInterface;
 use Smpl\Mydi\Loader\Service;
-use Smpl\Mydi\Provider\AutowirePsrCache;
+use Smpl\Mydi\Provider\AutowireCache;
 use stdClass;
 
-class AutowirePsrCacheTest extends TestCase
+class AutowireCacheTest extends TestCase
 {
     /**
-     * @var AutowirePsrCache
+     * @var AutowireCache
      */
     private $autowire;
     /**
@@ -30,7 +30,7 @@ class AutowirePsrCacheTest extends TestCase
         $this->cache = $this->createMock(CacheItemPoolInterface::class);
         /** @var CacheItemPoolInterface $cache */
         $cache = $this->cache;
-        $this->autowire = new AutowirePsrCache($cache);
+        $this->autowire = new AutowireCache($cache);
     }
 
     public function testHasProvide()
